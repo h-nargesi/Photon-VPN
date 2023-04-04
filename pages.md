@@ -1,3 +1,5 @@
+# User
+
 ## Home Page (cshtml)
 	- Login / Register / Accounting -> Login / Register / Accounting
 	- Show plans -> Plan
@@ -28,7 +30,17 @@
 
 ## Add Plan (api)
 
+# Admin
+	- Payment Checking
+	- Plans
+
 ## Payment Checking (cshtml)
 	- Payment List -> [approve]
 
 ## Payment Approvement (api)
+
+## Plans (cshtml/api)
+	- Active
+	- Price
+	- Profile
+	- Description
