@@ -25,17 +25,27 @@
 	- Parameters: (User-ID, Date, Transaction)
 	- "You can use the plan even your payment is not approved yet."
 
-## PLan (cshtml)
+## Plan (cshtml)
 	- Add plan to current user -> [add]
 
 ## Add Plan (api)
 
 # Admin
-	- Payment Checking
+	- Income
+	- Data Usage (user/plan, period, time slash)
+	- Users
+		- Info
+		- Plans
+		- Payment *
+		- Data Usage *
+	- Vouchers
+	- Payments
 	- Plans
+	- Servers
 
-## Payment Checking (cshtml)
-	- Payment List -> [approve]
+## Data Usage
+	- chart
+	- Parameters: (user/plan, period, time slash)
 
 ## Payment Approvement (api)
 
