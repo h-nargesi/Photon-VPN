@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Photon.Service.VPN.Basical;
+using Serilog;
 
 namespace Photon.Service.VPN.Pages
 {
@@ -14,14 +15,15 @@ namespace Photon.Service.VPN.Pages
             var menu = HttpContext.RequestServices.GetService<IActionDescriptorCollectionProvider>() ?? 
                        throw new Exception("IActionDescriptorCollectionProvider Service not found");
 
-            foreach (var item in menu.ActionDescriptors.Items)
+            var pages =  menu.ActionDescriptors.Items
+                             .Select(i => i.RouteValues["page"] ?? string.Empty)
+                             .Where(i => i.Length > 0)
+                             .Distinct();
+
+            foreach (var page in pages)
             {
-                var page = item.RouteValues["page"] ?? string.Empty;
-                if (page.Length > 0)
-                {
-                    var path = page.Split('/').Where(i => i.Length > 0).Select(i => i.FirstCharToUpper()).ToArray();
-                    RootMenu.GetSubPages(page, path);
-                }
+                var path = page.Split('/').Where(i => i.Length > 0).Select(i => i.FirstCharToUpper()).ToArray();
+                RootMenu.AddChild(page, path);
             }
         }
     }

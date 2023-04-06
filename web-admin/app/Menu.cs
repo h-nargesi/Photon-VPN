@@ -1,15 +1,20 @@
+using Serilog;
+
 namespace Photon.Service.VPN.Basical
 {
     public class Menu
     {
+        private readonly string name;
+        private string? title;
         public Dictionary<string, Menu> items { get; } = new Dictionary<string, Menu>();
 
-        public Menu(string title)
+        public Menu(string name, string? title = null)
         {
-            Title = title;
+            this.name = name;
+            this.title = title;
         }
 
-        public string Title { get; private set; }
+        public string Title => title ?? name;
         public string? Icon { get; private set; }
         public string? Url { get; private set; }
         public float Order { get; private set; } = 100;
@@ -20,34 +25,62 @@ namespace Photon.Service.VPN.Basical
         }
         public int ItemsCount => items.Count;
 
-        public void GetSubPages(string page, IEnumerable<string> path)
+        public void AddChild(string link, IEnumerable<string> path)
         {
-            var point = path.First();
+            var name = path.First();
             path = path.Skip(1);
 
-            if (!items.TryGetValue(point, out var item))
+            if (!items.TryGetValue(name, out var item))
             {
-                items.Add(point, item = new Menu(point));
+                items.Add(name, item = new Menu(name));
             }
 
             if (path.Count() > 0)
             {
-                item.GetSubPages(page, path);
+                item.AddChild(link, path);
             }
-            else if (item.Url == null)
+            else
             {
-                item.Url = page;
-
-                var type = Type.GetType($"Photon.Service.VPN.Pages.{point}Page");
-                if (type == null)
+                if (Url != null)
                 {
-                    return;
+                    AddList();
                 }
 
-                item.Title = type.GetField("TITLE")?.GetValue(null)?.ToString() ?? item.Title;
-                item.Icon = type.GetField("ICON")?.GetValue(null)?.ToString();
-                item.Order = (float?)type.GetField("ORDER")?.GetValue(null) ?? item.Order;
+                if (item.Url == null)
+                {
+                    item.SetLink(link);
+                }
             }
+        }
+
+        private void AddList()
+        {
+            if (items.ContainsKey("list"))
+            {
+                return;
+            }
+
+            items.Add("list", new Menu(name, "List")
+            {
+                Url = Url,
+                Icon = "fas fa-list",
+                Order = 0,
+            });
+        }
+
+        private void SetLink(string link)
+        {
+            Url = link;
+
+            var type = Type.GetType($"Photon.Service.VPN.Pages.{name}Page");
+            if (type == null)
+            {
+                return;
+            }
+
+            title = type.GetField("TITLE")?.GetValue(null)?.ToString() ?? title;
+            Icon = type.GetField("ICON")?.GetValue(null)?.ToString();
+            Order = (float?)type.GetField("ORDER")?.GetValue(null) ?? Order;
         }
     }
 }

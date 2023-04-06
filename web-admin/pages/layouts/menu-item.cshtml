@@ -1,7 +1,8 @@
 @model Photon.Service.VPN.Basical.Menu
 @using Serilog
 @{
-  var active = (ViewData["RequestPath"]?.ToString() == Model.Url) ? "active" : "";
+  var current = ViewData["RequestPath"]?.ToString() ?? string.Empty;
+  var active = (current == Model.Url || Model.Title != "List" && current.StartsWith(Model.Url + "/")) ? "active" : "";
 }
 
 <a href="@Model.Url" class="nav-link @active"> 
