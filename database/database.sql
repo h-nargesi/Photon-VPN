@@ -20,7 +20,7 @@ create table payments (
 	register_time		datetime		not null	default current_timestamp,
 
 	primary key (id),
-	foreign key (permanent_user_id) references permanent_users (id)
+	foreign key (permanent_user_id) references permanent_users (id) on delete cascade
 );
 
 create table plans (
@@ -35,7 +35,7 @@ create table plans (
 	modification_time	datetime		not null	on update current_timestamp,
 
 	primary key (profile_id),
-	foreign key (profile_id) references profiles (id)
+	foreign key (profile_id) references profiles (id) on delete cascade
 );
 
 create table permanent_user_plan (
@@ -46,8 +46,8 @@ create table permanent_user_plan (
 	register_time		datetime		not null	default current_timestamp,
 	
 	primary key (permanent_user_id, valid_time),
-	foreign key (permanent_user_id) references permanent_users (id),
-	foreign key (profile_id) references profiles (id)
+	foreign key (permanent_user_id) references permanent_users (id) on delete cascade,
+	foreign key (profile_id) references profiles (id) on delete cascade
 );
 
 create table users_access (
@@ -63,5 +63,5 @@ create table accounts (
 	password			varchar(50)		not null,
 
 	primary key (permanent_user_id),
-	foreign key (permanent_user_id) references permanent_users (id)
+	foreign key (permanent_user_id) references permanent_users (id) on delete cascade
 );
