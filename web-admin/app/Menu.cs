@@ -70,13 +70,19 @@ namespace Photon.Service.VPN.Basical
 
         private void SetLink(string link)
         {
-            Url = link;
-
             var type = Type.GetType($"Photon.Service.VPN.Pages.{name}Page");
             if (type == null)
             {
                 return;
             }
+
+            var show_in_menu = (bool?)type.GetField("SHOW_IN_MENU")?.GetValue(null) ?? true;
+            if (!show_in_menu)
+            {
+                return;
+            }
+
+            Url = link;
 
             title = type.GetField("TITLE")?.GetValue(null)?.ToString() ?? title;
             Icon = type.GetField("ICON")?.GetValue(null)?.ToString();

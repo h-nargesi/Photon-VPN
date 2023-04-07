@@ -13,6 +13,8 @@ namespace Photon.Service.VPN.Pages
 
         public abstract string PageTitle { get; }
 
+        public abstract string EditPage { get; }
+
         public virtual void OnGet()
         {
             var path = Request.Path;

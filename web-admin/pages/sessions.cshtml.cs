@@ -7,5 +7,6 @@
         public const float ORDER = 2.1f;
 
         public override string PageTitle => TITLE;
+        public override string EditPage => string.Empty;
     }
 }

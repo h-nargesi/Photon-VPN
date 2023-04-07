@@ -7,5 +7,6 @@
         public const float ORDER = 4;
 
         public override string PageTitle => TITLE;
+        public override string EditPage => "/plans";
     }
 }

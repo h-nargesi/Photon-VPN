@@ -20,6 +20,10 @@
   <ul class="nav nav-treeview">
     @foreach(var menu in Model.Items)
     {
+      if (menu.Url == null && menu.ItemsCount < 1)
+      {
+        continue;
+      }
       <li class="nav-item">
         @Html.Partial("~/pages/layouts/menu-item.cshtml", menu)
       </li>

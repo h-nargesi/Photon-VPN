@@ -173,6 +173,10 @@
                with font-awesome or any other icon font library -->
           @foreach(var menu in Model.RootMenu.Items)
           {
+            if (menu.Url == null && menu.ItemsCount < 1)
+            {
+              continue;
+            }
             <li class="nav-item">
               @Html.Partial("~/pages/layouts/menu-item.cshtml", menu)
             </li>
