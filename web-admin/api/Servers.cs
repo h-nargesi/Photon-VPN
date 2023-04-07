@@ -1,19 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
 namespace Photon.Service.VPN.Handlers;
 
 [Route("api/[controller]/[action]")]
-public class Users : Controller
+public class Servers : Controller
 {
     [HttpGet]
     public async Task<IActionResult> List()
     {
         using var db = new RdContext();
 
-        var query = db.PermanentUsers.AsNoTracking();
+        var query = db.Nas.AsNoTracking();
 
         return Ok(await query.ToListAsync());
     }
@@ -24,29 +23,29 @@ public class Users : Controller
     {
         using var db = new RdContext();
 
-        var quuey = db.PermanentUsers.AsNoTracking()
-                                     .Where(c => c.Id == id);
+        var quuey = db.Nas.AsNoTracking()
+                          .Where(c => c.Id == id);
 
         return Ok(await quuey.FirstOrDefaultAsync());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Modify([FromBody] PermanentUser user)
+    public async Task<IActionResult> Modify([FromBody] Na na)
     {
-        if (user == null) return BadRequest();
+        if (na == null) return BadRequest();
 
         using var db = new RdContext();
 
-        var original = await db.PermanentUsers.AsNoTracking()
-                                              .Where(c => c.Id == user.Id)
-                                              .FirstOrDefaultAsync();
+        var original = await db.Nas.AsNoTracking()
+                                   .Where(c => c.Id == na.Id)
+                                   .FirstOrDefaultAsync();
 
-        if (original == null) await db.PermanentUsers.AddAsync(user);
-        else db.Entry(original).CurrentValues.SetValues(user);
+        if (original == null) await db.Nas.AddAsync(na);
+        else db.Entry(original).CurrentValues.SetValues(na);
 
         await db.SaveChangesAsync();
 
-        return Ok(Result.Success(data: original?.Id ?? user.Id));
+        return Ok(Result.Success(data: original?.Id ?? na.Id));
     }
 
     [HttpPost]
@@ -54,7 +53,7 @@ public class Users : Controller
     {
         using var db = new RdContext();
 
-        db.PermanentUsers.Remove(new PermanentUser { Id = id });
+        db.Nas.Remove(new Na { Id = id });
         await db.SaveChangesAsync();
 
         return Ok(Result.Success());
