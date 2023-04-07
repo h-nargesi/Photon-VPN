@@ -1,90 +1,89 @@
-namespace Photon.Service.VPN.Basical
+namespace Photon.Service.VPN.Basical;
+
+public class Menu
 {
-    public class Menu
+    private readonly string name;
+    private string? title;
+    private readonly Dictionary<string, Menu> items = new();
+
+    public Menu(string name, string? title = null)
     {
-        private readonly string name;
-        private string? title;
-        private readonly Dictionary<string, Menu> items = new();
+        this.name = name;
+        this.title = title;
+    }
 
-        public Menu(string name, string? title = null)
+    public string Title => title ?? name;
+    public string? Icon { get; private set; }
+    public string? Url { get; private set; }
+    public float Order { get; private set; } = 100;
+
+    public IEnumerable<Menu> Items
+    {
+        get => items.Values.OrderBy(c => c.Order).ThenBy(c => c.Title).ToArray();
+    }
+    public int ItemsCount => items.Count;
+
+    public void AddChild(string link, IEnumerable<string> path)
+    {
+        var name = path.First();
+        path = path.Skip(1);
+
+        if (!items.TryGetValue(name, out var item))
         {
-            this.name = name;
-            this.title = title;
+            items.Add(name, item = new Menu(name));
         }
 
-        public string Title => title ?? name;
-        public string? Icon { get; private set; }
-        public string? Url { get; private set; }
-        public float Order { get; private set; } = 100;
-
-        public IEnumerable<Menu> Items
+        if (path.Any())
         {
-            get => items.Values.OrderBy(c => c.Order).ThenBy(c => c.Title).ToArray();
+            item.AddChild(link, path);
         }
-        public int ItemsCount => items.Count;
-
-        public void AddChild(string link, IEnumerable<string> path)
+        else
         {
-            var name = path.First();
-            path = path.Skip(1);
-
-            if (!items.TryGetValue(name, out var item))
+            if (Url != null)
             {
-                items.Add(name, item = new Menu(name));
+                AddList();
             }
 
-            if (path.Any())
+            if (item.Url == null)
             {
-                item.AddChild(link, path);
-            }
-            else
-            {
-                if (Url != null)
-                {
-                    AddList();
-                }
-
-                if (item.Url == null)
-                {
-                    item.SetLink(link);
-                }
+                item.SetLink(link);
             }
         }
+    }
 
-        private void AddList()
+    private void AddList()
+    {
+        if (items.ContainsKey("list"))
         {
-            if (items.ContainsKey("list"))
-            {
-                return;
-            }
-
-            items.Add("list", new Menu(name, "List")
-            {
-                Url = Url,
-                Icon = "fas fa-list",
-                Order = 0,
-            });
+            return;
         }
 
-        private void SetLink(string link)
+        items.Add("list", new Menu(name, "List")
         {
-            var type = Type.GetType($"Photon.Service.VPN.Pages.{name}Page");
-            if (type == null)
-            {
-                return;
-            }
+            Url = Url,
+            Icon = "fas fa-list",
+            Order = 0,
+        });
+    }
 
-            var show_in_menu = (bool?)type.GetField("SHOW_IN_MENU")?.GetValue(null) ?? true;
-            if (!show_in_menu)
-            {
-                return;
-            }
-
-            Url = link;
-
-            title = type.GetField("TITLE")?.GetValue(null)?.ToString() ?? title;
-            Icon = type.GetField("ICON")?.GetValue(null)?.ToString();
-            Order = (float?)type.GetField("ORDER")?.GetValue(null) ?? Order;
+    private void SetLink(string link)
+    {
+        var type = Type.GetType($"Photon.Service.VPN.Pages.{name}Page");
+        if (type == null)
+        {
+            return;
         }
+
+        var show_in_menu = (bool?)type.GetField("SHOW_IN_MENU")?.GetValue(null) ?? true;
+        if (!show_in_menu)
+        {
+            return;
+        }
+
+        Url = link;
+
+        title = type.GetField("TITLE")?.GetValue(null)?.ToString() ?? title;
+        Icon = type.GetField("ICON")?.GetValue(null)?.ToString();
+        Order = (float?)type.GetField("ORDER")?.GetValue(null) ?? Order;
     }
 }
