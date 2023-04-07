@@ -1,3 +1,5 @@
+use rd;
+
 drop table if exists accounts;
 drop table if exists users_access;
 drop table if exists permanent_user_plan;
@@ -18,7 +20,7 @@ create table payments (
 	register_time		datetime		not null	default current_timestamp,
 
 	primary key (id),
-	foreign key (permanent_user_id) references permanent_users (id),
+	foreign key (permanent_user_id) references permanent_users (id)
 );
 
 create table plans (
@@ -33,7 +35,7 @@ create table plans (
 	modification_time	datetime		not null	on update current_timestamp,
 
 	primary key (profile_id),
-	foreign key (profile_id) references profiles (id),
+	foreign key (profile_id) references profiles (id)
 );
 
 create table permanent_user_plan (
@@ -45,7 +47,7 @@ create table permanent_user_plan (
 	
 	primary key (permanent_user_id, valid_time),
 	foreign key (permanent_user_id) references permanent_users (id),
-	foreign key (profile_id) references profiles (id),
+	foreign key (profile_id) references profiles (id)
 );
 
 create table users_access (
@@ -53,7 +55,7 @@ create table users_access (
 	entity_name			varchar(24)		not null,
 
 	primary key (user_id, entity_name),
-	foreign key (user_id) references users (id),
+	foreign key (user_id) references users (id)
 );
 
 create table accounts (
@@ -61,5 +63,5 @@ create table accounts (
 	password			varchar(50)		not null,
 
 	primary key (permanent_user_id),
-	foreign key (permanent_user_id) references permanent_users (id),
+	foreign key (permanent_user_id) references permanent_users (id)
 );
