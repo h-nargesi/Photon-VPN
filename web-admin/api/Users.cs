@@ -4,13 +4,16 @@ using Photon.Service.VPN.Models;
 
 namespace Photon.Service.VPN.Handlers;
 
-[Route("app/[controller]/[action]")]
+[Route("api/[controller]/[action]")]
 public class Users : Controller
 {
-    public IActionResult State()
+    [HttpGet]
+    public async Task<IActionResult> List()
     {
-        // var db = new DbContext();
+        using var db = new RdContext();
 
-        return Ok();
+        var model = await db.PermanentUsers.AsNoTracking().ToListAsync();
+        
+        return Ok(model);
     }
 }

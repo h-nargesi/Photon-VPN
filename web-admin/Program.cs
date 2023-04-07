@@ -16,6 +16,8 @@ Log.Information("Starting up ...");
 builder.Services.AddRazorPages();
 // builder.Services.AddScoped<TrendsCheckpoint>();
 // builder.Services.AddSingleton<Analyzer>();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
@@ -23,7 +25,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapRazorPages();
     endpoints.MapControllers();
+    endpoints.MapRazorPages();
 });
 app.Run();

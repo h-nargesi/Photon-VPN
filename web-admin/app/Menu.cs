@@ -1,12 +1,10 @@
-using Serilog;
-
 namespace Photon.Service.VPN.Basical
 {
     public class Menu
     {
         private readonly string name;
         private string? title;
-        public Dictionary<string, Menu> items { get; } = new Dictionary<string, Menu>();
+        private readonly Dictionary<string, Menu> items = new();
 
         public Menu(string name, string? title = null)
         {
@@ -35,7 +33,7 @@ namespace Photon.Service.VPN.Basical
                 items.Add(name, item = new Menu(name));
             }
 
-            if (path.Count() > 0)
+            if (path.Any())
             {
                 item.AddChild(link, path);
             }
