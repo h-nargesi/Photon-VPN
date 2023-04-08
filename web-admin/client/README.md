@@ -1,4 +1,4 @@
-# web_admin_ui
+# web_admin
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.2.
 

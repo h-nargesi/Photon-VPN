@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "web_admin_ui": {
+    "web_admin": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "web_admin_ui:build:production"
+              "browserTarget": "web_admin:build:production"
             },
             "development": {
-              "browserTarget": "web_admin_ui:build:development",
+              "browserTarget": "web_admin:build:development",
               "proxyConfig": "proxy.conf.js"
             }
           },
@@ -81,7 +81,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "web_admin_ui:build"
+            "browserTarget": "web_admin:build"
           }
         },
         "test": {
@@ -129,7 +129,7 @@
       }
     }
   },
-  "defaultProject": "web_admin_ui",
+  "defaultProject": "web_admin",
   "cli": {
     "analytics": false
   }
