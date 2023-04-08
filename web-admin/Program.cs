@@ -17,7 +17,6 @@ builder.Services.AddRazorPages();
 // builder.Services.AddScoped<TrendsCheckpoint>();
 // builder.Services.AddSingleton<Analyzer>();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
