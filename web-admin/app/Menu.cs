@@ -1,4 +1,4 @@
-namespace Photon.Service.VPN.Basical;
+namespace Photon.Service.VPN.App;
 
 public class Menu
 {

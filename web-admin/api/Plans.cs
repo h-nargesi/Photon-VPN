@@ -9,6 +9,8 @@ namespace Photon.Service.VPN.Handlers;
 public class Plans : Controller
 {
     [HttpGet]
+    [Route("")]
+    [Route("/srv/[controller]/[action]")]
     public async Task<IActionResult> List()
     {
         using var db = new RdContext();
@@ -20,7 +22,9 @@ public class Plans : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int id)
+    [Route("{id}")]
+    [Route("/srv/[controller]/[action]/{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         using var db = new RdContext();
 

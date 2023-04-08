@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
 namespace Photon.Service.VPN.Handlers;
@@ -18,9 +17,9 @@ public class Users : Controller
         return Ok(await query.ToListAsync());
     }
 
-
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int id)
+    [Route("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         using var db = new RdContext();
 

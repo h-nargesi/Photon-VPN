@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Photon.Service.VPN.Basical;
+using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Pages;
 

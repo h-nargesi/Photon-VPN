@@ -6,6 +6,7 @@ using Photon.Service.VPN.Models;
 namespace Photon.Service.VPN.Handlers;
 
 [Route("api/[controller]/[action]")]
+[Route("srv/[controller]/[action]")]
 public class Membership : Controller
 {
     [HttpGet]

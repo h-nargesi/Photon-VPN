@@ -24,7 +24,8 @@ public class Payments : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int id)
+    [Route("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         using var db = new RdContext();
 
@@ -36,6 +37,8 @@ public class Payments : Controller
     }
 
     [HttpPost]
+    [Route("")]
+    [Route("/srv/[controller]/[action]")]
     public async Task<IActionResult> Add([FromBody] Payment payment)
     {
         if (payment == null) return BadRequest();
@@ -57,7 +60,8 @@ public class Payments : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Approve([FromQuery] int id, [FromQuery] bool approvement)
+    [Route("{id}")]
+    public async Task<IActionResult> Approve([FromRoute] int id, [FromBody] bool approvement)
     {
         using var db = new RdContext();
 

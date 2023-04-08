@@ -19,7 +19,8 @@ public class Servers : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int id)
+    [Route("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         using var db = new RdContext();
 
