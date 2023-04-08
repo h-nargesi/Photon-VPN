@@ -14,17 +14,19 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Information("Starting up ...");
 
-builder.Services.AddRazorPages();
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddControllersWithViews();
+// builder.Services.AddRazorPages();
+// builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddSingleton<TokenService.TokenServer>();
 
 var app = builder.Build();
 
 app.UseStaticFiles();
 app.UseRouting();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapRazorPages();
-});
+app.MapControllers();
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapControllers();
+//     endpoints.MapRazorPages();
+// });
 app.Run();
