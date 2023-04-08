@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+admin-lte/
+plugins/
+dist/
+
 # Database files
 *.sqlite3
 
@@ -31,6 +35,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+.angular/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

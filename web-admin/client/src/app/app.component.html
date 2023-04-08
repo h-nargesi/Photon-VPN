@@ -1,6 +1,26 @@
-<body>
-  <app-nav-menu></app-nav-menu>
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
-</body>
+<!-- Preloader -->
+<div class="preloader flex-column justify-content-center align-items-center">
+  <img class="animation__shake" src="/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+</div>
+
+<!-- Navbar -->
+<app-nav-header></app-nav-header>
+<!-- /.navbar -->
+
+<!-- Main Sidebar Container -->
+<app-nav-menu></app-nav-menu>
+<!-- /.main-sidebar -->
+
+<!-- Content Wrapper. Contains page content -->
+<router-outlet></router-outlet>
+<!-- /.content-wrapper -->
+
+<footer class="main-footer">
+  @RenderSection("Footer", required: false)
+</footer>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->

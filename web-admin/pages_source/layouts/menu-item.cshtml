@@ -1,0 +1,32 @@
+@model Photon.Service.VPN.App.Menu
+@using Serilog
+@{
+  var current = ViewData["RequestPath"]?.ToString() ?? string.Empty;
+  var active = (current == Model.Url || Model.Title != "List" && current.StartsWith(Model.Url + "/")) ? "active" : "";
+}
+
+<a href="@Model.Url" class="nav-link @active"> 
+  <i class="nav-icon @Model.Icon"></i>
+  <p>
+    @Model.Title
+    @if (Model.ItemsCount> 0)
+    {
+      <i class="right fas fa-angle-left"></i>
+    }
+  </p>
+</a>
+@if (Model.ItemsCount > 0)
+{
+  <ul class="nav nav-treeview">
+    @foreach(var menu in Model.Items)
+    {
+      if (menu.Url == null && menu.ItemsCount < 1)
+      {
+        continue;
+      }
+      <li class="nav-item">
+        @Html.Partial("~/pages/layouts/menu-item.cshtml", menu)
+      </li>
+    }
+  </ul>
+}
