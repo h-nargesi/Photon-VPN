@@ -17,6 +17,7 @@ Log.Information("Starting up ...");
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddSingleton<TokenService.TokenClient>();
 builder.Services.AddSingleton<CacheService>();
 
 var app = builder.Build();

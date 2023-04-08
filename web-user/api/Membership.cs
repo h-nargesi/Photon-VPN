@@ -6,20 +6,20 @@ namespace Photon.Service.VPN.Handlers;
 public class Membership : BasicController
 {
     [HttpGet]
-    public async Task<IActionResult> Plans([FromQuery] int user_id)
+    public async Task<IActionResult> Plans([FromQuery] int _)
     {
-        throw new NotImplementedException();
+        return Ok(await GetData());
     }
 
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] object user_plan)
     {
-        throw new NotImplementedException();
+        return Ok(await PostData(user_plan));
     }
 
     [HttpPost]
     public async Task<IActionResult> Delete([FromBody] object user_time)
     {
-        throw new NotImplementedException();
+        return Ok(await PostData(user_time));
     }
 }

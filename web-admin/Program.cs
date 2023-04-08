@@ -1,3 +1,4 @@
+using Photon.Service.VPN.App;
 using Serilog;
 using Serilog.Events;
 
@@ -14,9 +15,8 @@ Log.Logger = new LoggerConfiguration()
 Log.Information("Starting up ...");
 
 builder.Services.AddRazorPages();
-// builder.Services.AddScoped<TrendsCheckpoint>();
-// builder.Services.AddSingleton<Analyzer>();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddSingleton<TokenService.TokenServer>();
 
 var app = builder.Build();
 

@@ -8,7 +8,7 @@ public class Payments : BasicController
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] object payment)
     {
-        throw new NotImplementedException();
+        return Ok(await PostData(payment));
     }
 
 }

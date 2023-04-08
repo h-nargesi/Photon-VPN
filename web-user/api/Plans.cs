@@ -8,15 +8,15 @@ public class Plans : BasicController
     [HttpGet]
     public async Task<IActionResult> List()
     {
-        throw new NotImplementedException();
+        return Ok(await GetData());
     }
 
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<IActionResult> Get([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] int _)
     {
-        throw new NotImplementedException();
+        return Ok(await GetData());
     }
 
 }
