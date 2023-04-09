@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="/index3.html" class="brand-link">
+  <a [routerLink]="['/']" class="brand-link">
     <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">@Model.Title</span>
   </a>
@@ -30,10 +30,37 @@
     </div>
 
     <!-- Sidebar Menu -->
-    <nav class="mt-2">
+    <nav class="mt-2" ng-if="">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item" *ngFor="let menu of Menu.Items">
-          <app-menu-item [menu]="menu"></app-menu-item>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/']" [routerLinkActive]="['link-active']">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Dashbord</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/users']" [routerLinkActive]="['link-active']">
+            <i class="nav-icon fa fa-users"></i>
+            <p>Users</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/users/sessions']" [routerLinkActive]="['link-active']">
+            <i class="nav-icon fa fa-cloud"></i>
+            <p>Sessions</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/users/payments']" [routerLinkActive]="['link-active']">
+            <i class="nav-icon fas fa-money-check"></i>
+            <p>Payments</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/plans']" [routerLinkActive]="['link-active']">
+            <i class="nav-icon fas fa-cubes"></i>
+            <p>Plans</p>
+          </a>
         </li>
       </ul>
     </nav>

@@ -22,26 +22,4 @@ public class Global : Controller
 
         return Ok(configuration.GetSection("Organization"));
     }
-
-    [HttpGet]
-    public IActionResult Menu()
-    {
-        var menu = HttpContext.RequestServices.GetService<IActionDescriptorCollectionProvider>() ??
-                   throw new Exception("IActionDescriptorCollectionProvider Service not found");
-
-        var pages = menu.ActionDescriptors.Items
-                        .Select(i => i.RouteValues["page"] ?? string.Empty)
-                        .Where(i => i.Length > 0)
-                        .Distinct();
-
-        var RootMenu = new Menu("root");
-
-        foreach (var page in pages)
-        {
-            var path = page.Split('/').Where(i => i.Length > 0).Select(i => i.FirstCharToUpper()).ToArray();
-            RootMenu.AddChild(page, path);
-        }
-
-        return Ok(RootMenu);
-    }
 }

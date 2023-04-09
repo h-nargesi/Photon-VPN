@@ -5,28 +5,40 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { NavHeaderComponent } from './nav-header/nav-header.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { MenuItemComponent } from './nav-menu/menu-item/menu-item.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { NavHeaderComponent } from './components/nav-header/nav-header.component';
+import { ListViewComponent } from './components/list-view/list-view.component';
+import { DashbordComponent } from './dashbord/dashbord.component';
+import { UsersComponent } from './users/users.component';
+import { ProfileComponent } from './users/profile/profile.component';
+import { SessionsComponent } from './users/sessions/sessions.component';
+import { PaymentsComponent } from './users/payments/payments.component';
+import { PlansComponent } from './plans/plans.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    MenuItemComponent,
     NavHeaderComponent,
-    HomeComponent,
-    CounterComponent
+    ListViewComponent,
+    DashbordComponent,
+    UsersComponent,
+    ProfileComponent,
+    SessionsComponent,
+    PaymentsComponent,
+    PlansComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
+      { path: '', component: DashbordComponent, pathMatch: 'full' },
+      { path: 'users', component: UsersComponent },
+      { path: 'users/profile', component: ProfileComponent },
+      { path: 'users/sessions', component: SessionsComponent },
+      { path: 'users/payments', component: PaymentsComponent },
+      { path: 'plans', component: PlansComponent },
     ])
   ],
   providers: [],
