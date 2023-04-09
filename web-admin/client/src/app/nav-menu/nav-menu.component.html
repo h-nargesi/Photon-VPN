@@ -32,8 +32,8 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item" *ngFor="let menu in Menu.Items">
-          @Html.Partial("~/pages/layouts/menu-item.cshtml", menu)
+        <li class="nav-item" *ngFor="let menu of Menu.Items">
+          <app-menu-item [menu]="menu"></app-menu-item>
         </li>
       </ul>
     </nav>

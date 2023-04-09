@@ -1,3 +1,10 @@
 <li class="nav-item">
-  @Html.Partial("~/pages/layouts/menu-item.cshtml", menu)
+  <a href="{{ menu.Url }}" class="nav-link">
+    <i class="nav-icon {{ menu.Icon }}"></i>
+    <p>{{ menu.Title }} <i ng-if="hasChild(menu)" class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul ng-if="hasChild(menu)" class="nav nav-treeview" *ngFor="let menu of Menu.Items">
+    <app-menu-item [menu]="menu"></app-menu-item>
+  </ul>
 </li>
