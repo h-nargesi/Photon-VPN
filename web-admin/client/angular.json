@@ -24,8 +24,9 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/assets/dist",
-              "src/assets/plugins"
+              "src/assets",
+              "src/dist",
+              "src/plugins"
             ],
             "scripts": []
           },
