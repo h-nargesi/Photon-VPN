@@ -32,14 +32,9 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- Add icons to the links using the .nav-icon class
-             with font-awesome or any other icon font library -->
-        @foreach(var menu in Model.RootMenu.Items)
-          if (menu.Url == null && menu.ItemsCount < 1)
-            continue;
-          <li class="nav-item">
-            @Html.Partial("~/pages/layouts/menu-item.cshtml", menu)
-          </li>
+        <li class="nav-item" *ngFor="let menu in Menu.Items">
+          @Html.Partial("~/pages/layouts/menu-item.cshtml", menu)
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->
