@@ -9,16 +9,16 @@ import { Server } from './servers.model';
 export class ServersService {
 
   constructor(
-    private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string) {
-    this.baseUrl += "/api/servers";
+    private readonly http: HttpClient,
+    @Inject('BASE_URL') private readonly baseUrl: string) {
+    this.baseUrl += "api/servers/";
   }
 
   public List(): Observable<Server[]> {
-    return this.http.get<Server[]>(this.baseUrl + '/list');
+    return this.http.get<Server[]>(this.baseUrl + 'list');
   }
 
   public Get(id: number): Observable<Server> {
-    return this.http.get<Server>(this.baseUrl + '/get', { params: { id: id } });
+    return this.http.get<Server>(this.baseUrl + 'get', { params: { id: id } });
   }
 }

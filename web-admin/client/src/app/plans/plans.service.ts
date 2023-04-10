@@ -9,16 +9,16 @@ import { Plan } from './plans.models';
 export class PlansService {
 
   constructor(
-    private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string) {
-    this.baseUrl += "/api/plans";
+    private readonly http: HttpClient,
+    @Inject('BASE_URL') private readonly baseUrl: string) {
+    this.baseUrl += "api/plans/";
   }
 
   public List(): Observable<Plan[]> {
-    return this.http.get<Plan[]>(this.baseUrl + '/list');
+    return this.http.get<Plan[]>(this.baseUrl + 'list');
   }
 
   public Get(id: number): Observable<Plan> {
-    return this.http.get<Plan>(this.baseUrl + '/get', { params: { id: id } });
+    return this.http.get<Plan>(this.baseUrl + 'get', { params: { id: id } });
   }
 }

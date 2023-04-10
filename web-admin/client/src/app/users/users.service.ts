@@ -2,53 +2,29 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Membership, User } from './users.model';
-import { Payment } from './payments/payments.model';
+import { BaseService } from '../base-service';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
-export class UsersService {
+export class UsersService extends BaseService {
 
-  constructor(
-    private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string) { }
+	constructor(
+		http: HttpClient,
+		@Inject('API_URL') apiUrl: string,
+		@Inject('BASE_URL') baseUrl: string) {
+		super(http, apiUrl, baseUrl);
+	}
 
-  public Users = {
-    http: this.http,
-    baseUrl: this.baseUrl + '/api/users',
+	public List(): Observable<User[]> {
+		return this.http.get<User[]>(this.baseUrl + 'api/users/list');
+	}
 
-    List: function (): Observable<User[]> {
-      return this.http.get<User[]>(this.baseUrl + '/list');
-    },
+	public Get(id: number): Observable<User> {
+		return this.http.get<User>(this.baseUrl + 'api/users/get', { params: { id: id } });
+	}
 
-    Get: function (id: number): Observable<User> {
-      return this.http.get<User>(this.baseUrl + '/get', { params: { id: id } });
-    },
-  }
-
-  public Payments = {
-    http: this.http,
-    baseUrl: this.baseUrl + '/api/payments',
-
-    List: function (user_id: number | null): Observable<Payment[]> {
-      if (user_id == null) {
-        return this.http.get<Payment[]>(this.baseUrl + '/list');
-      } else {
-        return this.http.get<Payment[]>(this.baseUrl + '/list', { params: { user_id: user_id } });
-      }
-    },
-
-    Get: function (id: number): Observable<Payment> {
-      return this.http.get<Payment>(this.baseUrl + '/get', { params: { id: id } });
-    },
-  }
-
-  public Membership = {
-    http: this.http,
-    baseUrl: this.baseUrl + '/api/membership',
-
-    Plans: function (user_id: number): Observable<Membership> {
-      return this.http.get<Membership>(this.baseUrl + '/plans', { params: { user_id: user_id } });
-    },
-  }
+	public Plans(user_id: number): Observable<Membership> {
+		return this.http.get<Membership>(this.baseUrl + 'api/membership/plans', { params: { user_id: user_id } });
+	}
 }

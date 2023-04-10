@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-users-sessions',
   templateUrl: './sessions.component.html',
 })
-export class SessionsComponent {
-  constructor(title: Title) {
-    title.setTitle("Sessions | Photon - VPN");
-  }
-}
+export class SessionsComponent { }

@@ -14,7 +14,7 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Information("Starting up ...");
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
 // builder.Services.AddRazorPages();
 // builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddSingleton<TokenService.TokenServer>();

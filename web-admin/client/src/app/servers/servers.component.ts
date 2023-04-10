@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { Server } from './servers.model';
+import { ServersService } from './servers.service';
 
 @Component({
   selector: 'app-servers',
@@ -7,7 +9,23 @@ import { Title } from '@angular/platform-browser';
   template: '<div></div>',
 })
 export class ServersComponent {
-  constructor(title: Title) {
+  private servers: Server[] | null = null;
+
+  constructor(
+    title: Title,
+    private readonly service: ServersService) {
     title.setTitle("Servers | Photon - VPN");
+  }
+
+  get Servers(): Server[] | null {
+    return this.servers;
+  }
+
+  ngOnInit(): void {
+    this.service.List()
+      .subscribe({
+        next: (result: Server[]) => this.servers = result,
+        error: console.error
+      });
   }
 }
