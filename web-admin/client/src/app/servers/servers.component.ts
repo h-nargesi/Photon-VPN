@@ -6,8 +6,7 @@ import { ServersService } from './servers.service';
 
 @Component({
   selector: 'app-servers',
-  //templateUrl: './servers.component.html',
-  template: '<div></div>',
+  templateUrl: './servers.component.html',
 })
 export class ServersComponent extends ListViewComponent implements OnInit {
 
