@@ -14,6 +14,7 @@ import { ProfileComponent } from './users/profile/profile.component';
 import { SessionsComponent } from './users/sessions/sessions.component';
 import { PaymentsComponent } from './users/payments/payments.component';
 import { PlansComponent } from './plans/plans.component';
+import { ServersComponent } from './servers/servers.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { PlansComponent } from './plans/plans.component';
     ProfileComponent,
     SessionsComponent,
     PaymentsComponent,
-    PlansComponent
+    PlansComponent,
+    ServersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -39,6 +41,7 @@ import { PlansComponent } from './plans/plans.component';
       { path: 'users/sessions', component: SessionsComponent },
       { path: 'users/payments', component: PaymentsComponent },
       { path: 'plans', component: PlansComponent },
+      { path: 'servers', component: ServersComponent },
     ])
   ],
   providers: [],
