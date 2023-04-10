@@ -28,7 +28,7 @@ import { ServersComponent } from './servers/servers.component';
     SessionsComponent,
     PaymentsComponent,
     PlansComponent,
-    ServersComponent
+    ServersComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
