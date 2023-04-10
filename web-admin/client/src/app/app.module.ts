@@ -42,9 +42,9 @@ import { ServersComponent } from './servers/servers.component';
       { path: 'users/profile', component: ProfileComponent },
       { path: 'users/profile/:id', component: ProfileComponent },
       { path: 'users/sessions', component: SessionsComponent },
-      { path: 'users/sessions/:id', component: SessionsComponent },
+      { path: 'users/sessions/:user_id', component: SessionsComponent },
       { path: 'users/payments', component: PaymentsComponent },
-      { path: 'users/payments/:id', component: PaymentsComponent },
+      { path: 'users/payments/:user_id', component: PaymentsComponent },
       { path: 'plans', component: PlansComponent },
       { path: 'servers', component: ServersComponent },
     ])

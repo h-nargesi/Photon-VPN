@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { ListViewComponent } from '../components/list-view.component';
 import { Server } from './servers.model';
 import { ServersService } from './servers.service';
 
@@ -8,23 +9,19 @@ import { ServersService } from './servers.service';
   //templateUrl: './servers.component.html',
   template: '<div></div>',
 })
-export class ServersComponent {
-  private servers: Server[] | null = null;
+export class ServersComponent extends ListViewComponent implements OnInit {
 
   constructor(
     title: Title,
     private readonly service: ServersService) {
+    super();
     title.setTitle("Servers | Photon - VPN");
-  }
-
-  get Servers(): Server[] | null {
-    return this.servers;
   }
 
   ngOnInit(): void {
     this.service.List()
       .subscribe({
-        next: (result: Server[]) => this.servers = result,
+        next: (result: Server[]) => this.InitDataSource(result),
         error: console.error
       });
   }
