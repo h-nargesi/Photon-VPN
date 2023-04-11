@@ -15,9 +15,24 @@ public class Plans : Controller
     {
         using var db = new RdContext();
 
-        var query = db.Plans.AsNoTracking();
+        var quuey = from pr in db.Profiles.AsNoTracking()
+                    join pl in db.Plans.AsNoTracking()
+                            on pr.Id equals pl.ProfileId into @join
+                    from pl in @join.DefaultIfEmpty()
+                    select new
+                    {
+                        pr.Id,
+                        pr.Name,
+                        Active = pl != null ? pl.Active : false,
+                        pr.CloudId,
+                        Price = pl != null ? pl.Price : (decimal?)null,
+                        ImageFile = pl != null ? pl.ImageFile : null,
+                        Description = pl != null ? pl.Description : null,
+                        RegisterTime = pr.Created,
+                        ModificationTime = pl != null && pl.ModificationTime > pr.Modified ? pl.ModificationTime : pr.Modified,
+                    };
 
-        return Ok(await query.ToListAsync());
+        return Ok(await quuey.ToListAsync());
     }
 
 
@@ -30,7 +45,8 @@ public class Plans : Controller
 
         var quuey = from pr in db.Profiles.AsNoTracking()
                     join pl in db.Plans.AsNoTracking()
-                            on pr.Id equals pl.ProfileId
+                            on pr.Id equals pl.ProfileId into @join
+                    from pl in @join.DefaultIfEmpty()
                     where pr.Id == id
                     select new
                     {

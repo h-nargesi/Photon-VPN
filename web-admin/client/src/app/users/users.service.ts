@@ -13,18 +13,18 @@ export class UsersService extends BaseService {
 		http: HttpClient,
 		@Inject('API_URL') apiUrl: string,
 		@Inject('BASE_URL') baseUrl: string) {
-		super(http, apiUrl, baseUrl);
+		super(http, apiUrl, baseUrl, '');
 	}
 
 	public List(): Observable<User[]> {
-		return this.http.get<User[]>(this.baseUrl + 'api/users/list');
+		return this.http.get<User[]>(this.base_url + 'api/users/list');
 	}
 
 	public Get(id: number): Observable<User> {
-		return this.http.get<User>(this.baseUrl + 'api/users/get', { params: { id: id } });
+		return this.http.get<User>(this.base_url + 'api/users/get', { params: { id: id } });
 	}
 
 	public Plans(user_id: number): Observable<Membership> {
-		return this.http.get<Membership>(this.baseUrl + 'api/membership/plans', { params: { user_id: user_id } });
+		return this.http.get<Membership>(this.base_url + 'api/membership/plans', { params: { user_id: user_id } });
 	}
 }

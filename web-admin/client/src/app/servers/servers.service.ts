@@ -2,23 +2,25 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Server } from './servers.model';
+import { BaseService } from '../base-service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ServersService {
+export class ServersService extends BaseService {
 
-  constructor(
-    private readonly http: HttpClient,
-    @Inject('BASE_URL') private readonly baseUrl: string) {
-    this.baseUrl += "api/servers/";
-  }
+	constructor(
+		http: HttpClient,
+		@Inject('API_URL') api_url: string,
+		@Inject('BASE_URL') base_url: string) {
+		super(http, api_url, base_url, 'api/servers/');
+	}
 
   public List(): Observable<Server[]> {
-    return this.http.get<Server[]>(this.baseUrl + 'list');
+    return this.http.get<Server[]>(this.base_url + 'list');
   }
 
   public Get(id: number): Observable<Server> {
-    return this.http.get<Server>(this.baseUrl + 'get', { params: { id: id } });
+    return this.http.get<Server>(this.base_url + 'get', { params: { id: id } });
   }
 }

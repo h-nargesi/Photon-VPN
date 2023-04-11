@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'app-content-header',
   templateUrl: './content-header.component.html'
 })
-export class NavHeaderComponent { }
+export class ContentHeaderComponent { }

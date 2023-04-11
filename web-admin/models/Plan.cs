@@ -7,7 +7,7 @@ public partial class Plan
 {
     public int ProfileId { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
     public decimal Price { get; set; }
 

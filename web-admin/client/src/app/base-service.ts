@@ -2,21 +2,29 @@ import { HttpClient } from "@angular/common/http";
 import { Inject } from "@angular/core";
 
 export class BaseService {
-    protected readonly baseUrl: string;
+    protected readonly base_url: string;
 
     constructor(
         protected readonly http: HttpClient,
-        @Inject('API_URL') apiUrl: string,
-        @Inject('BASE_URL') baseUrl: string) {
+        @Inject('API_URL') api_url: string,
+        @Inject('BASE_URL') base_url: string,
+        base_app: string) {
 
-        if (apiUrl == null) apiUrl = '';
-        else if (!apiUrl.endsWith('/')) apiUrl += '/';
+        if (api_url == null) api_url = '';
+        else if (api_url.length > 0 && !api_url.endsWith('/')) api_url += '/';
 
-        if (baseUrl == null) baseUrl = '';
-        else if (baseUrl != null && baseUrl.startsWith('/')) baseUrl = baseUrl.substring(1);
+        if (base_url == null) base_url = '';
+        else if (base_url.length > 0) {
+            if (base_url.startsWith('/')) base_url = base_url.substring(1);
+            if (!base_url.endsWith('/')) base_url += '/';
+        }
 
-        this.baseUrl = apiUrl + baseUrl;
+        if (base_app == null) base_app = '';
+        else if (base_app.length > 0)  {
+            if (base_app.startsWith('/')) base_app = base_app.substring(1);
+            if (!base_app.endsWith('/')) base_app += '/';
+        }
 
-        if (this.baseUrl.length > 0 && !this.baseUrl.endsWith('/')) this.baseUrl += '/';
+        this.base_url = api_url + base_url + base_app;
     }
 }

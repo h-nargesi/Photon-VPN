@@ -10,7 +10,7 @@ import { ListViewComponent } from '../../components/list-view.component';
   templateUrl: './payments.component.html',
 })
 export class PaymentsComponent extends ListViewComponent implements OnInit {
-  private user_id: number | null = null;
+  private user_id: number = 0;
 
   constructor(
     title: Title,
@@ -23,7 +23,7 @@ export class PaymentsComponent extends ListViewComponent implements OnInit {
   ngOnInit(): void {
     this.user_id = Number(this.route.snapshot.paramMap.get('user_id'));
     if (Number.isNaN(this.user_id)) {
-      this.user_id = null;
+      this.user_id = 0;
     }
     this.service.List(this.user_id)
       .subscribe({
