@@ -36,8 +36,9 @@
 	- Users
 		- Info
 		- Plans
-		- Payment *
+		- Payments *
 		- Data Usage *
+		- Sessions
 	- Vouchers
 	- Payments
 	- Plans
@@ -54,3 +55,5 @@
 	- Price
 	- Profile
 	- Description
+
+## 
