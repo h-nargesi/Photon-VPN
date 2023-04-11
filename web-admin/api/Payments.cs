@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
 namespace Photon.Service.VPN.Handlers;
@@ -8,7 +9,7 @@ namespace Photon.Service.VPN.Handlers;
 public class Payments : Controller
 {
     [HttpGet]
-    public async Task<IActionResult> List([FromQuery] int? user_id)
+    public async Task<IActionResult> List([FromQuery] int? user_id, [FromBody] ListQuery filter)
     {
         using var db = new RdContext();
 
@@ -19,12 +20,13 @@ public class Payments : Controller
             query = query.Where(p => p.PermanentUserId == user_id);
         }
 
+        filter?.ApplyFilter(query);
+
         return Ok(await query.ToListAsync());
     }
 
-
     [HttpGet]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         using var db = new RdContext();
@@ -60,7 +62,7 @@ public class Payments : Controller
     }
 
     [HttpPost]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> Approve([FromRoute] int id, [FromBody] bool approvement)
     {
         using var db = new RdContext();

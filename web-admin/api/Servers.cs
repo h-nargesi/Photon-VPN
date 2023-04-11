@@ -19,7 +19,7 @@ public class Servers : Controller
 
 
     [HttpGet]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         using var db = new RdContext();

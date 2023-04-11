@@ -7,7 +7,7 @@ namespace Photon.Service.VPN.Handlers;
 public class Account : Controller
 {
     [HttpPost]
-    [Route("/api/[controller]/login/{username}")]
+    [Route("/api/[controller]/login/{username:string}")]
     public async Task<IActionResult> AdminLogin([FromRoute] string username, [FromBody] string password)
     {
         using var db = new RdContext();
@@ -20,7 +20,7 @@ public class Account : Controller
     }
 
     [HttpPost]
-    [Route("/srv/[controller]/login/{username}")]
+    [Route("/srv/[controller]/login/{username:string}")]
     public async Task<IActionResult> UserLogin([FromRoute] string username, [FromBody] string password)
     {
         using var db = new RdContext();

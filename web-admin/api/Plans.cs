@@ -11,11 +11,11 @@ public class Plans : Controller
     [HttpGet]
     [Route("")]
     [Route("/srv/[controller]/[action]")]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List([FromBody] ListQuery filter)
     {
         using var db = new RdContext();
 
-        var quuey = from pr in db.Profiles.AsNoTracking()
+        var query = from pr in db.Profiles.AsNoTracking()
                     join pl in db.Plans.AsNoTracking()
                             on pr.Id equals pl.ProfileId into @join
                     from pl in @join.DefaultIfEmpty()
@@ -32,13 +32,15 @@ public class Plans : Controller
                         ModificationTime = pl != null && pl.ModificationTime > pr.Modified ? pl.ModificationTime : pr.Modified,
                     };
 
-        return Ok(await quuey.ToListAsync());
+        filter?.ApplyFilter(query);
+
+        return Ok(await query.ToListAsync());
     }
 
 
     [HttpGet]
-    [Route("{id}")]
-    [Route("/srv/[controller]/[action]/{id}")]
+    [Route("{id:int}")]
+    [Route("/srv/[controller]/[action]/{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         using var db = new RdContext();
