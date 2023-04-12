@@ -1,7 +1,7 @@
-using System.Data.Common;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Photon.Service.VPN.App;
 using Photon.Service.VPN.Models;
+using System.Text;
 
 namespace Photon.Service.VPN.Handlers.Model;
 
@@ -13,13 +13,13 @@ public class ListQuery
 
     public string? Search { get; set; }
 
-    public Dictionary<string, string>? Filters { get; set; }
+    public Dictionary<string, DbObject>? Filters { get; set; }
 
     public Dictionary<string, bool>? Ordering { get; set; }
 
     public string[]? Columns { get; set; }
 
-    public Task<List<T>> ApplyFilter<T>(IQueryable<T> query, RdContext db) where T : class
+    public Task<List<T>> ApplyFilter<T>(IQueryable<T> query, RdContext db)
     {
         if (!HasFiltering())
         {
@@ -29,11 +29,11 @@ public class ListQuery
         var query_string = new StringBuilder(query.ToQueryString());
 
         ApplySelection(query_string);
-        ApplyWhere(query_string, typeof(T));
+        ApplyWhere(query_string);
         ApplyOrdering(query_string, typeof(T));
         ApplyRecordLimits(query_string);
 
-        return ApplyRecordLimits(query).ToListAsync();
+        return db.ReadSql<T>(query_string.ToString(), Filters);
     }
 
     private bool HasFiltering()
@@ -65,43 +65,30 @@ public class ListQuery
         query.Insert(0, " FROM (\n").Insert(0, selection).Insert(0, "SELECT ").Append("\n) qs\n");
     }
 
-    private void ApplyWhere(StringBuilder query, Type type)
+    private void ApplyWhere(StringBuilder query)
     {
         if (Filters == null || Filters.Count < 1) return;
 
-        var filters = Filters.ToDictionary(k => k.Key.ToLower(), v => v.Value);
-
-        var properties = type.GetProperties()
-                             .Where(p => filters.ContainsKey(p.Name.ToLower()));
-
-        if (!properties.Any()) return;
-
         var columns = new List<string>();
+        var parameters = new Dictionary<string, DbObject>();
 
-        foreach (var property in properties)
+        foreach (var filter in Filters)
         {
-            var value = filters[property.Name.ToLower()];
-            if (value == null)
+            if (filter.Value == null) continue;
+            else if (filter.Value.Value == null)
             {
-                columns.Add(property.Name + " IS NULL");
+                columns.Add(filter.Key + " IS NULL");
             }
             else
             {
-                var w = property.Name + " = ";
-
-                if (property.PropertyType == typeof(string) ||
-                    property.PropertyType == typeof(DateTime) ||
-                    property.PropertyType == typeof(DateTime?))
-                {
-                    w += $"'{value}'";
-                }
-                else w += value;
-
-                columns.Add(w);
+                parameters[filter.Key] = filter.Value;
+                columns.Add(filter.Key + " = @" + filter.Key);
             }
         }
 
-        query.Append("WHERE ").Append(string.Join(" AND ", columns)).Append("\n");
+        Filters = parameters;
+
+        query.Append("WHERE ").Append(string.Join(" AND ", columns)).Append('\n');
     }
 
     private void ApplyOrdering(StringBuilder query, Type type)
@@ -123,7 +110,7 @@ public class ListQuery
             else columns.Add(prop.Name + " desc");
         }
 
-        query.Append("ORDER BY ").Append(string.Join(", ", columns)).Append("\n");
+        query.Append("ORDER BY ").Append(string.Join(", ", columns)).Append('\n');
     }
 
     private void ApplyRecordLimits(StringBuilder query)
