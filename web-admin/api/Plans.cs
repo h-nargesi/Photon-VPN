@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
@@ -8,10 +9,10 @@ namespace Photon.Service.VPN.Handlers;
 [Route("api/[controller]/[action]")]
 public class Plans : Controller
 {
-    [HttpGet]
+    [HttpPost]
     [Route("")]
     [Route("/srv/[controller]/[action]")]
-    public async Task<IActionResult> List([FromBody] ListQuery filter)
+    public async Task<IActionResult> List([FromBody] ListQuery? filter)
     {
         using var db = new RdContext();
 
@@ -32,7 +33,7 @@ public class Plans : Controller
                         ModificationTime = pl != null && pl.ModificationTime > pr.Modified ? pl.ModificationTime : pr.Modified,
                     };
 
-        filter?.ApplyFilter(query);
+        filter?.ApplyFilter(ref query);
 
         return Ok(await query.ToListAsync());
     }

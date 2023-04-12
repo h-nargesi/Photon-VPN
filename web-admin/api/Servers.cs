@@ -7,7 +7,7 @@ namespace Photon.Service.VPN.Handlers;
 [Route("api/[controller]/[action]")]
 public class Servers : Controller
 {
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> List()
     {
         using var db = new RdContext();

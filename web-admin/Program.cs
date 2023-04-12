@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Photon.Service.VPN.App;
 using Serilog;
 using Serilog.Events;
@@ -14,9 +15,10 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Information("Starting up ...");
 
-builder.Services.AddControllers();
-// builder.Services.AddRazorPages();
-// builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddControllers(options =>
+{
+    options.AllowEmptyInputInBodyModelBinding = true;
+});
 builder.Services.AddSingleton<TokenService.TokenServer>();
 
 var app = builder.Build();
@@ -24,9 +26,4 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
-// app.UseEndpoints(endpoints =>
-// {
-//     endpoints.MapControllers();
-//     endpoints.MapRazorPages();
-// });
 app.Run();

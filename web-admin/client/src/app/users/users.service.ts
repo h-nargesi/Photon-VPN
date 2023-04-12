@@ -17,7 +17,7 @@ export class UsersService extends BaseService {
 	}
 
 	public List(): Observable<User[]> {
-		return this.http.get<User[]>(this.base_url + 'api/users/list');
+		return this.http.post<User[]>(this.base_url + 'api/users/list', { });
 	}
 
 	public Get(id: number): Observable<User> {

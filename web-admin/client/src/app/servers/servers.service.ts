@@ -17,7 +17,7 @@ export class ServersService extends BaseService {
 	}
 
   public List(): Observable<Server[]> {
-    return this.http.get<Server[]>(this.base_url + 'list');
+    return this.http.post<Server[]>(this.base_url + 'list', { });
   }
 
   public Get(id: number): Observable<Server> {

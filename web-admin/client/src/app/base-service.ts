@@ -10,6 +10,10 @@ export class BaseService {
         @Inject('BASE_URL') base_url: string,
         base_app: string) {
 
+        // console.log('API_URL', api_url);
+        // console.log('BASE_URL', base_url);
+        // console.log('BASE_APP', base_app);
+
         if (api_url == null) api_url = '';
         else if (api_url.length > 0 && !api_url.endsWith('/')) api_url += '/';
 
@@ -20,11 +24,13 @@ export class BaseService {
         }
 
         if (base_app == null) base_app = '';
-        else if (base_app.length > 0)  {
+        else if (base_app.length > 0) {
             if (base_app.startsWith('/')) base_app = base_app.substring(1);
             if (!base_app.endsWith('/')) base_app += '/';
         }
 
         this.base_url = api_url + base_url + base_app;
+
+        // console.log('URL', base_url);
     }
 }

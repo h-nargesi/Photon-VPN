@@ -19,25 +19,27 @@ public class ListQuery
         public string? Value { get; set; }
     }
 
-    public void ApplyFilter<T>(IQueryable<T> query)
+    public void ApplyFilter<T>(ref IQueryable<T> query)
     {
-        ApplyWhere(query);
-        ApplyOrdering(query);
-        ApplyRecordLimits(query);
+        query = ApplyWhere(query);
+        query = ApplyOrdering(query);
+        query = ApplyRecordLimits(query);
     }
 
-    private void ApplyWhere<T>(IQueryable<T> query)
+    private IQueryable<T> ApplyWhere<T>(IQueryable<T> query)
     {
-        if (Filters == null) return;
+        if (Filters == null) return query;
 
         var type = typeof(T);
         foreach (var filter in Filters)
         {
-            ApplyWhere(query, filter, type);
+            query = ApplyWhere(query, filter, type);
         }
+
+        return query;
     }
 
-    private void ApplyWhere<T>(IQueryable<T> query, Filter filter, Type type)
+    private IQueryable<T> ApplyWhere<T>(IQueryable<T> query, Filter filter, Type type)
     {
         var properties = type.GetProperties()
                              .Where(p => string.Compare(p.Name, filter.Name, true) == 0);
@@ -46,51 +48,57 @@ public class ListQuery
         {
             if (filter.Value == null)
             {
-                query.Where(e => property.GetValue(e) == null);
+                query = query.Where(e => property.GetValue(e) == null);
             }
             else
             {
-                query.Where(e => filter.Value.Equals(property.GetValue(e)));
+                query = query.Where(e => filter.Value.Equals(property.GetValue(e)));
             }
         }
+
+        return query;
     }
 
-    private void ApplyOrdering<T>(IQueryable<T> query)
+    private IQueryable<T> ApplyOrdering<T>(IQueryable<T> query)
     {
-        if (Ordering == null) return;
+        if (Ordering == null) return query;
 
         var type = typeof(T);
         var properties = type.GetProperties()
                              .Where(p => Ordering.ContainsKey(p.Name));
 
-        if (!properties.Any()) return;
+        if (!properties.Any()) return query;
 
         var first_prop = properties.First();
 
         if (Ordering[first_prop.Name.ToLower()])
-            query.OrderBy(o => first_prop.GetValue(o, null));
+            query = query.OrderBy(o => first_prop.GetValue(o, null));
         else
-            query.OrderByDescending(o => first_prop.GetValue(o, null));
+            query = query.OrderByDescending(o => first_prop.GetValue(o, null));
 
         foreach (var prop in properties.Skip(1))
         {
             if (Ordering[prop.Name.ToLower()])
-                query.OrderBy(o => prop.GetValue(o, null));
+                query = query.OrderBy(o => prop.GetValue(o, null));
             else
-                query.OrderByDescending(o => prop.GetValue(o, null));
+                query = query.OrderByDescending(o => prop.GetValue(o, null));
         }
+
+        return query;
     }
 
-    private void ApplyRecordLimits<T>(IQueryable<T> query)
+    private IQueryable<T> ApplyRecordLimits<T>(IQueryable<T> query)
     {
         if (Start > 0)
         {
-            query.Skip(Start);
+            query = query.Skip(Start);
         }
 
         if (Limit > 0)
         {
-            query.Take(Limit);
+            query = query.Take(Limit);
         }
+
+        return query;
     }
 }

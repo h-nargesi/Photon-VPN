@@ -8,8 +8,8 @@ namespace Photon.Service.VPN.Handlers;
 [Route("api/[controller]/[action]")]
 public class Payments : Controller
 {
-    [HttpGet]
-    public async Task<IActionResult> List([FromQuery] int? user_id, [FromBody] ListQuery filter)
+    [HttpPost]
+    public async Task<IActionResult> List([FromQuery] int? user_id, [FromBody] ListQuery? filter)
     {
         using var db = new RdContext();
 
@@ -20,7 +20,7 @@ public class Payments : Controller
             query = query.Where(p => p.PermanentUserId == user_id);
         }
 
-        filter?.ApplyFilter(query);
+        filter?.ApplyFilter(ref query);
 
         return Ok(await query.ToListAsync());
     }

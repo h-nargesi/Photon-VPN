@@ -1,3 +1,5 @@
+declare var LaodTable: any;
+
 export class ListViewComponent {
   private data_source: any[] | null = null;
   private data_columns: string[] = [];
@@ -14,12 +16,14 @@ export class ListViewComponent {
     return this.data_columns.slice();
   }
 
-  InitDataSource(data: any[]) {
+  InitDataSource(data: any[], table_id: string = 'MainTable') {
     this.data_source = data;
     this.data_columns = [];
     if (this.data_source != null && this.data_source.length > 0) {
       for (const c in this.data_source[0])
         this.data_columns.push(c);
     }
+
+    LaodTable(table_id);
   }
 }
