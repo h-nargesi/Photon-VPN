@@ -12,7 +12,7 @@ public class Plans : Controller
     [HttpPost]
     [Route("")]
     [Route("/srv/[controller]/[action]")]
-    public async Task<IActionResult> List([FromBody] ListQuery? filter)
+    public async Task<IActionResult> List([FromBody] ListQuery filter)
     {
         using var db = new RdContext();
 
@@ -33,9 +33,9 @@ public class Plans : Controller
                         ModificationTime = pl != null && pl.ModificationTime > pr.Modified ? pl.ModificationTime : pr.Modified,
                     };
 
-        filter?.ApplyFilter(ref query);
+        var result = await filter.ApplyFilter(query, db);
 
-        return Ok(await query.ToListAsync());
+        return Ok(result);
     }
 
 

@@ -9,15 +9,15 @@ namespace Photon.Service.VPN.Handlers;
 public class Users : Controller
 {
     [HttpPost]
-    public async Task<IActionResult> List([FromBody] ListQuery? filter)
+    public async Task<IActionResult> List([FromBody] ListQuery filter)
     {
         using var db = new RdContext();
 
         var query = db.PermanentUsers.AsNoTracking();
 
-        filter?.ApplyFilter(ref query);
+        var result = await filter.ApplyFilter(query, db);
 
-        return Ok(await query.ToListAsync());
+        return Ok(result);
     }
 
     [HttpGet]

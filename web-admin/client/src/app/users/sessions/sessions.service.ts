@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BaseService } from 'src/app/base-service';
+import { BaseService } from 'src/app/components/services/base-service';
 import { Session } from './sessions.model';
 
 @Injectable({

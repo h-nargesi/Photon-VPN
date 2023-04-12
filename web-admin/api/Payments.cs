@@ -20,7 +20,7 @@ public class Payments : Controller
             query = query.Where(p => p.PermanentUserId == user_id);
         }
 
-        filter?.ApplyFilter(ref query);
+        // filter?.ApplyFilter(ref query);
 
         return Ok(await query.ToListAsync());
     }

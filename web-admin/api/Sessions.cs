@@ -20,7 +20,7 @@ public class Sessions : Controller
             query = query.Where(c => c.Acctstoptime == null);
         }
 
-        filter?.ApplyFilter(ref query);
+        // filter?.ApplyFilter(ref query);
 
         return Ok(await query.ToListAsync());
     }
