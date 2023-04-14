@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ListViewComponent } from '../../components/list-view.component';
 import { SessionsService } from './sessions.service';
 import { Session } from './sessions.model';
 
@@ -9,22 +8,16 @@ import { Session } from './sessions.model';
   selector: 'app-users-sessions',
   templateUrl: './sessions.component.html',
 })
-export class SessionsComponent extends ListViewComponent implements OnInit {
+export class SessionsComponent implements OnInit {
   public only_open: boolean = true;
 
   constructor(
     title: Title,
-    private readonly service: SessionsService,
-    private readonly route: ActivatedRoute) {
-    super();
+    private readonly service: SessionsService) {
     title.setTitle("Sessions | Photon - VPN");
   }
 
   ngOnInit(): void {
-    this.service.List(this.only_open)
-      .subscribe({
-        next: (result: Session[]) => this.InitDataSource(result),
-        error: console.error
-      });
+    this.service.List(this.only_open);
   }
 }

@@ -6,16 +6,6 @@
     <!-- Default box -->
     <div class="card">
       <div class="card-body">
-        <table id="MainTable" mat-table [dataSource]="DataSource" class='table table-bordered table-striped table-hover'>
-
-          <ng-container [matColumnDef]="column" *ngFor="let column of DisplayColumns">
-            <th mat-header-cell *matHeaderCellDef>{{column}}</th>
-            <td mat-cell *matCellDef="let element">{{element[column]}}</td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="DataColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: DataColumns;"></tr>
-        </table>
       </div>
       <!-- /.card-body -->
     </div>

@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ListViewComponent } from '../components/list-view.component';
+import { Observable } from 'rxjs';
+import { ListViewModel } from '../components/list-view/list-view.model';
 import { Server } from './servers.model';
 import { ServersService } from './servers.service';
+import Titles from './servers.json';
 
 @Component({
   selector: 'app-servers',
   templateUrl: './servers.component.html',
 })
-export class ServersComponent extends ListViewComponent implements OnInit {
+export class ServersComponent implements OnInit {
+  public columns_info: ListViewModel = Titles.list;
+  public data_provider: Observable<Server[]> | null = null;
 
   constructor(
     title: Title,
     private readonly service: ServersService) {
-    super();
     title.setTitle("Servers | Photon - VPN");
   }
 
   ngOnInit(): void {
-    this.service.List()
-      .subscribe({
-        next: (result: Server[]) => this.InitDataSource(result),
-        error: console.error
-      });
+    this.data_provider = this.service.List();
   }
 }

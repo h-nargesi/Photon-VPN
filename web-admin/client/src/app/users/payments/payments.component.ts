@@ -3,20 +3,18 @@ import { Title } from '@angular/platform-browser';
 import { Payment } from './payments.model';
 import { PaymentsService } from './payments.service';
 import { ActivatedRoute } from '@angular/router';
-import { ListViewComponent } from '../../components/list-view.component';
 
 @Component({
   selector: 'app-users-payments',
   templateUrl: './payments.component.html',
 })
-export class PaymentsComponent extends ListViewComponent implements OnInit {
+export class PaymentsComponent implements OnInit {
   private user_id: number = 0;
 
   constructor(
     title: Title,
     private readonly service: PaymentsService,
     private readonly route: ActivatedRoute) {
-    super();
     title.setTitle("Payments | Photon - VPN");
   }
 
@@ -25,10 +23,6 @@ export class PaymentsComponent extends ListViewComponent implements OnInit {
     if (Number.isNaN(this.user_id)) {
       this.user_id = 0;
     }
-    this.service.List(this.user_id)
-      .subscribe({
-        next: (result: Payment[]) => this.InitDataSource(result),
-        error: console.error
-      });
+    this.service.List(this.user_id);
   }
 }
