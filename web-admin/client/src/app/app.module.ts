@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { NavHeaderComponent } from './components/nav-header/nav-header.component';
 import { ContentHeaderComponent } from './components/content-header/content-header.component';
+import { ListViewComponent } from './components/list-view/list-view.component';
 import { DashbordComponent } from './dashbord/dashbord.component';
 import { UsersComponent } from './users/users.component';
 import { ProfileComponent } from './users/profile/profile.component';
@@ -22,6 +23,7 @@ import { ServersComponent } from './servers/servers.component';
     AppComponent,
     NavMenuComponent,
     NavHeaderComponent,
+    ListViewComponent,
     ContentHeaderComponent,
     DashbordComponent,
     UsersComponent,

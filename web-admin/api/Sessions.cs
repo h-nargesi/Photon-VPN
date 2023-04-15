@@ -9,20 +9,20 @@ namespace Photon.Service.VPN.Handlers;
 public class Sessions : Controller
 {
     [HttpPost]
-    public async Task<IActionResult> List([FromQuery] bool only_open = true, [FromBody] ListQuery? filter = null)
+    public async Task<IActionResult> List([FromQuery] bool? only_open, [FromBody] ListQuery filter)
     {
         using var db = new RdContext();
 
         var query = db.Radaccts.AsNoTracking();
 
-        if (only_open)
+        if (only_open ?? true)
         {
             query = query.Where(c => c.Acctstoptime == null);
         }
 
-        // filter?.ApplyFilter(ref query);
+        var result = await filter.ApplyFilter(query, db);
 
-        return Ok(await query.ToListAsync());
+        return Ok(result);
     }
 
     [HttpPost]

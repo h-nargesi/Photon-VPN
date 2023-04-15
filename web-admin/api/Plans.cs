@@ -25,7 +25,7 @@ public class Plans : Controller
                         pr.Id,
                         pr.Name,
                         Active = pl != null ? pl.Active : false,
-                        pr.CloudId,
+                        //pr.CloudId,
                         Price = pl != null ? pl.Price : (decimal?)null,
                         ImageFile = pl != null ? pl.ImageFile : null,
                         Description = pl != null ? pl.Description : null,

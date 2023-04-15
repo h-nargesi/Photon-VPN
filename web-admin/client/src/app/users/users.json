@@ -1,0 +1,156 @@
+{
+  "list": {
+    "id": {
+      "title": "Id",
+      "show": false
+    },
+    "username": {
+      "title": "Username",
+      "show": true
+    },
+    "password": {
+      "title": "Password",
+      "show": false
+    },
+    "token": {
+      "title": "Token",
+      "show": false
+    },
+    "realm": {
+      "title": "Realm",
+      "show": true
+    },
+    "profile": {
+      "title": "Profile",
+      "show": true
+    },
+    "name": {
+      "title": "Name",
+      "show": true
+    },
+    "surname": {
+      "title": "Surname",
+      "show": true
+    },
+    "address": {
+      "title": "Address",
+      "show": false
+    },
+    "phone": {
+      "title": "Phone",
+      "show": true
+    },
+    "email": {
+      "title": "Email",
+      "show": false
+    },
+    "authType": {
+      "title": "Auth Type",
+      "show": false
+    },
+    "active": {
+      "title": "Active",
+      "show": false
+    },
+    "lastAcceptTime": {
+      "title": "Last Accept Time",
+      "show": true
+    },
+    "lastRejectTime": {
+      "title": "Last Reject Time",
+      "show": true
+    },
+    "lastAcceptNas": {
+      "title": "Last Accept Nas",
+      "show": false
+    },
+    "lastRejectNas": {
+      "title": "Last Reject Nas",
+      "show": false
+    },
+    "lastRejectMessage": {
+      "title": "Last Reject Message",
+      "show": true
+    },
+    "percTimeUsed": {
+      "title": "Perc Time Used",
+      "show": false
+    },
+    "percDataUsed": {
+      "title": "Perc Data Used",
+      "show": false
+    },
+    "dataUsed": {
+      "title": "Data Used",
+      "show": false
+    },
+    "dataCap": {
+      "title": "Data Cap",
+      "show": false
+    },
+    "timeUsed": {
+      "title": "Time Used",
+      "show": false
+    },
+    "timeCap": {
+      "title": "Time Cap",
+      "show": false
+    },
+    "timeCap Type": {
+      "title": "Time Cap Type",
+      "show": false
+    },
+    "dataCap Type": {
+      "title": "Data Cap Type",
+      "show": false
+    },
+    "fromDate": {
+      "title": "From Date",
+      "show": true
+    },
+    "toDate": {
+      "title": "To Date",
+      "show": true
+    },
+    "trackAuth": {
+      "title": "Track Auth",
+      "show": false
+    },
+    "trackAcct": {
+      "title": "Track Acct",
+      "show": false
+    },
+    "staticIp": {
+      "title": "Static Ip",
+      "show": false
+    },
+    "extraName": {
+      "title": "Extra Name",
+      "show": false
+    },
+    "extra Value": {
+      "title": "Extra Value",
+      "show": false
+    },
+    "countryId": {
+      "title": "Country Id",
+      "show": false
+    },
+    "languageId": {
+      "title": "Language Id",
+      "show": false
+    },
+    "cloudId": {
+      "title": "Cloud Id",
+      "show": false
+    },
+    "created": {
+      "title": "Created",
+      "show": true
+    },
+    "modified": {
+      "title": "Modified",
+      "show": true
+    }
+  }
+}

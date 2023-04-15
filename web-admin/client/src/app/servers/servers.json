@@ -1,0 +1,120 @@
+{
+  "list": {
+    "id": {
+      "title": "Id",
+      "show": false
+    },
+    "nasname": {
+      "title": "Source IP",
+      "show": true
+    },
+    "shortname": {
+      "title": "Title",
+      "show": true
+    },
+    "nasidentifier": {
+      "title": "NAS Identifier",
+      "show": false
+    },
+    "type": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "ports": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "secret": {
+      "title": "Secret",
+      "show": true
+    },
+    "server": {
+      "title": "Server",
+      "show": false
+    },
+    "community": {
+      "title": "Community",
+      "show": false
+    },
+    "description": {
+      "title": "Description",
+      "show": true
+    },
+    "connectionType": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "timezone": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "recordAuth": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "ignoreAcct": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "dynamicAttribute": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "dynamicValue": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "monitor": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "pingInterval": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "heartbeatDeadAfter": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "lastContact": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "sessionAutoClose": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "sessionDeadTime": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "onPublicMaps": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "lat": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "lon": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "photoFileName": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "cloudId": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "created": {
+      "title": "Connection Type",
+      "show": false
+    },
+    "modified": {
+      "title": "Modified On",
+      "show": false
+    }
+  }
+}
