@@ -1,10 +1,19 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-import { MatTableModule } from '@angular/material/table' ;
+import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { BrowserModule, Title } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
+import {
+  PERFECT_SCROLLBAR_CONFIG,
+  PerfectScrollbarConfigInterface,
+  PerfectScrollbarModule,
+} from 'ngx-perfect-scrollbar';
+
+// Import routing module
+import { AppRoutingModule } from './app-routing.module';
+
+// Import app component
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { NavHeaderComponent } from './components/nav-header/nav-header.component';
@@ -18,41 +27,101 @@ import { PaymentsComponent } from './users/payments/payments.component';
 import { PlansComponent } from './plans/plans.component';
 import { ServersComponent } from './servers/servers.component';
 
+// Import containers
+import {
+  DefaultFooterComponent,
+  DefaultHeaderComponent,
+  DefaultLayoutComponent,
+} from './containers';
+
+import {
+  AvatarModule,
+  BadgeModule,
+  BreadcrumbModule,
+  ButtonGroupModule,
+  ButtonModule,
+  CardModule,
+  DropdownModule,
+  FooterModule,
+  FormModule,
+  GridModule,
+  HeaderModule,
+  ListGroupModule,
+  NavModule,
+  ProgressModule,
+  SharedModule,
+  SidebarModule,
+  TabsModule,
+  UtilitiesModule,
+} from '@coreui/angular';
+
+import { IconModule, IconSetService } from '@coreui/icons-angular';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true,
+};
+
+const APP_CONTAINERS = [
+  AppComponent,
+  NavMenuComponent,
+  NavHeaderComponent,
+  ListViewComponent,
+  ContentHeaderComponent,
+  DashbordComponent,
+  UsersComponent,
+  ProfileComponent,
+  SessionsComponent,
+  PaymentsComponent,
+  PlansComponent,
+  ServersComponent,
+  DefaultFooterComponent,
+  DefaultHeaderComponent,
+  DefaultLayoutComponent,
+];
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavMenuComponent,
-    NavHeaderComponent,
-    ListViewComponent,
-    ContentHeaderComponent,
-    DashbordComponent,
-    UsersComponent,
-    ProfileComponent,
-    SessionsComponent,
-    PaymentsComponent,
-    PlansComponent,
-    ServersComponent,
-  ],
+  declarations: [AppComponent, ...APP_CONTAINERS],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    MatTableModule,
-    RouterModule.forRoot([
-      { path: '', component: DashbordComponent, pathMatch: 'full' },
-      { path: 'users', component: UsersComponent },
-      { path: 'users/profile', component: ProfileComponent },
-      { path: 'users/profile/:id', component: ProfileComponent },
-      { path: 'users/sessions', component: SessionsComponent },
-      { path: 'users/sessions/:user_id', component: SessionsComponent },
-      { path: 'users/payments', component: PaymentsComponent },
-      { path: 'users/payments/:user_id', component: PaymentsComponent },
-      { path: 'plans', component: PlansComponent },
-      { path: 'servers', component: ServersComponent },
-    ])
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    AvatarModule,
+    BreadcrumbModule,
+    FooterModule,
+    DropdownModule,
+    GridModule,
+    HeaderModule,
+    SidebarModule,
+    IconModule,
+    PerfectScrollbarModule,
+    NavModule,
+    ButtonModule,
+    FormModule,
+    UtilitiesModule,
+    ButtonGroupModule,
+    ReactiveFormsModule,
+    SidebarModule,
+    SharedModule,
+    TabsModule,
+    ListGroupModule,
+    ProgressModule,
+    BadgeModule,
+    ListGroupModule,
+    CardModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy,
+    },
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+    },
+    IconSetService,
+    Title
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }
