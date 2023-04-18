@@ -6,7 +6,7 @@ declare var LaodTable: any;
 
 @Component({
   selector: 'app-list-view',
-  templateUrl: './list-view.component.html',
+  template: '<div></div>',
 })
 export class ListViewComponent implements OnInit {
 
