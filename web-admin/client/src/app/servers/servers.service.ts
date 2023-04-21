@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Server } from './servers.model';
-import { BaseService } from '../components/services/base-service';
+import { BaseService, ListQuery } from '../components';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +16,9 @@ export class ServersService extends BaseService {
 		super(http, api_url, base_url, 'api/servers/');
 	}
 
-  public List(): Observable<Server[]> {
-    return this.http.post<Server[]>(this.base_url + 'list', { });
+  public List(filter: ListQuery | null): Observable<Server[]> {
+    if (filter == null) filter = {} as ListQuery;
+    return this.http.post<Server[]>(this.base_url + 'list', filter);
   }
 
   public Get(id: number): Observable<Server> {

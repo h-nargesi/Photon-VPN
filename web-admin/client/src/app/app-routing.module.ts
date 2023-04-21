@@ -28,7 +28,12 @@ const routes: Routes = [
       {
         path: 'plans',
         loadChildren: () =>
-          import('./views/plans/plans.module').then((m) => m.PlansModule)
+          import('./plans/plans.module').then((m) => m.PlansModule)
+      },
+      {
+        path: 'servers',
+        loadChildren: () =>
+          import('./servers/servers.module').then((m) => m.ServersModule)
       },
       {
         path: 'theme',
