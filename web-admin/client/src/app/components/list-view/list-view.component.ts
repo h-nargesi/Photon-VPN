@@ -2,17 +2,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Observable } from "rxjs";
 import { ListViewModel } from "./list-view.model";
 
-declare var LaodTable: any;
-
 @Component({
-  selector: 'app-list-view',
-  template: '<div></div>',
+  selector: '[app-list-view]',
+  templateUrl: './list-view.component.html',
 })
-export class ListViewComponent implements OnInit {
+export class ListViewComponent {
 
   @Input("data-provider") data_provider: Observable<any[]> | null = null;
   @Input("columns-info") columns_info: ListViewModel | null = null;
-  @Input("table-id") table_id: string = 'MainTable';
   @Output("selected") selectedEvent = new EventEmitter<Set<any>>();
 
   private data_source: any[] = [];
@@ -66,7 +63,5 @@ export class ListViewComponent implements OnInit {
       for (const column in this.data_source[0])
         this.data_columns.push(column);
     }
-
-    LaodTable(this.table_id);
   }
 }
