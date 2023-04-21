@@ -1254,7 +1254,7 @@
   dependencies:
     postcss-combine-duplicated-selectors "^10.0.3"
 
-"@coreui/icons-angular@~4.4.1":
+"@coreui/icons-angular@^4.4.1":
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/@coreui/icons-angular/-/icons-angular-4.4.1.tgz#cf3339af21f806b6116f2c009b1bc43b5a11d415"
   integrity sha512-HmyDlOlZ6c5M4Jd8JwIMfJNk7XlNx8/DPSE+ieRxxWQ0PxHB7Vq8saB2E0IZjpAPt8kO0XFgVau5usgE6Xklyg==
