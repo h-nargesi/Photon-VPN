@@ -5,9 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 // CoreUI Modules
 import {
   AccordionModule,
+  ButtonModule,
   BadgeModule,
   BreadcrumbModule,
-  ButtonModule,
   CardModule,
   CarouselModule,
   CollapseModule,
@@ -23,8 +23,6 @@ import {
   SharedModule,
   SpinnerModule,
   TableModule,
-  TabsModule,
-  TooltipModule,
   UtilitiesModule,
 } from '@coreui/angular';
 
@@ -36,6 +34,7 @@ import { ComponentsModule } from '../components/components.module';
 
 // views
 import { ServerListComponent } from './list/server-list.component';
+import { ServerComponent } from './edit/server.component';
 
 // Components Routing
 import { ServersRoutingModule } from './servers-routing.module';
@@ -43,14 +42,15 @@ import { ServersRoutingModule } from './servers-routing.module';
 @NgModule({
   declarations: [
     ServerListComponent,
+    ServerComponent,
   ],
   imports: [
     CommonModule,
+    ButtonModule,
     ServersRoutingModule,
     AccordionModule,
     BadgeModule,
     BreadcrumbModule,
-    ButtonModule,
     CardModule,
     CollapseModule,
     GridModule,
@@ -62,9 +62,7 @@ import { ServersRoutingModule } from './servers-routing.module';
     PlaceholderModule,
     ProgressModule,
     SpinnerModule,
-    TabsModule,
     NavModule,
-    TooltipModule,
     CarouselModule,
     FormModule,
     ReactiveFormsModule,

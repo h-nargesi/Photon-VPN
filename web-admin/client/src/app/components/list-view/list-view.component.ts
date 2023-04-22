@@ -8,12 +8,11 @@ import { ListViewModel } from "./list-view.model";
 export class ListViewComponent {
 
   @Input("columns-info") columns_info: ListViewModel | undefined;
-  @Output("selected") selectedEvent = new EventEmitter<Set<any>>();
+  @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
 
   private data_source: any[] = [];
   private data_columns: string[] = [];
-  private selected_records: Set<any> = new Set<any>();
-  public selected_index: Set<number> = new Set<number>();
+  private selected_records: Map<number, any> = new Map<number, any>();
 
   get DataSource(): any[] {
     return this.data_source;
@@ -27,7 +26,7 @@ export class ListViewComponent {
     return this.data_columns.slice();
   }
 
-  get SelectedItems(): Set<any> {
+  get SelectedItems(): Map<number, any>  {
     return this.selected_records;
   }
 
@@ -39,20 +38,18 @@ export class ListViewComponent {
     if (index < 0 || index > this.data_source.length) return;
     const item = this.data_source[index];
 
-    if (this.selected_index.has(index)) {
-      this.selected_records.delete(item);
-      this.selected_index.delete(index);
+    if (this.selected_records.has(index)) {
+      this.selected_records.delete(index);
 
     } else {
-      this.selected_records.add(item);
-      this.selected_index.add(index);
+      this.selected_records.set(index, item);
     }
 
     this.selectedEvent.emit(this.selected_records);
   }
 
   isSelected(index: number): boolean {
-    return this.selected_index.has(index);
+    return this.selected_records.has(index);
   }
 
   SetDataSource(data: any[]) {

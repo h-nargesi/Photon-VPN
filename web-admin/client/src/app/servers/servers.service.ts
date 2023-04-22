@@ -9,12 +9,12 @@ import { BaseService, ListQuery } from '../components';
 })
 export class ServersService extends BaseService {
 
-	constructor(
-		http: HttpClient,
-		@Inject('API_URL') api_url: string,
-		@Inject('BASE_URL') base_url: string) {
-		super(http, api_url, base_url, 'api/servers/');
-	}
+  constructor(
+    http: HttpClient,
+    @Inject('API_URL') api_url: string,
+    @Inject('BASE_URL') base_url: string) {
+    super(http, api_url, base_url, 'api/servers/');
+  }
 
   public List(filter: ListQuery | null): Observable<Server[]> {
     if (filter == null) filter = {} as ListQuery;
@@ -22,6 +22,10 @@ export class ServersService extends BaseService {
   }
 
   public Get(id: number): Observable<Server> {
-    return this.http.get<Server>(this.base_url + 'get', { params: { id: id } });
+    return this.http.get<Server>(this.base_url + 'get/' + id);
+  }
+
+  public Delete(id: number): Observable<Object> {
+    return this.http.post(this.base_url + 'delete', id);
   }
 }

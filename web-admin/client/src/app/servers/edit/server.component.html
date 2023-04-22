@@ -1,0 +1,58 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header ngPreserveWhitespaces>
+        <strong>Server</strong> <small>{{ item.id ? 'edit' : 'add' }}</small>
+      </c-card-header>
+      <c-card-body>
+        <p class="text-medium-emphasis small">
+          More complex forms can be built using our grid classes. Use these for form layouts
+          that require multiple columns, varied widths, and additional alignment options.
+        </p>
+        <form>
+          <c-row class="mb-3">
+            <c-col sm="10" class="offset-md-2">
+              <c-form-check>
+                <input cFormCheckInput id="formActive" name="formActive" type="checkbox" />
+                <label cFormCheckLabel for="formActive">Active</label>
+              </c-form-check>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="formIP">
+              {{ getTitle('nasname') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="formIP" type="ip" [value]="Item.nasname ? Item.nasname : ''" (change)="Item.nasname = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="formName">
+              {{ getTitle('shortname') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="formName" type="text" [value]="Item.shortname ? Item.shortname : ''" (change)="Item.shortname = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="formSecret">
+              {{ getTitle('secret') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="formSecret" type="text" [value]="Item.secret ? Item.secret : ''" (change)="Item.secret = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="formAutoClose">
+              {{ getTitle('secret') }}
+            </label>
+            <c-col lg="2" md="3">
+              <input cFormControl id="formAutoClose" type="number" [value]="Item.heartbeatDeadAfter ? Item.heartbeatDeadAfter : ''" (change)="Item.heartbeatDeadAfter = val($event)" />
+            </c-col>
+          </c-row>
+          <button cButton (click)="Submit()">Submit</button>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

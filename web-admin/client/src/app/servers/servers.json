@@ -73,7 +73,7 @@
       "show": false
     },
     "heartbeatDeadAfter": {
-      "title": "Connection Type",
+      "title": "Auto close activation time",
       "show": false
     },
     "lastContact": {
