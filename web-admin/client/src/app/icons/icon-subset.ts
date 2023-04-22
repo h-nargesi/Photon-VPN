@@ -91,6 +91,8 @@ import {
   cilMonitor,
   cilGroup,
   cil3d,
+  cilLibraryAdd,
+  cilReload,
 } from '@coreui/icons';
 
 export const iconSubset = {
@@ -186,6 +188,8 @@ export const iconSubset = {
   cilMonitor,
   cilGroup,
   cil3d,
+  cilLibraryAdd,
+  cilReload,
 };
 
 export enum IconSubset {
@@ -281,4 +285,6 @@ export enum IconSubset {
   cilMonitor = 'cilMonitor',
   cilGroup = 'cilGroup',
   cil3d = 'cil3d',
+  cilLibraryAdd = 'cilLibraryAdd',
+  cilReload = 'cilReload',
 }
