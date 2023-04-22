@@ -13,6 +13,6 @@ export class ListButtonsComponent {
 
   cilPencil = 'cilPencil';
   cilTrash = 'cilTrash';
-  cilLibraryAdd = 'cilLibraryAdd';
+  cilPlus = 'cilPlus';
   cilReload = 'cilReload';
 }

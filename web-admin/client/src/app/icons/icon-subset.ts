@@ -93,6 +93,7 @@ import {
   cil3d,
   cilLibraryAdd,
   cilReload,
+  cilPlus,
 } from '@coreui/icons';
 
 export const iconSubset = {
@@ -190,6 +191,7 @@ export const iconSubset = {
   cil3d,
   cilLibraryAdd,
   cilReload,
+  cilPlus,
 };
 
 export enum IconSubset {
@@ -287,4 +289,5 @@ export enum IconSubset {
   cil3d = 'cil3d',
   cilLibraryAdd = 'cilLibraryAdd',
   cilReload = 'cilReload',
+  cilPlus = 'cilPlus',
 }

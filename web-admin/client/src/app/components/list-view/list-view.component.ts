@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Observable } from "rxjs";
 import { ListViewModel } from "./list-view.model";
 
 @Component({
@@ -8,8 +7,7 @@ import { ListViewModel } from "./list-view.model";
 })
 export class ListViewComponent {
 
-  @Input("data-provider") data_provider: Observable<any[]> | null = null;
-  @Input("columns-info") columns_info: ListViewModel | null = null;
+  @Input("columns-info") columns_info: ListViewModel | undefined;
   @Output("selected") selectedEvent = new EventEmitter<Set<any>>();
 
   private data_source: any[] = [];
@@ -32,9 +30,13 @@ export class ListViewComponent {
     return this.columns_info != null ? this.columns_info[name].title : name;
   }
 
-  selectRow(key: any) {
-    if (this.selected_records.has(key)) this.selected_records.delete(key);
-    else this.selected_records.add(key);
+  selectRow(index: number) {
+    if (index < 0 || index > this.data_source.length) return;
+    const item = this.data_source[index];
+
+    if (this.selected_records.has(item)) this.selected_records.delete(item);
+    else this.selected_records.add(item);
+    
     this.selectedEvent.emit(this.selected_records);
   }
 
@@ -42,14 +44,7 @@ export class ListViewComponent {
     return this.selected_records.has(key);
   }
 
-  ngOnInit(): void {
-    this.data_provider?.subscribe({
-      next: (result: any[]) => this.InitDataSource(result),
-      error: console.error
-    });
-  }
-
-  InitDataSource(data: any[]) {
+  SetDataSource(data: any[]) {
     this.data_source = data;
 
     this.data_columns = [];

@@ -4,12 +4,18 @@
       <c-card-header>
         <strong>Servers</strong> <small>list</small>
       </c-card-header>
+      <c-card-body>
+        <app-list-buttons 
+          (reloadClick)="ngOnInit()"
+          (addClick)="onAddClick()"
+          (editClick)="onEditClick()"
+          (removeClick)="onDeleteClick()"></app-list-buttons>
+      </c-card-body>
       <c-card-body class="overflow-auto">
-        <p class="text-medium-emphasis small">
-          Using the most basic table CoreUI, here&#39;s how <code>cTable</code>-based
-          tables look in CoreUI.
-        </p>
-        <table cTable app-list-view [columns-info]="columns_info" [data-provider]="data_provider" [striped]="true" [hover]="true">
+        <table cTable app-list-view #listView
+          [columns-info]="columns_info"
+          [striped]="true" 
+          [hover]="true">
         </table>
       </c-card-body>
     </c-card>
