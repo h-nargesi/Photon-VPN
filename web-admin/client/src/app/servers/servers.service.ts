@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Server } from './servers.model';
-import { BaseService, ListQuery } from '../components';
+import { BaseService, ListQuery, Result } from '../components';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,11 @@ export class ServersService extends BaseService {
     return this.http.get<Server>(this.base_url + 'get/' + id);
   }
 
-  public Delete(id: number): Observable<Object> {
-    return this.http.post(this.base_url + 'delete', id);
+  public Modify(server: Server): Observable<Result> {
+    return this.http.post<Result>(this.base_url + 'modify', server);
+  }
+
+  public Delete(id: number): Observable<Result> {
+    return this.http.post<Result>(this.base_url + 'delete', id);
   }
 }

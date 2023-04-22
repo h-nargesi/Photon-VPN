@@ -2,7 +2,7 @@ import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Server } from '../servers.model';
 import { ServersService } from '../servers.service';
-import { ListViewModel, ListViewComponent } from '../../components'
+import { ListViewModel, ListViewComponent, Result, ResultStatus } from '../../components'
 import Titles from '../servers.json';
 import { Router } from '@angular/router';
 
@@ -36,11 +36,15 @@ export class ServerListComponent {
   onDeleteClick() {
     if (!this.listView?.SelectedItems.size) return;
     let items = Array.from(this.listView?.SelectedItems.values());
-    
+
     items.forEach((element, index) => {
       this.service.Delete(element.id).subscribe({
-        next: () => {
-          delete items[index]
+        next: (result: Result) => {
+          if (result.status >= ResultStatus.Invalid)
+            console.error(result);
+
+          const i = items.indexOf(element, 0);
+          items.splice(i, 1);
           if (items.length < 1) {
             this.ngOnInit();
           }

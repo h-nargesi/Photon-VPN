@@ -44,7 +44,11 @@ public class Users : Controller
                                               .FirstOrDefaultAsync();
 
         if (original == null) await db.PermanentUsers.AddAsync(user);
-        else db.Entry(original).CurrentValues.SetValues(user);
+        else
+        {
+            db.PermanentUsers.Attach(original);
+            db.Entry(original).CurrentValues.SetValues(user);
+        }
 
         await db.SaveChangesAsync();
 

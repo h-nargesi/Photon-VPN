@@ -42,7 +42,11 @@ public class Servers : Controller
                                    .FirstOrDefaultAsync();
 
         if (original == null) await db.Nas.AddAsync(na);
-        else db.Entry(original).CurrentValues.SetValues(na);
+        else
+        {
+            db.Nas.Attach(original);
+            db.Entry(original).CurrentValues.SetValues(na);
+        }
 
         await db.SaveChangesAsync();
 

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Server } from '../servers.model';
 import Titles from '../servers.json';
 import { ServersService } from '../servers.service';
-import { ListViewModel } from '../../components';
+import { ListViewModel, Result, ResultStatus } from '../../components';
 
 @Component({
   selector: 'app-server',
@@ -16,8 +16,9 @@ export class ServerComponent {
   public item: Server = {} as Server;
 
   constructor(
+    private readonly service: ServersService,
     private readonly route: ActivatedRoute,
-    private readonly service: ServersService) { }
+    private readonly router: Router) { }
 
   get Item(): Server {
     return this.item;
@@ -25,19 +26,17 @@ export class ServerComponent {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.service.Get(+params['id']).subscribe({
-        next: (result: Server) => this.item = result,
-        error: console.error
-      });
+      if ('id' in params) {
+        this.service.Get(+params['id']).subscribe({
+          next: (result: Server) => this.item = result,
+          error: console.error
+        });
+      }
     });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  Submit() {
-    console.log(this.item);
   }
 
   getTitle(name: string) {
@@ -46,5 +45,32 @@ export class ServerComponent {
 
   val(event: any): any {
     return event.target.value;
+  }
+
+  Submit() {
+    console.log(this.item);
+
+    this.service.Modify(this.item).subscribe({
+      next: (result: Result) => {
+        if (result.status >= ResultStatus.Invalid) console.error(result);
+        else {
+          console.info(result);
+          if (!this.item.id) this.item.id = Number(result.data);
+        }
+      },
+      error: console.error
+    });
+  }
+
+  Delete() {
+    if (!this.item.id) return;
+
+    this.service.Delete(this.item.id).subscribe({
+      next: (result: Result) => {
+        if (result.status >= ResultStatus.Invalid) console.error(result);
+        else this.router.navigate(['servers']);
+      },
+      error: console.error
+    });
   }
 }

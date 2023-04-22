@@ -74,7 +74,11 @@ public class Plans : Controller
                                             .FirstOrDefaultAsync();
 
             if (original == null) await db.Profiles.AddAsync(plan_profile.Profile);
-            else db.Entry(original).CurrentValues.SetValues(plan_profile.Profile);
+            else
+            {
+                db.Profiles.Attach(original);
+                db.Entry(original).CurrentValues.SetValues(plan_profile.Profile);
+            }
 
             await db.SaveChangesAsync();
         }
@@ -86,7 +90,11 @@ public class Plans : Controller
                                          .FirstOrDefaultAsync();
 
             if (original == null) await db.Plans.AddAsync(plan_profile.Plan);
-            else db.Entry(original).CurrentValues.SetValues(plan_profile.Plan);
+            else
+            {
+                db.Plans.Attach(original);
+                db.Entry(original).CurrentValues.SetValues(plan_profile.Plan);
+            }
 
             await db.SaveChangesAsync();
         }

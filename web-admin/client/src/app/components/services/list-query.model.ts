@@ -11,3 +11,13 @@ export interface Filter {
     Name: string,
     Value: string,
 }
+
+export interface Result {
+    status: ResultStatus,
+    message: string | null,
+    data: any | null,
+}
+
+export enum ResultStatus {
+    Success = 200, Invalid = 400, Error = 500
+}

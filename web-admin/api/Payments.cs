@@ -54,7 +54,11 @@ public class Payments : Controller
                                         .FirstOrDefaultAsync();
 
         if (original == null) await db.Payments.AddAsync(payment);
-        else db.Entry(original).CurrentValues.SetValues(payment);
+        else
+        {
+            db.Payments.Attach(original);
+            db.Entry(original).CurrentValues.SetValues(payment);
+        }
 
         await db.SaveChangesAsync();
 
@@ -73,6 +77,7 @@ public class Payments : Controller
 
         if (payment == null) return BadRequest();
 
+        db.Payments.Attach(payment);
         payment.Approved = approvement;
         await db.SaveChangesAsync();
 

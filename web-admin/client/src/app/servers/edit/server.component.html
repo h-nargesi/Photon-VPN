@@ -50,7 +50,11 @@
               <input cFormControl id="formAutoClose" type="number" [value]="Item.heartbeatDeadAfter ? Item.heartbeatDeadAfter : ''" (change)="Item.heartbeatDeadAfter = val($event)" />
             </c-col>
           </c-row>
-          <button cButton (click)="Submit()">Submit</button>
+          <div class="d-grid gap-2 d-md-block">
+            <button cButton (click)="Submit()" class="me-md-2">Submit</button>
+            <button cButton routerLink="/servers" class="me-md-2" color="secondary" variant="outline">Cancel</button>
+            <button cButton (click)="Delete()" class="me-md-2" color="danger" variant="outline">Delete</button>
+          </div>
         </form>
       </c-card-body>
     </c-card>
