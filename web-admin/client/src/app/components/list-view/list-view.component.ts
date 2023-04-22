@@ -13,6 +13,7 @@ export class ListViewComponent {
   private data_source: any[] = [];
   private data_columns: string[] = [];
   private selected_records: Set<any> = new Set<any>();
+  public selected_index: Set<number> = new Set<number>();
 
   get DataSource(): any[] {
     return this.data_source;
@@ -26,6 +27,10 @@ export class ListViewComponent {
     return this.data_columns.slice();
   }
 
+  get SelectedItems(): Set<any> {
+    return this.selected_records;
+  }
+
   getTitle(name: string) {
     return this.columns_info != null ? this.columns_info[name].title : name;
   }
@@ -34,14 +39,20 @@ export class ListViewComponent {
     if (index < 0 || index > this.data_source.length) return;
     const item = this.data_source[index];
 
-    if (this.selected_records.has(item)) this.selected_records.delete(item);
-    else this.selected_records.add(item);
-    
+    if (this.selected_index.has(index)) {
+      this.selected_records.delete(item);
+      this.selected_index.delete(index);
+
+    } else {
+      this.selected_records.add(item);
+      this.selected_index.add(index);
+    }
+
     this.selectedEvent.emit(this.selected_records);
   }
 
-  isSelected(key: any): boolean {
-    return this.selected_records.has(key);
+  isSelected(index: number): boolean {
+    return this.selected_index.has(index);
   }
 
   SetDataSource(data: any[]) {

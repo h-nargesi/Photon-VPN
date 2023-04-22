@@ -5,7 +5,10 @@
     </tr>
 </thead>
 <tbody>
-    <tr *ngFor="let row of DataSource; let index = index" (click)="selectRow(index)">
+    <tr *ngFor="let row of DataSource; let index = index"
+        (click)="selectRow(index)"
+        cTableColor="{{ isSelected(index) ? 'primary' : '' }}">
+        
         <td scope="row">{{ index + 1 }}</td>
         <td *ngFor="let col of DataColumns;">{{ row[col] }}</td>
     </tr>
