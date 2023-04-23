@@ -1,10 +1,10 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Server } from '../servers.model';
 import { ServersService } from '../servers.service';
-import { ListViewModel, ListViewComponent, Result, ResultStatus } from '../../components'
+import { ListViewModel, TableViewComponent, Result, ResultStatus } from '../../components';
 import Titles from '../servers.json';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-server-list',
@@ -16,7 +16,7 @@ export class ServerListComponent {
   public data_provider: Observable<Server[]> | undefined;
   public reload: EventEmitter<any[]> | undefined;
 
-  @ViewChild('listView') listView: ListViewComponent | undefined;
+  @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
   constructor(
     private readonly service: ServersService,
@@ -24,7 +24,7 @@ export class ServerListComponent {
 
   ngOnInit(): void {
     this.service.List(null).subscribe({
-      next: (result: any[]) => this.listView?.SetDataSource(result),
+      next: (result: any[]) => this.table_view?.SetDataSource(result),
       error: console.error
     });
   }
@@ -34,10 +34,10 @@ export class ServerListComponent {
   }
 
   onDeleteClick() {
-    if (!this.listView?.SelectedItems.size) return;
-    let items = Array.from(this.listView?.SelectedItems.values());
+    if (!this.table_view?.SelectedItems.size) return;
+    let items = Array.from(this.table_view?.SelectedItems.values());
 
-    items.forEach((element, index) => {
+    items.forEach((element) => {
       this.service.Delete(element.id).subscribe({
         next: (result: Result) => {
           if (result.status >= ResultStatus.Invalid)
@@ -55,8 +55,8 @@ export class ServerListComponent {
   }
 
   onEditClick() {
-    if (!this.listView?.SelectedItems.size) return;
-    const items = Array.from(this.listView?.SelectedItems.values());
+    if (!this.table_view?.SelectedItems.size) return;
+    const items = Array.from(this.table_view?.SelectedItems.values());
     const id = items[items.length - 1].id;
     this.router.navigate(['servers', 'edit', id]);
   }

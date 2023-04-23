@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Plan } from './plans.models';
-import { BaseService } from '../components/services/base-service';
+import { PlanModel, PlanProfile } from './plans.models';
+import { BaseService, ListQuery, Result } from '../components';
 
 @Injectable({
   providedIn: 'root',
@@ -16,11 +16,20 @@ export class PlansService extends BaseService {
 		super(http, api_url, base_url, 'api/plans/');
 	}
 
-  public List(): Observable<Plan[]> {
-    return this.http.post<Plan[]>(this.base_url + 'list', { });
+  public List(filter: ListQuery | null): Observable<PlanModel[]> {
+    if (filter == null) filter = {} as ListQuery;
+    return this.http.post<PlanModel[]>(this.base_url + 'list', filter);
   }
 
-  public Get(id: number): Observable<Plan> {
-    return this.http.get<Plan>(this.base_url + 'get', { params: { id: id } });
+  public Get(id: number): Observable<PlanProfile> {
+    return this.http.get<PlanProfile>(this.base_url + 'get/' + id);
+  }
+
+  public Modify(plan: PlanProfile): Observable<Result> {
+    return this.http.post<Result>(this.base_url + 'modify', plan);
+  }
+
+  public Delete(id: number): Observable<Result> {
+    return this.http.post<Result>(this.base_url + 'delete', id);
   }
 }

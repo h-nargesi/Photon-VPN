@@ -51,8 +51,9 @@ public class Plans : Controller
                             on pr.Id equals pl.ProfileId into @join
                     from pl in @join.DefaultIfEmpty()
                     where pr.Id == id
-                    select new
+                    select new PlanProfile
                     {
+                        Id = pr.Id,
                         Profile = pr,
                         Plan = pl,
                     };

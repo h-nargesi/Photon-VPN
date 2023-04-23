@@ -1,20 +1,16 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { EventEmitter } from "@angular/core";
 import { ListViewModel } from "./list-view.model";
 
-@Component({
-  selector: '[app-list-view]',
-  templateUrl: './list-view.component.html',
-})
-export class ListViewComponent {
-
-  @Input("columns-info") columns_info: ListViewModel | undefined;
-  @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
-  @Output("dbClick") doubleClicke = new EventEmitter<any>();
+export abstract class ListViewComponent {
 
   private click = { time: 0, index: -1 };
   private data_source: any[] = [];
   private data_columns: string[] = [];
   private selected_records: Map<number, any> = new Map<number, any>();
+
+  protected abstract get columns_info(): ListViewModel | undefined;
+  protected abstract get selectedEvent():  EventEmitter<Map<number, any>>;
+  protected abstract get doubleClicke(): EventEmitter<any>;
 
   get DataSource(): any[] {
     return this.data_source;

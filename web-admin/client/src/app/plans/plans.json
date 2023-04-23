@@ -32,5 +32,12 @@
       "title": "Modified On",
       "show": true
     }
+  },
+  "schema": {
+    "title": "name",
+    "subtitle": "price",
+    "color": "color",
+    "header": "speed",
+    "info": "traffic"
   }
 }
