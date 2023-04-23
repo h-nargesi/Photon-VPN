@@ -18,18 +18,18 @@ export class PlansService extends BaseService {
 
   public List(filter: ListQuery | null): Observable<PlanModel[]> {
     if (filter == null) filter = {} as ListQuery;
-    return this.http.post<PlanModel[]>(this.base_url + 'list', filter);
+    return this.http.post<PlanModel[]>(this.module_url + 'list', filter);
   }
 
   public Get(id: number): Observable<Plan> {
-    return this.http.get<Plan>(this.base_url + 'get/' + id);
+    return this.http.get<Plan>(this.module_url + 'get/' + id);
   }
 
   public Modify(plan: Plan): Observable<Result> {
-    return this.http.post<Result>(this.base_url + 'modify', plan);
+    return this.http.post<Result>(this.module_url + 'modify', plan);
   }
 
   public Delete(id: number): Observable<Result> {
-    return this.http.post<Result>(this.base_url + 'delete', id);
+    return this.http.post<Result>(this.module_url + 'delete', id);
   }
 }

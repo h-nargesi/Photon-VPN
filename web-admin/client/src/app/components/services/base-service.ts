@@ -1,14 +1,14 @@
 import { HttpClient } from "@angular/common/http";
-import { Inject } from "@angular/core";
 
-export class BaseService {
+export abstract class BaseService {
     protected readonly base_url: string;
+    protected readonly module_url: string;
 
     constructor(
         protected readonly http: HttpClient,
-        @Inject('API_URL') api_url: string,
-        @Inject('BASE_URL') base_url: string,
-        base_app: string) {
+        api_url: string,
+        base_url: string,
+        module_url: string) {
 
         // console.log('API_URL', api_url);
         // console.log('BASE_URL', base_url);
@@ -23,13 +23,14 @@ export class BaseService {
             if (!base_url.endsWith('/')) base_url += '/';
         }
 
-        if (base_app == null) base_app = '';
-        else if (base_app.length > 0) {
-            if (base_app.startsWith('/')) base_app = base_app.substring(1);
-            if (!base_app.endsWith('/')) base_app += '/';
+        if (module_url == null) module_url = '';
+        else if (module_url.length > 0) {
+            if (module_url.startsWith('/')) module_url = module_url.substring(1);
+            if (!module_url.endsWith('/')) module_url += '/';
         }
 
-        this.base_url = api_url + base_url + base_app;
+        this.base_url = api_url + base_url;
+        this.module_url = this.base_url + module_url;
 
         // console.log('URL', base_url);
     }

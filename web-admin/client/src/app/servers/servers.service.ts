@@ -18,18 +18,18 @@ export class ServersService extends BaseService {
 
   public List(filter: ListQuery | null): Observable<Server[]> {
     if (filter == null) filter = {} as ListQuery;
-    return this.http.post<Server[]>(this.base_url + 'list', filter);
+    return this.http.post<Server[]>(this.module_url + 'list', filter);
   }
 
   public Get(id: number): Observable<Server> {
-    return this.http.get<Server>(this.base_url + 'get/' + id);
+    return this.http.get<Server>(this.module_url + 'get/' + id);
   }
 
   public Modify(server: Server): Observable<Result> {
-    return this.http.post<Result>(this.base_url + 'modify', server);
+    return this.http.post<Result>(this.module_url + 'modify', server);
   }
 
   public Delete(id: number): Observable<Result> {
-    return this.http.post<Result>(this.base_url + 'delete', id);
+    return this.http.post<Result>(this.module_url + 'delete', id);
   }
 }
