@@ -1,9 +1,9 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ListViewModel, TableViewComponent, Result, ResultStatus } from '../../components';
 import { Server } from '../servers.model';
 import { ServersService } from '../servers.service';
-import { ListViewModel, TableViewComponent, Result, ResultStatus } from '../../components';
 import Titles from '../servers.json';
 
 @Component({
