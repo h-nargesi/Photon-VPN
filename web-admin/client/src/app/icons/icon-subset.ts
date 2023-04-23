@@ -94,6 +94,8 @@ import {
   cilLibraryAdd,
   cilReload,
   cilPlus,
+  cilCash,
+  cilInputPower,
 } from '@coreui/icons';
 
 export const iconSubset = {
@@ -192,6 +194,8 @@ export const iconSubset = {
   cilLibraryAdd,
   cilReload,
   cilPlus,
+  cilCash,
+  cilInputPower,
 };
 
 export enum IconSubset {
@@ -290,4 +294,6 @@ export enum IconSubset {
   cilLibraryAdd = 'cilLibraryAdd',
   cilReload = 'cilReload',
   cilPlus = 'cilPlus',
+  cilCash = 'cilCash',
+  cilInputPower = 'cilInputPower',
 }
