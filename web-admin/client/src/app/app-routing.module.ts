@@ -28,7 +28,7 @@ const routes: Routes = [
       {
         path: 'accoutning',
         loadChildren: () =>
-          import('./users/accounting.module').then((m) => m.AccountingModule)
+          import('./accounting/accounting.module').then((m) => m.AccountingModule)
       },
       {
         path: 'plans',
