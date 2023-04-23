@@ -1,4 +1,4 @@
-import { PlanProfile } from "../plans/plans.models";
+import { UIColors } from "src/app/components"
 
 export interface User {
     Id: number,
@@ -43,8 +43,7 @@ export interface User {
     Modified: Date
 }
 
-export interface PermanentUserPlan
-{
+export interface PermanentUserPlan {
     PermanentUserId: number,
     ValidTime: Date,
     ProfileId: number,
@@ -52,7 +51,13 @@ export interface PermanentUserPlan
     RegisterTime: Date,
 }
 
-export interface Membership extends PlanProfile
-{
-    PermanentUserPlan: PermanentUserPlan,
+export interface Membership {
+    planId: number,
+    profileId: number,
+    name: string,
+    validTime: Date,
+    price: number,
+    color: UIColors,
+    created: Date,
+    modified: Date,
 }
