@@ -13,7 +13,9 @@ public partial class PermanentUserLog
 
     public string Content { get; set; } = null!;
 
-    public DateTime RegisterTime { get; set; }
+    public DateTime Created { get; set; }
+
+    public DateTime Modified { get; set; }
 
     public virtual PermanentUser PermanentUser { get; set; } = null!;
 

@@ -4,6 +4,7 @@ drop table if exists accounts;
 drop table if exists users_access;
 drop table if exists permanent_user_logs;
 drop table if exists permanent_user_plan;
+drop table if exists packages;
 drop table if exists plans;
 drop table if exists payments;
 
@@ -18,38 +19,46 @@ create table payments (
 	bank_name			varchar(255)	not null,
 	bank_account		varchar(255)	not null,
 
-	register_time		datetime		not null	default current_timestamp,
+	created				datetime		not null	default current_timestamp,
 
 	primary key (id),
 	foreign key (permanent_user_id) references permanent_users (id) on delete cascade
 );
 
 create table plans (
-	profile_id			int				not null,
+	id					int				not null	auto_increment,
 	active				tinyint(1)		not null	default 1,
 
+	title				varchar(255)	not null,
 	price				decimal(16)		not null,
 	image_file			text				null,
 	color				int				not null	default 0,
 	description			text				null,
 	
-	register_time		datetime		not null	default current_timestamp,
-	modification_time	datetime		not null	default current_timestamp,
+	created				datetime		not null	default current_timestamp,
+	modified			datetime		not null	default current_timestamp,
 
+	primary key (id)
+);
+
+create table packages (
+	profile_id			int				not null,
+	plan_id			int				not null,
+	
 	primary key (profile_id),
+	foreign key (plan_id) references plans (id) on delete cascade,
 	foreign key (profile_id) references profiles (id) on delete cascade
 );
 
 create table permanent_user_plan (
-	id					int				not null	auto_increment,
 	permanent_user_id	int				not null,
 	valid_time			datetime		not null,
 	profile_id			int				not null,
 	override_price		decimal(16)			null,
-	register_time		datetime		not null	default current_timestamp,
+	created				datetime		not null	default current_timestamp,
+	modified			datetime		not null	default current_timestamp,
 	
-	primary key (id),
-	unique (permanent_user_id, valid_time),
+	primary key (permanent_user_id, valid_time),
 	foreign key (permanent_user_id) references permanent_users (id) on delete cascade,
 	foreign key (profile_id) references profiles (id) on delete cascade
 );
@@ -59,7 +68,8 @@ create table permanent_user_logs (
 	permanent_user_id	int				not null,
 	witer				int				not null,
 	content				text			not null,
-	register_time		datetime		not null	default current_timestamp,
+	created				datetime		not null	default current_timestamp,
+	modified			datetime		not null	default current_timestamp,
 
 	primary key (id),
 	foreign key (permanent_user_id) references permanent_users (id) on delete cascade,
@@ -67,12 +77,10 @@ create table permanent_user_logs (
 );
 
 create table users_access (
-	id					int				not null	auto_increment,
 	user_id				int				not null,
 	entity_name			varchar(24)		not null,
 
-	primary key (id),
-	unique (user_id, entity_name),
+	primary key (user_id, entity_name),
 	foreign key (user_id) references users (id) on delete cascade
 );
 

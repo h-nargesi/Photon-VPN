@@ -14,21 +14,37 @@ public class Membership : Controller
     {
         using var db = new RdContext();
 
+        var plans = from pk in db.Packages.AsNoTracking()
+                    join pl in db.Plans.AsNoTracking()
+                            on pk.ProfileId equals pl.Id
+                    select new
+                    {
+                        pl.Id,
+                        pl.Price,
+                        pl.Color,
+                        pk.ProfileId,
+                    };
+
         var query = from up in db.PermanentUserPlans.AsNoTracking()
                     where up.PermanentUserId == user_id
-
-                    join pl in db.Plans.AsNoTracking()
-                            on up.ProfileId equals pl.ProfileId
 
                     join pr in db.Profiles.AsNoTracking()
                             on up.ProfileId equals pr.Id
 
-                    orderby up.ValidTime descending, up.RegisterTime descending
+                    join pl in plans
+                            on up.ProfileId equals pl.ProfileId
+
+                    orderby up.ValidTime descending, up.Created descending
                     select new
                     {
-                        PermanentUserPlan = up,
-                        Plan = pl,
-                        Profile = pr,
+                        PlanId = pl.Id,
+                        ProfileId = pr.Id,
+                        Name = pr.Name,
+                        ValidTime = up.ValidTime,
+                        Price = up.OverridePrice ?? pl.Price,
+                        Color = pl.Color,
+                        Created = up.Created,
+                        Modified = up.Modified,
                     };
 
         return Ok(await query.FirstOrDefaultAsync());

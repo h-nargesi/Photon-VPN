@@ -5,8 +5,6 @@ namespace Photon.Service.VPN.Models;
 
 public partial class PermanentUserPlan
 {
-    public int Id { get; set; }
-
     public int PermanentUserId { get; set; }
 
     public DateTime ValidTime { get; set; }
@@ -15,7 +13,9 @@ public partial class PermanentUserPlan
 
     public decimal? OverridePrice { get; set; }
 
-    public DateTime RegisterTime { get; set; }
+    public DateTime Created { get; set; }
+
+    public DateTime Modified { get; set; }
 
     public virtual PermanentUser PermanentUser { get; set; } = null!;
 

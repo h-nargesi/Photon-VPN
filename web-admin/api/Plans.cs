@@ -16,22 +16,19 @@ public class Plans : Controller
     {
         using var db = new RdContext();
 
-        var query = from pr in db.Profiles.AsNoTracking()
-                    join pl in db.Plans.AsNoTracking()
-                            on pr.Id equals pl.ProfileId into @join
-                    from pl in @join.DefaultIfEmpty()
+        var query = from pl in db.Plans.AsNoTracking()
                     select new
                     {
-                        pr.Id,
-                        pr.Name,
+                        pl.Id,
+                        pl.Title,
                         Active = pl != null ? pl.Active : false,
-                        //pr.CloudId,
                         Price = pl != null ? pl.Price : (decimal?)null,
                         ImageFile = pl != null ? pl.ImageFile : null,
                         Color = pl != null ? pl.Color : 0,
-                        Description = pl != null ? pl.Description : null,
-                        RegisterTime = pr.Created,
-                        ModificationTime = pl != null && pl.ModificationTime > pr.Modified ? pl.ModificationTime : pr.Modified,
+                        Speed = string.Empty,
+                        Traffic = string.Empty,
+                        pl.Created,
+                        pl.Modified,
                     };
 
         var result = await filter.ApplyFilter(query, db);
@@ -47,82 +44,69 @@ public class Plans : Controller
     {
         using var db = new RdContext();
 
-        var quuey = from pr in db.Profiles.AsNoTracking()
-                    join pl in db.Plans.AsNoTracking()
-                            on pr.Id equals pl.ProfileId into @join
-                    from pl in @join.DefaultIfEmpty()
-                    where pr.Id == id
-                    select new PlanProfile
-                    {
-                        Id = pr.Id,
-                        Profile = pr,
-                        Plan = pl,
-                    };
+        var quuey = db.Plans.AsNoTracking()
+                            .Where(c => c.Id == id);
 
         return Ok(await quuey.FirstOrDefaultAsync());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Modify([FromBody] PlanProfile plan_profile)
+    public async Task<IActionResult> Modify([FromBody] Plan plan)
     {
-        if (plan_profile == null) return BadRequest();
+        if (plan == null) return BadRequest();
 
         using var db = new RdContext();
 
-        if (plan_profile.Profile != null)
+        var original = await db.Plans.AsNoTracking()
+                                     .Where(c => c.Id == plan.Id)
+                                     .FirstOrDefaultAsync();
+
+        if (original == null)
         {
-            var original = await db.Profiles.AsNoTracking()
-                                            .Where(c => c.Id == plan_profile.Profile.Id)
-                                            .FirstOrDefaultAsync();
+            plan.Created = plan.Modified = DateTime.Now;
 
-            if (original == null)
-            {
-                plan_profile.Profile.Created =
-                plan_profile.Profile.Modified = DateTime.Now;
+            await db.Plans.AddAsync(plan);
+        }
+        else
+        {
+            plan.Modified = DateTime.Now;
 
-                await db.Profiles.AddAsync(plan_profile.Profile);
-            }
-            else
-            {
-                plan_profile.Profile.Modified = DateTime.Now;
-
-                db.Profiles.Attach(original);
-                db.Entry(original).CurrentValues.SetValues(plan_profile.Profile);
-                db.Entry(original).Property(x => x.Created).IsModified = false;
-            }
-
-            await db.SaveChangesAsync();
-
-            if (plan_profile.Plan != null)
-                plan_profile.Plan.ProfileId = plan_profile.Profile.Id;
+            db.Plans.Attach(original);
+            db.Entry(original).CurrentValues.SetValues(plan);
+            db.Entry(original).Property(x => x.Created).IsModified = false;
         }
 
-        if (plan_profile.Plan != null)
+        await db.SaveChangesAsync();
+
+        return Ok(Result.Success(data: original?.Id ?? plan.Id));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Profiles([FromRoute] int plan_id, [FromBody] int[] profiles)
+    {
+        if (profiles == null) return BadRequest();
+
+        using var db = new RdContext();
+
+        var current_packages = await db.Packages.AsNoTracking()
+                                                .Where(p => p.PlanId == plan_id)
+                                                .ToArrayAsync();
+
+        db.Packages.RemoveRange(current_packages);
+        await db.SaveChangesAsync();
+
+        foreach (var profiles_id in profiles)
         {
-            var original = await db.Plans.AsNoTracking()
-                                         .Where(c => c.ProfileId == plan_profile.Plan.ProfileId)
-                                         .FirstOrDefaultAsync();
-
-            if (original == null)
+            await db.Packages.AddAsync(new Package
             {
-                plan_profile.Plan.RegisterTime =
-                plan_profile.Plan.ModificationTime = DateTime.Now;
-
-                await db.Plans.AddAsync(plan_profile.Plan);
-            }
-            else
-            {
-                plan_profile.Plan.ModificationTime = DateTime.Now;
-
-                db.Plans.Attach(original);
-                db.Entry(original).CurrentValues.SetValues(plan_profile.Plan);
-                db.Entry(original).Property(x => x.RegisterTime).IsModified = false;
-            }
-
-            await db.SaveChangesAsync();
+                PlanId = plan_id,
+                ProfileId = profiles_id,
+            });
         }
 
-        return Ok(Result.Success(data: plan_profile.Profile?.Id ?? plan_profile.Plan?.ProfileId));
+        await db.SaveChangesAsync();
+
+        return Ok(Result.Success());
     }
 
     [HttpPost]
@@ -130,7 +114,7 @@ public class Plans : Controller
     {
         using var db = new RdContext();
 
-        db.Profiles.Remove(new Profile { Id = id });
+        db.Plans.Remove(new Plan { Id = id });
         await db.SaveChangesAsync();
 
         return Ok(Result.Success());

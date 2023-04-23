@@ -205,6 +205,8 @@ public partial class RdContext : DbContext
 
     public virtual DbSet<OpenvpnServerClient> OpenvpnServerClients { get; set; }
 
+    public virtual DbSet<Package> Packages { get; set; }
+
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<PermanentUser> PermanentUsers { get; set; }
@@ -5237,6 +5239,30 @@ public partial class RdContext : DbContext
             entity.Property(e => e.State).HasColumnName("state");
         });
 
+        modelBuilder.Entity<Package>(entity =>
+        {
+            entity.HasKey(e => e.ProfileId).HasName("PRIMARY");
+
+            entity.ToTable("packages");
+
+            entity.HasIndex(e => e.PlanId, "plan_id");
+
+            entity.Property(e => e.ProfileId)
+                .HasColumnType("int(11)")
+                .HasColumnName("profile_id");
+            entity.Property(e => e.PlanId)
+                .HasColumnType("int(11)")
+                .HasColumnName("plan_id");
+
+            entity.HasOne(d => d.Plan).WithMany(p => p.Packages)
+                .HasForeignKey(d => d.PlanId)
+                .HasConstraintName("packages_ibfk_1");
+
+            entity.HasOne(d => d.Profile).WithOne(p => p.Package)
+                .HasForeignKey<Package>(d => d.ProfileId)
+                .HasConstraintName("packages_ibfk_2");
+        });
+
         modelBuilder.Entity<Payment>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -5255,6 +5281,10 @@ public partial class RdContext : DbContext
             entity.Property(e => e.BankName)
                 .HasMaxLength(255)
                 .HasColumnName("bank_name");
+            entity.Property(e => e.Created)
+                .HasDefaultValueSql("'current_timestamp()'")
+                .HasColumnType("datetime")
+                .HasColumnName("created");
             entity.Property(e => e.DateTime)
                 .HasDefaultValueSql("'current_timestamp()'")
                 .HasColumnType("datetime")
@@ -5262,10 +5292,6 @@ public partial class RdContext : DbContext
             entity.Property(e => e.PermanentUserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
-            entity.Property(e => e.RegisterTime)
-                .HasDefaultValueSql("'current_timestamp()'")
-                .HasColumnType("datetime")
-                .HasColumnName("register_time");
             entity.Property(e => e.TrnsactionId)
                 .HasMaxLength(24)
                 .HasColumnName("trnsaction_id");
@@ -5445,13 +5471,17 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Content)
                 .HasColumnType("text")
                 .HasColumnName("content");
+            entity.Property(e => e.Created)
+                .HasDefaultValueSql("'current_timestamp()'")
+                .HasColumnType("datetime")
+                .HasColumnName("created");
+            entity.Property(e => e.Modified)
+                .HasDefaultValueSql("'current_timestamp()'")
+                .HasColumnType("datetime")
+                .HasColumnName("modified");
             entity.Property(e => e.PermanentUserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
-            entity.Property(e => e.RegisterTime)
-                .HasDefaultValueSql("'current_timestamp()'")
-                .HasColumnType("datetime")
-                .HasColumnName("register_time");
             entity.Property(e => e.Witer)
                 .HasColumnType("int(11)")
                 .HasColumnName("witer");
@@ -5551,34 +5581,33 @@ public partial class RdContext : DbContext
 
         modelBuilder.Entity<PermanentUserPlan>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => new { e.PermanentUserId, e.ValidTime }).HasName("PRIMARY");
 
             entity.ToTable("permanent_user_plan");
 
-            entity.HasIndex(e => new { e.PermanentUserId, e.ValidTime }, "permanent_user_id").IsUnique();
-
             entity.HasIndex(e => e.ProfileId, "profile_id");
 
-            entity.Property(e => e.Id)
+            entity.Property(e => e.PermanentUserId)
                 .HasColumnType("int(11)")
-                .HasColumnName("id");
+                .HasColumnName("permanent_user_id");
+            entity.Property(e => e.ValidTime)
+                .HasColumnType("datetime")
+                .HasColumnName("valid_time");
+            entity.Property(e => e.Created)
+                .HasDefaultValueSql("'current_timestamp()'")
+                .HasColumnType("datetime")
+                .HasColumnName("created");
+            entity.Property(e => e.Modified)
+                .HasDefaultValueSql("'current_timestamp()'")
+                .HasColumnType("datetime")
+                .HasColumnName("modified");
             entity.Property(e => e.OverridePrice)
                 .HasPrecision(16)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnName("override_price");
-            entity.Property(e => e.PermanentUserId)
-                .HasColumnType("int(11)")
-                .HasColumnName("permanent_user_id");
             entity.Property(e => e.ProfileId)
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
-            entity.Property(e => e.RegisterTime)
-                .HasDefaultValueSql("'current_timestamp()'")
-                .HasColumnType("datetime")
-                .HasColumnName("register_time");
-            entity.Property(e => e.ValidTime)
-                .HasColumnType("datetime")
-                .HasColumnName("valid_time");
 
             entity.HasOne(d => d.PermanentUser).WithMany(p => p.PermanentUserPlans)
                 .HasForeignKey(d => d.PermanentUserId)
@@ -5617,13 +5646,13 @@ public partial class RdContext : DbContext
 
         modelBuilder.Entity<Plan>(entity =>
         {
-            entity.HasKey(e => e.ProfileId).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("plans");
 
-            entity.Property(e => e.ProfileId)
+            entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
-                .HasColumnName("profile_id");
+                .HasColumnName("id");
             entity.Property(e => e.Active)
                 .IsRequired()
                 .HasDefaultValueSql("'1'")
@@ -5631,6 +5660,10 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Color)
                 .HasColumnType("int(11)")
                 .HasColumnName("color");
+            entity.Property(e => e.Created)
+                .HasDefaultValueSql("'current_timestamp()'")
+                .HasColumnType("datetime")
+                .HasColumnName("created");
             entity.Property(e => e.Description)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
@@ -5639,21 +5672,16 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("image_file");
-            entity.Property(e => e.ModificationTime)
+            entity.Property(e => e.Modified)
                 .HasDefaultValueSql("'current_timestamp()'")
                 .HasColumnType("datetime")
-                .HasColumnName("modification_time");
+                .HasColumnName("modified");
             entity.Property(e => e.Price)
                 .HasPrecision(16)
                 .HasColumnName("price");
-            entity.Property(e => e.RegisterTime)
-                .HasDefaultValueSql("'current_timestamp()'")
-                .HasColumnType("datetime")
-                .HasColumnName("register_time");
-
-            entity.HasOne(d => d.Profile).WithOne(p => p.Plan)
-                .HasForeignKey<Plan>(d => d.ProfileId)
-                .HasConstraintName("plans_ibfk_1");
+            entity.Property(e => e.Title)
+                .HasMaxLength(255)
+                .HasColumnName("title");
         });
 
         modelBuilder.Entity<PptpClient>(entity =>
@@ -7910,21 +7938,16 @@ public partial class RdContext : DbContext
 
         modelBuilder.Entity<UsersAccess>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => new { e.UserId, e.EntityName }).HasName("PRIMARY");
 
             entity.ToTable("users_access");
 
-            entity.HasIndex(e => new { e.UserId, e.EntityName }, "user_id").IsUnique();
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.EntityName)
-                .HasMaxLength(24)
-                .HasColumnName("entity_name");
             entity.Property(e => e.UserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("user_id");
+            entity.Property(e => e.EntityName)
+                .HasMaxLength(24)
+                .HasColumnName("entity_name");
 
             entity.HasOne(d => d.User).WithMany(p => p.UsersAccesses)
                 .HasForeignKey(d => d.UserId)

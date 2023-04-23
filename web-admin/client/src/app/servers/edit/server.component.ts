@@ -13,7 +13,7 @@ export class ServerComponent {
 
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: Server = {} as Server;
+  public item: Server = { } as Server;
 
   constructor(
     private readonly service: ServersService,

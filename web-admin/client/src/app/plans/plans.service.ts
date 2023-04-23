@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PlanModel, PlanProfile } from './plans.models';
+import { PlanModel, Plan } from './plans.models';
 import { BaseService, ListQuery, Result } from '../components';
 
 @Injectable({
@@ -21,11 +21,11 @@ export class PlansService extends BaseService {
     return this.http.post<PlanModel[]>(this.base_url + 'list', filter);
   }
 
-  public Get(id: number): Observable<PlanProfile> {
-    return this.http.get<PlanProfile>(this.base_url + 'get/' + id);
+  public Get(id: number): Observable<Plan> {
+    return this.http.get<Plan>(this.base_url + 'get/' + id);
   }
 
-  public Modify(plan: PlanProfile): Observable<Result> {
+  public Modify(plan: Plan): Observable<Result> {
     return this.http.post<Result>(this.base_url + 'modify', plan);
   }
 

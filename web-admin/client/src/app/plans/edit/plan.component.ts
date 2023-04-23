@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plan, PlanProfile, Profile } from '../plans.models';
+import { Plan } from '../plans.models';
 import Titles from '../plans.json';
 import { PlansService } from '../plans.service';
 import { ListViewModel, Result, ResultStatus, UIColors } from '../../components';
@@ -13,11 +13,7 @@ export class PlanComponent {
 
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: PlanProfile = {
-    id: 0,
-    profile: {} as Profile,
-    plan: {} as Plan
-  } as PlanProfile;
+  public item: Plan = { } as Plan;
 
   Colors = [
     { title: UIColors[UIColors.secondary], value: UIColors.secondary },
@@ -35,7 +31,7 @@ export class PlanComponent {
     private readonly route: ActivatedRoute,
     private readonly router: Router) { }
 
-  get Item(): PlanProfile {
+  get Item(): Plan {
     return this.item;
   }
 
@@ -43,10 +39,7 @@ export class PlanComponent {
     this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe({
-          next: (result: PlanProfile) => {
-            this.item = result;
-            if (!this.item.plan) this.item.plan = {} as Plan;
-          },
+          next: (result: Plan) => this.item = result,
           error: console.error
         });
       }
@@ -66,8 +59,6 @@ export class PlanComponent {
   }
 
   Submit() {
-    this.item.profile.cloudId = 23;
-
     console.log(this.item);
 
     this.service.Modify(this.item).subscribe({

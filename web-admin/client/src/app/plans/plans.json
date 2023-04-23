@@ -4,12 +4,12 @@
       "title": "Id",
       "show": false
     },
-    "name": {
-      "title": "Name",
-      "show": true
-    },
     "active": {
       "title": "Active",
+      "show": true
+    },
+    "title": {
+      "title": "Title",
       "show": true
     },
     "price": {
@@ -18,23 +18,23 @@
     },
     "imageFile": {
       "title": "Image Url",
-      "show": true
+      "show": false
     },
     "description": {
       "title": "Description",
       "show": false
     },
-    "registerTime": {
-      "title": "Register On",
+    "created": {
+      "title": "Created On",
       "show": true
     },
-    "modificationTime": {
+    "modified": {
       "title": "Modified On",
       "show": true
     }
   },
   "schema": {
-    "title": "name",
+    "title": "title",
     "subtitle": "price",
     "color": "color",
     "header": "speed",

@@ -1,9 +1,28 @@
 import { UIColors } from '../components';
 
-export interface PlanProfile {
+export interface Plan {
     id: number,
-    profile: Profile,
-    plan: Plan,
+    active: boolean,
+    title: string,
+    price: number,
+    imageFile: string | null,
+    description: string | null,
+    color: UIColors,
+    created: Date,
+    modified: Date,
+}
+
+export interface PlanModel {
+    id: number,
+    title: string,
+    active: boolean,
+    price: number,
+    imageFile: string | null,
+    color: UIColors,
+    speed: string,
+    traffic: string,
+    created: Date,
+    modified: Date,
 }
 
 export interface Profile {
@@ -12,29 +31,4 @@ export interface Profile {
     cloudId: number | null,
     created: Date,
     modified: Date
-}
-
-export interface Plan {
-    profileId: number,
-    active: boolean | null,
-    price: number,
-    imageFile: string | null,
-    description: string | null,
-    color: UIColors,
-    registerTime: Date,
-    modificationTime: Date,
-}
-
-export interface PlanModel {
-    id: number,
-    name: string,
-    active: boolean,
-    price: number,
-    imageFile: string | null,
-    color: UIColors,
-    speed: string,
-    traffic: string,
-    description: string | null,
-    registerTime: Date,
-    modificationTime: Date,
 }

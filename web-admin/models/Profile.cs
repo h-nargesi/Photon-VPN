@@ -15,7 +15,7 @@ public partial class Profile
 
     public DateTime Modified { get; set; }
 
-    public virtual ICollection<PermanentUserPlan> PermanentUserPlans { get; } = new List<PermanentUserPlan>();
+    public virtual Package? Package { get; set; }
 
-    public virtual Plan? Plan { get; set; }
+    public virtual ICollection<PermanentUserPlan> PermanentUserPlans { get; } = new List<PermanentUserPlan>();
 }

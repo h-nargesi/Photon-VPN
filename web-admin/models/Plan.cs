@@ -5,9 +5,11 @@ namespace Photon.Service.VPN.Models;
 
 public partial class Plan
 {
-    public int ProfileId { get; set; }
+    public int Id { get; set; }
 
     public bool Active { get; set; }
+
+    public string Title { get; set; } = null!;
 
     public decimal Price { get; set; }
 
@@ -17,9 +19,9 @@ public partial class Plan
 
     public string? Description { get; set; }
 
-    public DateTime RegisterTime { get; set; }
+    public DateTime Created { get; set; }
 
-    public DateTime ModificationTime { get; set; }
+    public DateTime Modified { get; set; }
 
-    public virtual Profile Profile { get; set; } = null!;
+    public virtual ICollection<Package> Packages { get; } = new List<Package>();
 }

@@ -14,7 +14,7 @@
             <c-col sm="10" class="offset-md-2">
               <c-form-check>
                 <input cFormCheckInput id="form_active" name="form_active" type="checkbox"
-                  [value]="Item.plan.active ? Item.plan.active : true" (change)="Item.plan.active = val($event)" />
+                  [value]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
                 <label cFormCheckLabel for="form_active">{{ getTitle('active') }}</label>
               </c-form-check>
             </c-col>
@@ -24,8 +24,8 @@
               {{ getTitle('name') }}
             </label>
             <c-col md="5">
-              <input cFormControl id="form_name" type="ip" [value]="Item.profile.name ? Item.profile.name : ''"
-                (change)="Item.profile.name = val($event)" />
+              <input cFormControl id="form_name" type="ip" [value]="Item.title ? Item.title : ''"
+                (change)="Item.title = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -33,8 +33,8 @@
               {{ getTitle('price') }}
             </label>
             <c-col md="5">
-              <input cFormControl id="form_price" type="number" [value]="Item.plan.price ? Item.plan.price : ''"
-                (change)="Item.plan.price = val($event)" />
+              <input cFormControl id="form_price" type="number" [value]="Item.price ? Item.price : ''"
+                (change)="Item.price = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -42,8 +42,8 @@
               {{ getTitle('imageFile') }}
             </label>
             <c-col md="5">
-              <input cFormControl id="form_imageFile" type="text" [value]="Item.plan.imageFile ? Item.plan.imageFile : ''"
-                (change)="Item.plan.imageFile = val($event)" />
+              <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ? Item.imageFile : ''"
+                (change)="Item.imageFile = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -51,8 +51,8 @@
               {{ getTitle('color') }}
             </label>
             <c-col lg="2" md="3">
-              <select aria-label="Pick a color" id="form_color" cSelect [value]="Item.plan.color ? Item.plan.color : ''"
-                (change)="Item.plan.color = val($event)">
+              <select aria-label="Pick a color" id="form_color" cSelect [value]="Item.color ? Item.color : ''"
+                (change)="Item.color = val($event)">
                 <option *ngFor="let color of Colors;" value="{{ color.value }}">{{ color.title }}</option>
               </select>
             </c-col>
@@ -62,26 +62,26 @@
               {{ getTitle('description') }}
             </label>
             <c-col md="5">
-              <textarea cFormControl id="form_description" rows="3" [value]="Item.plan.description ? Item.plan.description : ''"
-                (change)="Item.plan.description = val($event)"></textarea>
+              <textarea cFormControl id="form_description" rows="3" [value]="Item.description ? Item.description : ''"
+                (change)="Item.description = val($event)"></textarea>
             </c-col>
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_modified">
-              {{ getTitle('modificationTime') }}
+              {{ getTitle('modified') }}
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_modified" type="text"
-                [value]="Item.profile.modified ? Item.profile.modified : ''" />
+                [value]="Item.modified ? Item.modified : ''" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_created">
-              {{ getTitle('registerTime') }}
+              {{ getTitle('created') }}
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_created" type="text"
-                [value]="Item.profile.created ? Item.profile.created : ''" />
+                [value]="Item.created ? Item.created : ''" />
             </c-col>
           </c-row>
           <div class="d-grid gap-2 d-md-block">
