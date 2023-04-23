@@ -28,6 +28,7 @@ public class Plans : Controller
                         //pr.CloudId,
                         Price = pl != null ? pl.Price : (decimal?)null,
                         ImageFile = pl != null ? pl.ImageFile : null,
+                        Color = pl != null ? pl.Color : 0,
                         Description = pl != null ? pl.Description : null,
                         RegisterTime = pr.Created,
                         ModificationTime = pl != null && pl.ModificationTime > pr.Modified ? pl.ModificationTime : pr.Modified,
@@ -74,14 +75,26 @@ public class Plans : Controller
                                             .Where(c => c.Id == plan_profile.Profile.Id)
                                             .FirstOrDefaultAsync();
 
-            if (original == null) await db.Profiles.AddAsync(plan_profile.Profile);
+            if (original == null)
+            {
+                plan_profile.Profile.Created =
+                plan_profile.Profile.Modified = DateTime.Now;
+
+                await db.Profiles.AddAsync(plan_profile.Profile);
+            }
             else
             {
+                plan_profile.Profile.Modified = DateTime.Now;
+
                 db.Profiles.Attach(original);
                 db.Entry(original).CurrentValues.SetValues(plan_profile.Profile);
+                db.Entry(original).Property(x => x.Created).IsModified = false;
             }
 
             await db.SaveChangesAsync();
+
+            if (plan_profile.Plan != null)
+                plan_profile.Plan.ProfileId = plan_profile.Profile.Id;
         }
 
         if (plan_profile.Plan != null)
@@ -90,11 +103,20 @@ public class Plans : Controller
                                          .Where(c => c.ProfileId == plan_profile.Plan.ProfileId)
                                          .FirstOrDefaultAsync();
 
-            if (original == null) await db.Plans.AddAsync(plan_profile.Plan);
+            if (original == null)
+            {
+                plan_profile.Plan.RegisterTime =
+                plan_profile.Plan.ModificationTime = DateTime.Now;
+
+                await db.Plans.AddAsync(plan_profile.Plan);
+            }
             else
             {
+                plan_profile.Plan.ModificationTime = DateTime.Now;
+
                 db.Plans.Attach(original);
                 db.Entry(original).CurrentValues.SetValues(plan_profile.Plan);
+                db.Entry(original).Property(x => x.RegisterTime).IsModified = false;
             }
 
             await db.SaveChangesAsync();

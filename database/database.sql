@@ -34,20 +34,22 @@ create table plans (
 	description			text				null,
 	
 	register_time		datetime		not null	default current_timestamp,
-	modification_time	datetime		not null	on update current_timestamp,
+	modification_time	datetime		not null	default current_timestamp,
 
 	primary key (profile_id),
 	foreign key (profile_id) references profiles (id) on delete cascade
 );
 
 create table permanent_user_plan (
+	id					int				not null	auto_increment,
 	permanent_user_id	int				not null,
 	valid_time			datetime		not null,
 	profile_id			int				not null,
 	override_price		decimal(16)			null,
 	register_time		datetime		not null	default current_timestamp,
 	
-	primary key (permanent_user_id, valid_time),
+	primary key (id),
+	unique (permanent_user_id, valid_time),
 	foreign key (permanent_user_id) references permanent_users (id) on delete cascade,
 	foreign key (profile_id) references profiles (id) on delete cascade
 );
@@ -65,11 +67,13 @@ create table permanent_user_logs (
 );
 
 create table users_access (
+	id					int				not null	auto_increment,
 	user_id				int				not null,
 	entity_name			varchar(24)		not null,
 
-	primary key (user_id, entity_name),
-	foreign key (user_id) references users (id)
+	primary key (id),
+	unique (user_id, entity_name),
+	foreign key (user_id) references users (id) on delete cascade
 );
 
 create table accounts (

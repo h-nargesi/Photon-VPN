@@ -22,7 +22,7 @@
     },
     "description": {
       "title": "Description",
-      "show": true
+      "show": false
     },
     "registerTime": {
       "title": "Register On",

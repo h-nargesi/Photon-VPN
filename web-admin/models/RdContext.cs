@@ -5551,22 +5551,24 @@ public partial class RdContext : DbContext
 
         modelBuilder.Entity<PermanentUserPlan>(entity =>
         {
-            entity.HasKey(e => new { e.PermanentUserId, e.ValidTime }).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("permanent_user_plan");
 
+            entity.HasIndex(e => new { e.PermanentUserId, e.ValidTime }, "permanent_user_id").IsUnique();
+
             entity.HasIndex(e => e.ProfileId, "profile_id");
 
-            entity.Property(e => e.PermanentUserId)
+            entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
-                .HasColumnName("permanent_user_id");
-            entity.Property(e => e.ValidTime)
-                .HasColumnType("datetime")
-                .HasColumnName("valid_time");
+                .HasColumnName("id");
             entity.Property(e => e.OverridePrice)
                 .HasPrecision(16)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnName("override_price");
+            entity.Property(e => e.PermanentUserId)
+                .HasColumnType("int(11)")
+                .HasColumnName("permanent_user_id");
             entity.Property(e => e.ProfileId)
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
@@ -5574,6 +5576,9 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'current_timestamp()'")
                 .HasColumnType("datetime")
                 .HasColumnName("register_time");
+            entity.Property(e => e.ValidTime)
+                .HasColumnType("datetime")
+                .HasColumnName("valid_time");
 
             entity.HasOne(d => d.PermanentUser).WithMany(p => p.PermanentUserPlans)
                 .HasForeignKey(d => d.PermanentUserId)
@@ -5635,8 +5640,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("text")
                 .HasColumnName("image_file");
             entity.Property(e => e.ModificationTime)
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("'''0000-00-00 00:00:00'''")
+                .HasDefaultValueSql("'current_timestamp()'")
                 .HasColumnType("datetime")
                 .HasColumnName("modification_time");
             entity.Property(e => e.Price)
@@ -7906,20 +7910,24 @@ public partial class RdContext : DbContext
 
         modelBuilder.Entity<UsersAccess>(entity =>
         {
-            entity.HasKey(e => new { e.UserId, e.EntityName }).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("users_access");
 
-            entity.Property(e => e.UserId)
+            entity.HasIndex(e => new { e.UserId, e.EntityName }, "user_id").IsUnique();
+
+            entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
-                .HasColumnName("user_id");
+                .HasColumnName("id");
             entity.Property(e => e.EntityName)
                 .HasMaxLength(24)
                 .HasColumnName("entity_name");
+            entity.Property(e => e.UserId)
+                .HasColumnType("int(11)")
+                .HasColumnName("user_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.UsersAccesses)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("users_access_ibfk_1");
         });
 

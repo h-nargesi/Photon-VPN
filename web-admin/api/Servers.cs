@@ -41,11 +41,19 @@ public class Servers : Controller
                                    .Where(c => c.Id == na.Id)
                                    .FirstOrDefaultAsync();
 
-        if (original == null) await db.Nas.AddAsync(na);
+        if (original == null)
+        {
+            na.Created = na.Modified = DateTime.Now;
+
+            await db.Nas.AddAsync(na);
+        }
         else
         {
+            na.Modified = DateTime.Now;
+
             db.Nas.Attach(original);
             db.Entry(original).CurrentValues.SetValues(na);
+            db.Entry(original).Property(x => x.Created).IsModified = false;
         }
 
         await db.SaveChangesAsync();

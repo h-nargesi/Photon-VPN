@@ -34,6 +34,7 @@ import { ComponentsModule } from '../components/components.module';
 
 // views
 import { PlanListComponent } from './list/plan-list.component';
+import { PlanComponent } from './edit/plan.component';
 
 // Components Routing
 import { PlansRoutingModule } from './plans-routing.module';
@@ -41,6 +42,7 @@ import { PlansRoutingModule } from './plans-routing.module';
 @NgModule({
   declarations: [
     PlanListComponent,
+    PlanComponent,
   ],
   imports: [
     CommonModule,

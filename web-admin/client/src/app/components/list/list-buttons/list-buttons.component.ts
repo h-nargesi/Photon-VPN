@@ -1,10 +1,15 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
   selector: 'app-list-buttons',
   templateUrl: './list-buttons.component.html',
 })
 export class ListButtonsComponent {
+
+  @Input('reload') show_reload: boolean = true;
+  @Input('add') show_add: boolean = true;
+  @Input('edit') show_edit: boolean = true;
+  @Input('remove') show_remove: boolean = true;
 
   @Output("reloadClick") realod = new EventEmitter<any>();
   @Output("addClick") add = new EventEmitter<any>();

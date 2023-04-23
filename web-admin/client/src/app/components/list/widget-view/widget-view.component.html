@@ -17,15 +17,8 @@
             <svg cIcon class="text-high-emphasis-inverse" name="cilOptions"></svg>
           </button>
           <ul cDropdownMenu>
-            <li><a routerLink="./" cDropdownItem>Action</a></li>
-            <li><a routerLink="./" cDropdownItem>Another action</a></li>
-            <li><a routerLink="./" cDropdownItem>Something else here</a></li>
-            <li>
-              <hr cDropdownDivider>
-            </li>
-            <li>
-              <button cDropdownItem>Separated link</button>
-            </li>
+            <li><button cDropdownItem (click)="edit.emit(row)">Edit</button></li>
+            <li><button cDropdownItem (click)="remove.emit(row)" color="danger" variant="outline">Delete</button></li>
           </ul>
         </c-dropdown>
       </ng-template>

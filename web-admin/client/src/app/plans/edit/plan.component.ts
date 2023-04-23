@@ -1,26 +1,41 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Server } from '../servers.model';
-import Titles from '../servers.json';
-import { ServersService } from '../servers.service';
-import { ListViewModel, Result, ResultStatus } from '../../components';
+import { Plan, PlanProfile, Profile } from '../plans.models';
+import Titles from '../plans.json';
+import { PlansService } from '../plans.service';
+import { ListViewModel, Result, ResultStatus, UIColors } from '../../components';
 
 @Component({
-  selector: 'app-server',
-  templateUrl: './server.component.html',
+  selector: 'app-plan',
+  templateUrl: './plan.component.html',
 })
-export class ServerComponent {
+export class PlanComponent {
 
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: Server = {} as Server;
+  public item: PlanProfile = {
+    id: 0,
+    profile: {} as Profile,
+    plan: {} as Plan
+  } as PlanProfile;
+
+  Colors = [
+    { title: UIColors[UIColors.secondary], value: UIColors.secondary },
+    { title: UIColors[UIColors.primary], value: UIColors.primary },
+    { title: UIColors[UIColors.danger], value: UIColors.danger },
+    { title: UIColors[UIColors.dark], value: UIColors.dark },
+    { title: UIColors[UIColors.info], value: UIColors.info },
+    { title: UIColors[UIColors.light], value: UIColors.light },
+    { title: UIColors[UIColors.success], value: UIColors.success },
+    { title: UIColors[UIColors.warning], value: UIColors.warning },
+  ];
 
   constructor(
-    private readonly service: ServersService,
+    private readonly service: PlansService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) { }
 
-  get Item(): Server {
+  get Item(): PlanProfile {
     return this.item;
   }
 
@@ -28,7 +43,10 @@ export class ServerComponent {
     this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe({
-          next: (result: Server) => this.item = result,
+          next: (result: PlanProfile) => {
+            this.item = result;
+            if (!this.item.plan) this.item.plan = {} as Plan;
+          },
           error: console.error
         });
       }
@@ -48,6 +66,8 @@ export class ServerComponent {
   }
 
   Submit() {
+    this.item.profile.cloudId = 23;
+
     console.log(this.item);
 
     this.service.Modify(this.item).subscribe({
@@ -68,7 +88,7 @@ export class ServerComponent {
     this.service.Delete(this.item.id).subscribe({
       next: (result: Result) => {
         if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['servers']);
+        else this.router.navigate(['plans']);
       },
       error: console.error
     });

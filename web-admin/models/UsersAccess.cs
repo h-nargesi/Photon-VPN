@@ -5,6 +5,8 @@ namespace Photon.Service.VPN.Models;
 
 public partial class UsersAccess
 {
+    public int Id { get; set; }
+
     public int UserId { get; set; }
 
     public string EntityName { get; set; } = null!;

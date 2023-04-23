@@ -29,7 +29,7 @@ export abstract class ListViewComponent {
   }
 
   TitleOf(name: string) {
-    return this.columns_info != null ? this.columns_info[name].title : name;
+    return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
   }
 
   SelectRow(index: number) {

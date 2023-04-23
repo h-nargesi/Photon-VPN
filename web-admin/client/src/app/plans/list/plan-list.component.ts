@@ -33,35 +33,19 @@ export class PlanListComponent {
     this.router.navigate(['plans', 'edit']);
   }
 
-  onDeleteClick() {
-    if (!this.widget_view?.SelectedItems.size) return;
-    let items = Array.from(this.widget_view?.SelectedItems.values());
+  onDeleteClick(item: PlanModel) {
+    this.service.Delete(item.id).subscribe({
+      next: (result: Result) => {
+        if (result.status >= ResultStatus.Invalid)
+          console.error(result);
 
-    items.forEach((element) => {
-      this.service.Delete(element.id).subscribe({
-        next: (result: Result) => {
-          if (result.status >= ResultStatus.Invalid)
-            console.error(result);
-
-          const i = items.indexOf(element, 0);
-          items.splice(i, 1);
-          if (items.length < 1) {
-            this.ngOnInit();
-          }
-        },
-        error: console.error
-      });
+        this.ngOnInit();
+      },
+      error: console.error
     });
   }
 
-  onEditClick() {
-    if (!this.widget_view?.SelectedItems.size) return;
-    const items = Array.from(this.widget_view?.SelectedItems.values());
-    const id = items[items.length - 1].id;
-    this.router.navigate(['plans', 'edit', id]);
-  }
-
-  onDbClick(item: any) {
+  onEditClick(item: PlanModel) {
     this.router.navigate(['plans', 'edit', item.id]);
   }
 }

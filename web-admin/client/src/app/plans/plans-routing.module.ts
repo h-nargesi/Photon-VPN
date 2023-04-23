@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PlanListComponent } from './list/plan-list.component';
+import { PlanComponent } from './edit/plan.component';
 
 const routes: Routes = [
   {
@@ -17,20 +18,20 @@ const routes: Routes = [
           title: 'Plan List'
         }
       },
-      // {
-      //   path: 'edit',
-      //   component: PlanComponent,
-      //   data: {
-      //     title: 'Add Plan'
-      //   }
-      // },
-      // {
-      //   path: 'edit/:id',
-      //   component: PlanComponent,
-      //   data: {
-      //     title: 'Edit Plan'
-      //   }
-      // },
+      {
+        path: 'edit',
+        component: PlanComponent,
+        data: {
+          title: 'Add Plan'
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: PlanComponent,
+        data: {
+          title: 'Edit Plan'
+        }
+      },
     ]
   },
 ];

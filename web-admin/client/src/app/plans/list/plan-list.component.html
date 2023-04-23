@@ -1,4 +1,16 @@
+
+<div class="mb-4">
+  <c-card-body>
+    <app-list-buttons 
+      (reloadClick)="ngOnInit()"
+      (addClick)="onAddClick()"
+      [edit]="false"
+      [remove]="false"></app-list-buttons>
+  </c-card-body>
+</div>
 <app-widget-view #widgetView
   [columns-info]="columns_info"
-  [columns-schema]="columns_schema">
+  [columns-schema]="columns_schema"
+  (editClick)="onEditClick($event)"
+  (removeClick)="onDeleteClick($event)">
 </app-widget-view>
