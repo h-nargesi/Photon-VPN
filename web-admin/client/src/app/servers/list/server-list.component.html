@@ -15,7 +15,8 @@
         <table cTable app-list-view #listView
           [columns-info]="columns_info"
           [striped]="true" 
-          [hover]="true">
+          [hover]="true"
+          (dbClick)="onDbClick($event)">
         </table>
       </c-card-body>
     </c-card>

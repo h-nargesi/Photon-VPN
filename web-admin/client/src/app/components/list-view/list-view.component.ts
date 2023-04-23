@@ -9,7 +9,9 @@ export class ListViewComponent {
 
   @Input("columns-info") columns_info: ListViewModel | undefined;
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
+  @Output("dbClick") doubleClicke = new EventEmitter<any>();
 
+  private click = { time: 0, index: -1 };
   private data_source: any[] = [];
   private data_columns: string[] = [];
   private selected_records: Map<number, any> = new Map<number, any>();
@@ -26,15 +28,15 @@ export class ListViewComponent {
     return this.data_columns.slice();
   }
 
-  get SelectedItems(): Map<number, any>  {
+  get SelectedItems(): Map<number, any> {
     return this.selected_records;
   }
 
-  getTitle(name: string) {
+  TitleOf(name: string) {
     return this.columns_info != null ? this.columns_info[name].title : name;
   }
 
-  selectRow(index: number) {
+  SelectRow(index: number) {
     if (index < 0 || index > this.data_source.length) return;
     const item = this.data_source[index];
 
@@ -45,10 +47,15 @@ export class ListViewComponent {
       this.selected_records.set(index, item);
     }
 
-    this.selectedEvent.emit(this.selected_records);
+    if (this.is_double_click(index)) {
+      this.doubleClicke.emit(item);
+
+    } else {
+      this.selectedEvent.emit(this.selected_records);
+    }
   }
 
-  isSelected(index: number): boolean {
+  IsSelected(index: number): boolean {
     return this.selected_records.has(index);
   }
 
@@ -66,5 +73,24 @@ export class ListViewComponent {
       for (const column in this.data_source[0])
         this.data_columns.push(column);
     }
+  }
+
+  private is_double_click(index: number): boolean {
+    const now = new Date().getTime();
+    let result: boolean;
+
+    if (this.click.index == index &&
+      now - this.click.time <= 250) {
+      result = true;
+      this.click.index = -1;
+      this.click.time = 0;
+
+    } else {
+      result = false;
+      this.click.index = index;
+      this.click.time = now;
+    }
+
+    return result;
   }
 }

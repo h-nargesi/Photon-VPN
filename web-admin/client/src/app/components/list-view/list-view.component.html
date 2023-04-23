@@ -1,13 +1,13 @@
 <thead cTableColor="dark">
     <tr>
         <th scope="col">#</th>
-        <th *ngFor="let column of DataColumns;">{{ getTitle(column) }}</th>
+        <th *ngFor="let column of DataColumns;">{{ TitleOf(column) }}</th>
     </tr>
 </thead>
 <tbody>
     <tr *ngFor="let row of DataSource; let index = index"
-        (click)="selectRow(index)"
-        cTableColor="{{ isSelected(index) ? 'primary' : '' }}">
+        (click)="SelectRow(index)"
+        cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
         
         <td scope="row">{{ index + 1 }}</td>
         <td *ngFor="let col of DataColumns;">{{ row[col] }}</td>

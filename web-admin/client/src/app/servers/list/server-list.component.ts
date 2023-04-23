@@ -60,4 +60,8 @@ export class ServerListComponent {
     const id = items[items.length - 1].id;
     this.router.navigate(['servers', 'edit', id]);
   }
+
+  onDbClick(item: any) {
+    this.router.navigate(['servers', 'edit', item.id]);
+  }
 }
