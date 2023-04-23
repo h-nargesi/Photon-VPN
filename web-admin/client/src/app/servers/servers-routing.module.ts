@@ -15,14 +15,14 @@ const routes: Routes = [
         path: '',
         component: ServerListComponent,
         data: {
-          title: 'List Server'
+          title: 'Server List'
         }
       },
       {
         path: 'edit',
         component: ServerComponent,
         data: {
-          title: 'Edit Server'
+          title: 'Add Server'
         }
       },
       {

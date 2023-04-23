@@ -5,9 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 // CoreUI Modules
 import {
   AccordionModule,
-  ButtonModule,
   BadgeModule,
   BreadcrumbModule,
+  ButtonModule,
   CardModule,
   CarouselModule,
   CollapseModule,
@@ -46,11 +46,11 @@ import { ServersRoutingModule } from './servers-routing.module';
   ],
   imports: [
     CommonModule,
-    ButtonModule,
     ServersRoutingModule,
     AccordionModule,
     BadgeModule,
     BreadcrumbModule,
+    ButtonModule,
     CardModule,
     CollapseModule,
     GridModule,
