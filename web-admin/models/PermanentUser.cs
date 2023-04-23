@@ -89,5 +89,7 @@ public partial class PermanentUser
 
     public virtual ICollection<Payment> Payments { get; } = new List<Payment>();
 
+    public virtual ICollection<PermanentUserLog> PermanentUserLogs { get; } = new List<PermanentUserLog>();
+
     public virtual ICollection<PermanentUserPlan> PermanentUserPlans { get; } = new List<PermanentUserPlan>();
 }

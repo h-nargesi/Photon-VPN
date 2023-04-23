@@ -13,6 +13,8 @@ public partial class Plan
 
     public string? ImageFile { get; set; }
 
+    public int Color { get; set; }
+
     public string? Description { get; set; }
 
     public DateTime RegisterTime { get; set; }

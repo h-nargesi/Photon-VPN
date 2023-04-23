@@ -209,6 +209,8 @@ public partial class RdContext : DbContext
 
     public virtual DbSet<PermanentUser> PermanentUsers { get; set; }
 
+    public virtual DbSet<PermanentUserLog> PermanentUserLogs { get; set; }
+
     public virtual DbSet<PermanentUserNotification> PermanentUserNotifications { get; set; }
 
     public virtual DbSet<PermanentUserOtp> PermanentUserOtps { get; set; }
@@ -315,20 +317,29 @@ public partial class RdContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.PermanentUserId).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("accounts");
 
-            entity.Property(e => e.PermanentUserId)
+            entity.HasIndex(e => e.PermanentUserId, "permanent_user_id").IsUnique();
+
+            entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
-                .HasColumnName("permanent_user_id");
+                .HasColumnName("id");
             entity.Property(e => e.Password)
                 .HasMaxLength(50)
                 .HasColumnName("password");
+            entity.Property(e => e.PermanentUserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)")
+                .HasColumnName("permanent_user_id");
+            entity.Property(e => e.Username)
+                .HasMaxLength(50)
+                .HasColumnName("username");
 
             entity.HasOne(d => d.PermanentUser).WithOne(p => p.Account)
                 .HasForeignKey<Account>(d => d.PermanentUserId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("accounts_ibfk_1");
         });
 
@@ -5264,7 +5275,6 @@ public partial class RdContext : DbContext
 
             entity.HasOne(d => d.PermanentUser).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.PermanentUserId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("payments_ibfk_1");
         });
 
@@ -5419,6 +5429,42 @@ public partial class RdContext : DbContext
                 .HasColumnName("username");
         });
 
+        modelBuilder.Entity<PermanentUserLog>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("permanent_user_logs");
+
+            entity.HasIndex(e => e.PermanentUserId, "permanent_user_id");
+
+            entity.HasIndex(e => e.Witer, "witer");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("id");
+            entity.Property(e => e.Content)
+                .HasColumnType("text")
+                .HasColumnName("content");
+            entity.Property(e => e.PermanentUserId)
+                .HasColumnType("int(11)")
+                .HasColumnName("permanent_user_id");
+            entity.Property(e => e.RegisterTime)
+                .HasDefaultValueSql("'current_timestamp()'")
+                .HasColumnType("datetime")
+                .HasColumnName("register_time");
+            entity.Property(e => e.Witer)
+                .HasColumnType("int(11)")
+                .HasColumnName("witer");
+
+            entity.HasOne(d => d.PermanentUser).WithMany(p => p.PermanentUserLogs)
+                .HasForeignKey(d => d.PermanentUserId)
+                .HasConstraintName("permanent_user_logs_ibfk_1");
+
+            entity.HasOne(d => d.WiterNavigation).WithMany(p => p.PermanentUserLogs)
+                .HasForeignKey(d => d.Witer)
+                .HasConstraintName("permanent_user_logs_ibfk_2");
+        });
+
         modelBuilder.Entity<PermanentUserNotification>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -5531,12 +5577,10 @@ public partial class RdContext : DbContext
 
             entity.HasOne(d => d.PermanentUser).WithMany(p => p.PermanentUserPlans)
                 .HasForeignKey(d => d.PermanentUserId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("permanent_user_plan_ibfk_1");
 
             entity.HasOne(d => d.Profile).WithMany(p => p.PermanentUserPlans)
                 .HasForeignKey(d => d.ProfileId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("permanent_user_plan_ibfk_2");
         });
 
@@ -5579,6 +5623,9 @@ public partial class RdContext : DbContext
                 .IsRequired()
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("active");
+            entity.Property(e => e.Color)
+                .HasColumnType("int(11)")
+                .HasColumnName("color");
             entity.Property(e => e.Description)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
@@ -5602,7 +5649,6 @@ public partial class RdContext : DbContext
 
             entity.HasOne(d => d.Profile).WithOne(p => p.Plan)
                 .HasForeignKey<Plan>(d => d.ProfileId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("plans_ibfk_1");
         });
 

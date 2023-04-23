@@ -37,5 +37,7 @@ public partial class User
 
     public int? TimezoneId { get; set; }
 
+    public virtual ICollection<PermanentUserLog> PermanentUserLogs { get; } = new List<PermanentUserLog>();
+
     public virtual ICollection<UsersAccess> UsersAccesses { get; } = new List<UsersAccess>();
 }
