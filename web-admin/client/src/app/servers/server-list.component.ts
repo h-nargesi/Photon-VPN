@@ -5,7 +5,7 @@ import Titles from './servers.json';
 
 @Component({
   selector: 'app-server-list',
-  template: '<app-table-page [title]="title" [columns-info]="columns_info" [service]="service"></app-table-page>',
+  template: '<app-table-page [title]="title" [columns-info]="columns_info" [service]="service" [small]="false"></app-table-page>',
 })
 export class ServerListComponent {
 
