@@ -19,12 +19,14 @@ import { ChartjsModule } from '@coreui/angular-chartjs';
 // utils
 import { ListButtonsComponent } from './list/list-buttons/list-buttons.component';
 import { TableViewComponent } from './list/table-view/table-view.component';
+import { TablePageComponent } from './list/table-page/table-page.component';
 import { WidgetViewComponent } from './list/widget-view/widget-view.component';
 
 @NgModule({
     declarations: [
         ListButtonsComponent,
         TableViewComponent,
+        TablePageComponent,
         WidgetViewComponent,
     ],
     imports: [
@@ -44,6 +46,7 @@ import { WidgetViewComponent } from './list/widget-view/widget-view.component';
     exports: [
         ListButtonsComponent,
         TableViewComponent,
+        TablePageComponent,
         WidgetViewComponent,
     ]
 })

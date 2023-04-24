@@ -1,4 +1,5 @@
 export * from './services/base-service';
+export * from './services/lgmd-service';
 export * from './services/list-query.model';
 export * from './list/list-view.model';
 export * from './list/table-view/table-view.component';

@@ -1,4 +1,4 @@
-import { UIColors } from "src/app/components"
+import { UIColors } from "../components"
 
 export interface User {
     Id: number,

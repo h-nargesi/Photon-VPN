@@ -1,36 +1,32 @@
-import { Component, EventEmitter, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ListViewModel, TableViewComponent, Result, ResultStatus } from '../../components';
-import { Server } from '../servers.model';
-import { ServersService } from '../servers.service';
-import Titles from '../servers.json';
+import { ListViewModel } from '../list-view.model';
+import { TableViewComponent } from '../table-view/table-view.component';
+import { LGMDService } from '../../services/lgmd-service';
+import { Result, ResultStatus } from '../../services/list-query.model';
 
 @Component({
-  selector: 'app-server-list',
-  templateUrl: './server-list.component.html',
+  selector: 'app-table-page',
+  templateUrl: './table-page.component.html',
 })
-export class ServerListComponent {
+export class TablePageComponent {
 
-  public columns_info: ListViewModel = Titles.list;
-  public data_provider: Observable<Server[]> | undefined;
-  public reload: EventEmitter<any[]> | undefined;
-
+  @Input("title") title : string | undefined;
+  @Input("columns-info") columns_info: ListViewModel | undefined;
+  @Input("service") service : LGMDService | undefined;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
-  constructor(
-    private readonly service: ServersService,
-    private readonly router: Router) { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit(): void {
-    this.service.List(null).subscribe({
+    this.service?.List(null).subscribe({
       next: (result: any[]) => this.table_view?.SetDataSource(result),
       error: console.error
     });
   }
 
   onAddClick() {
-    this.router.navigate(['servers', 'edit']);
+    this.router.navigate([this.title?.toLowerCase(), 'edit']);
   }
 
   onDeleteClick() {
@@ -38,7 +34,7 @@ export class ServerListComponent {
     let items = Array.from(this.table_view?.SelectedItems.values());
 
     items.forEach((element) => {
-      this.service.Delete(element.id).subscribe({
+      this.service?.Delete(element.id).subscribe({
         next: (result: Result) => {
           if (result.status >= ResultStatus.Invalid)
             console.error(result);
@@ -58,10 +54,10 @@ export class ServerListComponent {
     if (!this.table_view?.SelectedItems.size) return;
     const items = Array.from(this.table_view?.SelectedItems.values());
     const id = items[items.length - 1].id;
-    this.router.navigate(['servers', 'edit', id]);
+    this.router.navigate([this.title?.toLowerCase(), 'edit', id]);
   }
 
   onDbClick(item: any) {
-    this.router.navigate(['servers', 'edit', item.id]);
+    this.router.navigate([this.title?.toLowerCase(), 'edit', item.id]);
   }
 }

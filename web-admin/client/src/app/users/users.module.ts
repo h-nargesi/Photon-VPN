@@ -33,18 +33,18 @@ import { DocsComponentsModule } from '@docs-components/docs-components.module';
 import { ComponentsModule } from '../components/components.module';
 
 // views
-import { UsersComponent } from './users/users.component';
+import { UsersListComponent } from './user-list.component';
 
 // Components Routing
-import { AccountingRoutingModule } from './accounting-routing.module';
+import { UsersRoutingModule } from './users-routing.module';
 
 @NgModule({
   declarations: [
-    UsersComponent,
+    UsersListComponent,
   ],
   imports: [
     CommonModule,
-    AccountingRoutingModule,
+    UsersRoutingModule,
     AccordionModule,
     BadgeModule,
     BreadcrumbModule,
@@ -72,4 +72,4 @@ import { AccountingRoutingModule } from './accounting-routing.module';
     ComponentsModule,
   ],
 })
-export class AccountingModule {}
+export class UsersModule {}

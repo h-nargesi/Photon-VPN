@@ -33,7 +33,7 @@ import { DocsComponentsModule } from '@docs-components/docs-components.module';
 import { ComponentsModule } from '../components/components.module';
 
 // views
-import { ServerListComponent } from './list/server-list.component';
+import { ServerListComponent } from './server-list.component';
 import { ServerComponent } from './edit/server.component';
 
 // Components Routing

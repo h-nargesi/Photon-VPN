@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Membership, User } from './users.model';
-import { BaseService, ListQuery, Result } from '../../components';
+import { LGMDService, ListQuery, Result } from '../components';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class UsersService extends BaseService {
+export class UsersService extends LGMDService {
 
 	constructor(
 		http: HttpClient,
@@ -22,7 +22,7 @@ export class UsersService extends BaseService {
 	}
 
 	public Get(id: number): Observable<User> {
-		return this.http.get<User>(this.module_url + 'get/' + id));
+		return this.http.get<User>(this.module_url + 'get/' + id);
 	}
 
 	public Modify(server: User): Observable<Result> {
