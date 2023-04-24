@@ -10,14 +10,17 @@ export class ListButtonsComponent {
   @Input('add') show_add: boolean = true;
   @Input('edit') show_edit: boolean = true;
   @Input('remove') show_remove: boolean = true;
+  @Input('undo') show_undo: boolean = true;
 
   @Output("reloadClick") realod = new EventEmitter<any>();
   @Output("addClick") add = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();
   @Output("removeClick") remove = new EventEmitter<any>();
+  @Output("undoClick") undo = new EventEmitter<any>();
 
   cilPencil = 'cilPencil';
   cilTrash = 'cilTrash';
   cilPlus = 'cilPlus';
   cilReload = 'cilReload';
+  cilActionUndo = 'cilActionUndo';
 }

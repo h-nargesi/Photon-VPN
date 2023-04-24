@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 // CoreUI Modules
 import {
-    TableModule, 
-    ButtonGroupModule, 
+    TableModule,
+    ButtonGroupModule,
     ButtonModule,
     CardModule,
     DropdownModule,
@@ -12,6 +12,7 @@ import {
     ProgressModule,
     SharedModule,
     WidgetModule,
+    ModalModule,
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
@@ -42,6 +43,7 @@ import { WidgetViewComponent } from './list/widget-view/widget-view.component';
         SharedModule,
         WidgetModule,
         ChartjsModule,
+        ModalModule,
     ],
     exports: [
         ListButtonsComponent,

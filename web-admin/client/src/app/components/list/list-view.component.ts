@@ -9,7 +9,7 @@ export abstract class ListViewComponent {
   private selected_records: Map<number, any> = new Map<number, any>();
 
   protected abstract get columns_info(): ListViewModel | undefined;
-  protected abstract get selectedEvent():  EventEmitter<Map<number, any>>;
+  protected abstract get selectedEvent(): EventEmitter<Map<number, any>>;
   protected abstract get doubleClicke(): EventEmitter<any>;
 
   get DataSource(): any[] {
@@ -53,6 +53,11 @@ export abstract class ListViewComponent {
 
   IsSelected(index: number): boolean {
     return this.selected_records.has(index);
+  }
+
+  ClearSelected() {
+    this.selected_records.clear();
+    this.selectedEvent.emit(this.selected_records);
   }
 
   SetDataSource(data: any[]) {

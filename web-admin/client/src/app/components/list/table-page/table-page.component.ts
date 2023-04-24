@@ -4,6 +4,7 @@ import { ListViewModel } from '../list-view.model';
 import { TableViewComponent } from '../table-view/table-view.component';
 import { LGMDService } from '../../services/lgmd-service';
 import { Result, ResultStatus } from '../../services/list-query.model';
+import { ModalComponent } from '@coreui/angular';
 
 @Component({
   selector: 'app-table-page',
@@ -11,10 +12,12 @@ import { Result, ResultStatus } from '../../services/list-query.model';
 })
 export class TablePageComponent {
 
+  @Input("small") small : boolean = true;
   @Input("title") title : string | undefined;
   @Input("columns-info") columns_info: ListViewModel | undefined;
   @Input("service") service : LGMDService | undefined;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
+  @ViewChild('ConfirmDelete') private delete_modal: ModalComponent | undefined;
 
   constructor(private readonly router: Router) { }
 
@@ -29,8 +32,17 @@ export class TablePageComponent {
     this.router.navigate([this.title?.toLowerCase(), 'edit']);
   }
 
+  onUndoClick() {
+    this.table_view?.ClearSelected();
+  }
+
   onDeleteClick() {
-    if (!this.table_view?.SelectedItems.size) return;
+    if (!this.table_view?.SelectedItems.size) 
+    {
+      console.error('No item has been selected.');
+      return;
+    }
+    
     let items = Array.from(this.table_view?.SelectedItems.values());
 
     items.forEach((element) => {
