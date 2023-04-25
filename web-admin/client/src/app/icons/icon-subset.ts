@@ -30,6 +30,7 @@ import {
   cilCalculator,
   cilCalendar,
   cilChart,
+  cilChartLine,
   cilChartPie,
   cilCheck,
   cilChevronLeft,
@@ -133,6 +134,7 @@ export const iconSubset = {
   cilCalculator,
   cilCalendar,
   cilChart,
+  cilChartLine,
   cilChartPie,
   cilCheck,
   cilChevronLeft,
@@ -305,4 +307,5 @@ export enum IconSubset {
   cilActionUndo = 'cilActionUndo',
   cilLinkBroken = 'cilLinkBroken',
   cilX = "cilX",
+  cilChartLine = 'cilChartLine',
 }

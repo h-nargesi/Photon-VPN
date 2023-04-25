@@ -5,7 +5,7 @@ import Titles from './users.json';
 
 @Component({
   selector: 'app-user-list',
-  template: '<app-table-page [title]="title" [columns-info]="columns_info" [service]="service"></app-table-page>',
+  templateUrl: './user-list.component.html',
 })
 export class UsersListComponent {
 

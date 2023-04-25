@@ -5,8 +5,7 @@ import Titles from './payments.json';
 
 @Component({
   selector: 'app-payment-list',
-  template:
-    '<app-table-page [title]="title" [columns-info]="columns_info" [service]="service" [small]="false"></app-table-page>',
+  templateUrl: './payment-list.component.html',
 })
 export class PaymentListComponent {
   title: string = 'Payments';
