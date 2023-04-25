@@ -6,21 +6,15 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 })
 export class ListButtonsComponent {
 
-  @Input('reload') show_reload: boolean = true;
-  @Input('add') show_add: boolean = true;
-  @Input('edit') show_edit: boolean = true;
-  @Input('remove') show_remove: boolean = true;
-  @Input('undo') show_undo: boolean = true;
-
+  @Input('show-reload') show_reload: boolean = true;
+  @Input('show-add') show_add: boolean = true;
+  @Input('show-edit') show_edit: boolean = true;
+  @Input('show-remove') show_remove: boolean = true;
+  @Input('show-undo') show_undo: boolean = true;
+  
   @Output("reloadClick") realod = new EventEmitter<any>();
   @Output("addClick") add = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();
   @Output("removeClick") remove = new EventEmitter<any>();
   @Output("undoClick") undo = new EventEmitter<any>();
-
-  cilPencil = 'cilPencil';
-  cilTrash = 'cilTrash';
-  cilPlus = 'cilPlus';
-  cilReload = 'cilReload';
-  cilActionUndo = 'cilActionUndo';
 }

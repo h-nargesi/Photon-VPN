@@ -8,6 +8,7 @@ export abstract class ListViewComponent {
   private data_columns: string[] = [];
   private selected_records: Map<number, any> = new Map<number, any>();
 
+  protected abstract get selectable(): boolean | undefined;
   protected abstract get columns_info(): ListViewModel | undefined;
   protected abstract get selectedEvent(): EventEmitter<Map<number, any>>;
   protected abstract get doubleClicke(): EventEmitter<any>;
@@ -33,6 +34,7 @@ export abstract class ListViewComponent {
   }
 
   SelectRow(index: number) {
+    if (!this.selectable) return;
     if (index < 0 || index > this.data_source.length) return;
     const item = this.data_source[index];
 

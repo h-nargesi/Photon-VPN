@@ -15,6 +15,8 @@ export class WidgetViewComponent extends ListViewComponent {
   @Output("dbClick") doubleClicke = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();
   @Output("removeClick") remove = new EventEmitter<any>();
+  
+  protected selectable: boolean = false;
 
   GetTitle(data: Data): string {
     const title = this.GetColumn('title', data) ?? '';

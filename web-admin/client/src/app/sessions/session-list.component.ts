@@ -5,8 +5,7 @@ import Titles from './sessions.json';
 
 @Component({
   selector: 'app-session-list',
-  template:
-    '<app-table-page [title]="title" [columns-info]="columns_info" [service]="service" [small]="false"></app-table-page>',
+  templateUrl: './session-list.component.html',
 })
 export class SessionListComponent {
   title: string = 'Sessions';

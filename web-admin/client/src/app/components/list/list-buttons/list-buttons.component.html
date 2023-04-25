@@ -1,19 +1,19 @@
 
 <c-button-group>
     <button cButton *ngIf="show_reload" (click)="realod.emit()" variant="outline" color="secondary">
-        <svg cIcon [name]="cilReload" [title]="cilReload" size="2xl"></svg>
+        <svg cIcon name="cilReload" title="cilReload" size="2xl"></svg>
     </button>
     <button cButton *ngIf="show_add" (click)="add.emit()" variant="outline" color="success">
-        <svg cIcon [name]="cilPlus" [title]="cilPlus" size="2xl"></svg>
+        <svg cIcon name="cilPlus" title="cilPlus" size="2xl"></svg>
     </button>
     <button cButton *ngIf="show_edit" (click)="edit.emit()" variant="outline" color="secondary">
-        <svg cIcon [name]="cilPencil" [title]="cilPencil" size="2xl"></svg>
+        <svg cIcon name="cilPencil" title="cilPencil" size="2xl"></svg>
     </button>
     <button cButton *ngIf="show_undo" (click)="undo.emit()" variant="outline" color="secondary">
-        <svg cIcon [name]="cilActionUndo" [title]="cilActionUndo" size="2xl"></svg>
+        <svg cIcon name="cilActionUndo" title="cilActionUndo" size="2xl"></svg>
     </button>
     <button cButton *ngIf="show_remove" [cModalToggle]="ConfirmDelete.id" variant="outline" color="danger">
-        <svg cIcon [name]="cilTrash" [title]="cilTrash" size="2xl"></svg>
+        <svg cIcon name="cilTrash" title="cilTrash" size="2xl"></svg>
     </button>
 </c-button-group>
 

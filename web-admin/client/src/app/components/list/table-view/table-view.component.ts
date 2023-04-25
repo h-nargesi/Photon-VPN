@@ -8,6 +8,7 @@ import { ListViewModel } from "../list-view.model";
 })
 export class TableViewComponent extends ListViewComponent {
 
+  @Input("selectable") selectable: boolean = true;
   @Input("columns-info") columns_info: ListViewModel | undefined;
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
   @Output("dbClick") doubleClicke = new EventEmitter<any>();

@@ -4,7 +4,6 @@ import { ListViewModel } from '../list-view.model';
 import { TableViewComponent } from '../table-view/table-view.component';
 import { LGMDService } from '../../services/lgmd-service';
 import { Result, ResultStatus } from '../../services/list-query.model';
-import { ModalComponent } from '@coreui/angular';
 
 @Component({
   selector: 'app-table-page',
@@ -16,8 +15,12 @@ export class TablePageComponent {
   @Input("title") title : string | undefined;
   @Input("columns-info") columns_info: ListViewModel | undefined;
   @Input("service") service : LGMDService | undefined;
+  @Input('show-reload') show_reload: boolean = true;
+  @Input('show-add') show_add: boolean = true;
+  @Input('show-edit') show_edit: boolean = true;
+  @Input('show-remove') show_remove: boolean = true;
+  @Input('show-undo') show_undo: boolean = true;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
-  @ViewChild('ConfirmDelete') private delete_modal: ModalComponent | undefined;
 
   constructor(private readonly router: Router) { }
 

@@ -10,7 +10,13 @@
           (addClick)="onAddClick()"
           (editClick)="onEditClick()"
           (removeClick)="onDeleteClick()"
-          (undoClick)="onUndoClick()"></app-list-buttons>
+          (undoClick)="onUndoClick()"
+          [show-add]="show_add"
+          [show-edit]="show_edit"
+          [show-reload]="show_reload"
+          [show-remove]="show_remove"
+          [show-undo]="show_undo"></app-list-buttons>
+        <ng-content></ng-content>
       </c-card-body>
       <c-card-body class="overflow-auto">
         <table cTable app-table-view #tableView
