@@ -1,7 +1,8 @@
 import { EventEmitter } from "@angular/core";
 import { ListViewModel } from "./list-view.model";
+import { BaseComponent } from "./base.component";
 
-export abstract class ListViewComponent {
+export abstract class ListViewComponent extends BaseComponent {
 
   private click = { time: 0, index: -1 };
   private data_source: any[] = [];
@@ -9,7 +10,6 @@ export abstract class ListViewComponent {
   private selected_records: Map<number, any> = new Map<number, any>();
 
   protected abstract get selectable(): boolean | undefined;
-  protected abstract get columns_info(): ListViewModel | undefined;
   protected abstract get selectedEvent(): EventEmitter<Map<number, any>>;
   protected abstract get doubleClicke(): EventEmitter<any>;
 
@@ -27,10 +27,6 @@ export abstract class ListViewComponent {
 
   get SelectedItems(): Map<number, any> {
     return this.selected_records;
-  }
-
-  TitleOf(name: string) {
-    return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
   }
 
   SelectRow(index: number) {

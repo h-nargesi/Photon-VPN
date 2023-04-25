@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListViewModel, Result, ResultStatus } from '../components';
+import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
 import { ServersService } from './servers.service';
 import { Server } from './servers.model';
 import Titles from './servers.json';
@@ -9,16 +9,18 @@ import Titles from './servers.json';
   selector: 'app-server',
   templateUrl: './server.component.html',
 })
-export class ServerComponent {
+export class ServerComponent extends BaseComponent {
 
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: Server = { } as Server;
+  public item: Server = {} as Server;
 
   constructor(
     private readonly service: ServersService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) { }
+    private readonly router: Router) {
+    super();
+  }
 
   get Item(): Server {
     return this.item;
@@ -37,14 +39,6 @@ export class ServerComponent {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  getTitle(name: string) {
-    return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
-  }
-
-  val(event: any): any {
-    return event.target.value;
   }
 
   Submit() {

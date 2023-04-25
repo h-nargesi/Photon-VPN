@@ -11,5 +11,5 @@ export class PaymentListComponent {
   title: string = 'Payments';
   columns_info: ListViewModel = Titles.list;
 
-  constructor(public readonly service: PaymentsService) {}
+  constructor(public readonly service: PaymentsService) { }
 }

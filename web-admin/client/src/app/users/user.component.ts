@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListViewModel, Result, ResultStatus } from '../components';
+import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import Titles from './users.json';
@@ -9,16 +9,18 @@ import Titles from './users.json';
   selector: 'app-user',
   templateUrl: './user.component.html',
 })
-export class UserComponent {
+export class UserComponent extends BaseComponent {
 
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: User = { } as User;
+  public item: User = {} as User;
 
   constructor(
     private readonly service: UsersService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) { }
+    private readonly router: Router) {
+    super();
+  }
 
   get Item(): User {
     return this.item;
@@ -37,14 +39,6 @@ export class UserComponent {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  getTitle(name: string) {
-    return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
-  }
-
-  val(event: any): any {
-    return event.target.value;
   }
 
   Submit() {

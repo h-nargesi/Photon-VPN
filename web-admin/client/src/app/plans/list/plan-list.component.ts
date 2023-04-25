@@ -3,14 +3,14 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PlanModel } from '../plans.models';
 import { PlansService } from '../plans.service';
-import { ListViewModel, WidgetViewComponent, Result, ResultStatus, ListViewSchema } from '../../components';
+import { ListViewModel, WidgetViewComponent, Result, ResultStatus, ListViewSchema, BaseComponent } from '../../components';
 import Titles from '../plans.json';
 
 @Component({
   selector: 'app-plan-list',
   templateUrl: './plan-list.component.html',
 })
-export class PlanListComponent {
+export class PlanListComponent extends BaseComponent {
   public columns_info: ListViewModel = Titles.list;
   public columns_schema: ListViewSchema = Titles.schema;
   public data_provider: Observable<PlanModel[]> | undefined;
@@ -20,7 +20,9 @@ export class PlanListComponent {
 
   constructor(
     private readonly service: PlansService,
-    private readonly router: Router) { }
+    private readonly router: Router) {
+    super();
+  }
 
   ngOnInit(): void {
     this.service.List(null).subscribe({

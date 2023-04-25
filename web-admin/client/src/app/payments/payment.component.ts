@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListViewModel, Result, ResultStatus } from '../components';
+import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
 import { PaymentsService } from './payments.service';
 import { Payment } from './payments.model';
 import Titles from './payments.json';
@@ -9,7 +9,7 @@ import Titles from './payments.json';
   selector: 'app-payment',
   templateUrl: './payment.component.html',
 })
-export class PaymentComponent {
+export class PaymentComponent extends BaseComponent {
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
   public item: Payment = {} as Payment;
@@ -17,8 +17,9 @@ export class PaymentComponent {
   constructor(
     private readonly service: PaymentsService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router) {
+    super();
+  }
 
   get Item(): Payment {
     return this.item;
@@ -37,16 +38,6 @@ export class PaymentComponent {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  getTitle(name: string) {
-    return this.columns_info != null && name in this.columns_info
-      ? this.columns_info[name].title
-      : name;
-  }
-
-  val(event: any): any {
-    return event.target.value;
   }
 
   Submit() {

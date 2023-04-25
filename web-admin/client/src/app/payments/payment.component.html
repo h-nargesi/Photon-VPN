@@ -13,7 +13,7 @@
         <form>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_permanentUserId">
-              {{ getTitle("permanentUserId") }}
+              {{ titleOf("permanentUserId") }}
             </label>
             <c-col md="5">
               <input
@@ -27,7 +27,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_value">
-              {{ getTitle("value") }}
+              {{ titleOf("value") }}
             </label>
             <c-col md="5">
               <input
@@ -41,7 +41,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_trnsactionId">
-              {{ getTitle("trnsactionId") }}
+              {{ titleOf("trnsactionId") }}
             </label>
             <c-col md="5">
               <input
@@ -55,7 +55,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_auto_close">
-              {{ getTitle("dateTime") }}
+              {{ titleOf("dateTime") }}
             </label>
             <c-col lg="2" md="3">
               <input
@@ -69,7 +69,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_bankName">
-              {{ getTitle("bankName") }}
+              {{ titleOf("bankName") }}
             </label>
             <c-col md="5">
               <input
@@ -83,7 +83,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_bankAccount">
-              {{ getTitle("bankAccount") }}
+              {{ titleOf("bankAccount") }}
             </label>
             <c-col md="5">
               <input
@@ -97,14 +97,14 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_created">
-              {{ getTitle("created") }}
+              {{ titleOf("created") }}
             </label>
             <c-col md="5">
               <input
                 cFormControl
                 disabled
                 id="form_created"
-                type="text"
+                type="date-time"
                 [value]="Item.created ? Item.created : ''"
               />
             </c-col>
@@ -114,7 +114,7 @@
               <c-form-check>
                 <input cFormCheckInput id="form_approved" name="form_approved" type="checkbox"
                   [checked]="Item.approved ? Item.approved : true" (change)="Item.approved = val($event)" />
-                <label cFormCheckLabel for="form_approved">{{ getTitle('approved') }}</label>
+                <label cFormCheckLabel for="form_approved">{{ titleOf('approved') }}</label>
               </c-form-check>
             </c-col>
           </c-row>

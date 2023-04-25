@@ -3,17 +3,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Plan } from '../plans.models';
 import Titles from '../plans.json';
 import { PlansService } from '../plans.service';
-import { ListViewModel, Result, ResultStatus, UIColors } from '../../components';
+import { BaseComponent, ListViewModel, Result, ResultStatus, UIColors } from '../../components';
 
 @Component({
   selector: 'app-plan',
   templateUrl: './plan.component.html',
 })
-export class PlanComponent {
+export class PlanComponent extends BaseComponent {
 
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: Plan = { } as Plan;
+  public item: Plan = {} as Plan;
 
   Colors = [
     { title: UIColors[UIColors.secondary], value: UIColors.secondary },
@@ -29,7 +29,9 @@ export class PlanComponent {
   constructor(
     private readonly service: PlansService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) { }
+    private readonly router: Router) {
+    super();
+  }
 
   get Item(): Plan {
     return this.item;
@@ -48,14 +50,6 @@ export class PlanComponent {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  getTitle(name: string) {
-    return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
-  }
-
-  val(event: any): any {
-    return event.target.value;
   }
 
   Submit() {

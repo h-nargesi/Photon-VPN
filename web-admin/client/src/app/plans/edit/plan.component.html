@@ -15,13 +15,13 @@
               <c-form-check>
                 <input cFormCheckInput id="form_active" name="form_active" type="checkbox"
                   [checked]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
-                <label cFormCheckLabel for="form_active">{{ getTitle('active') }}</label>
+                <label cFormCheckLabel for="form_active">{{ titleOf('active') }}</label>
               </c-form-check>
             </c-col>
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_name">
-              {{ getTitle('name') }}
+              {{ titleOf('name') }}
             </label>
             <c-col md="5">
               <input cFormControl id="form_name" type="ip" [value]="Item.title ? Item.title : ''"
@@ -30,7 +30,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_price">
-              {{ getTitle('price') }}
+              {{ titleOf('price') }}
             </label>
             <c-col md="5">
               <input cFormControl id="form_price" type="number" [value]="Item.price ? Item.price : ''"
@@ -39,7 +39,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_imageFile">
-              {{ getTitle('imageFile') }}
+              {{ titleOf('imageFile') }}
             </label>
             <c-col md="5">
               <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ? Item.imageFile : ''"
@@ -48,7 +48,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_color">
-              {{ getTitle('color') }}
+              {{ titleOf('color') }}
             </label>
             <c-col lg="2" md="3">
               <select aria-label="Pick a color" id="form_color" cSelect [value]="Item.color ? Item.color : ''"
@@ -59,7 +59,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_description">
-              {{ getTitle('description') }}
+              {{ titleOf('description') }}
             </label>
             <c-col md="5">
               <textarea cFormControl id="form_description" rows="3" [value]="Item.description ? Item.description : ''"
@@ -68,7 +68,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_modified">
-              {{ getTitle('modified') }}
+              {{ titleOf('modified') }}
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_modified" type="text"
@@ -77,7 +77,7 @@
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_created">
-              {{ getTitle('created') }}
+              {{ titleOf('created') }}
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_created" type="text"
