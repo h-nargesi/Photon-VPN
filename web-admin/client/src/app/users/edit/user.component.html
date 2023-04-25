@@ -1,0 +1,139 @@
+<c-row>
+  <c-col md="3">
+
+  </c-col>
+  <c-col md="9">
+    <c-card class="mb-4">
+      <c-card-header ngPreserveWhitespaces>
+        <strong>User</strong> <small>{{ item.id ? 'edit' : 'add' }}</small>
+      </c-card-header>
+      <c-card-body>
+        <p class="text-medium-emphasis small">
+          More complex forms can be built using our grid classes. Use these for form layouts
+          that require multiple columns, varied widths, and additional alignment options.
+        </p>
+        <form>
+          <c-row class="mb-3">
+            <c-col sm="10" class="offset-md-2">
+              <c-form-check>
+                <input cFormCheckInput id="form_active" name="form_active" type="checkbox"
+                  [checked]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
+                <label cFormCheckLabel for="form_active">{{ getTitle('active') }}</label>
+              </c-form-check>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_username">
+              {{ getTitle('username') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_username" type="ip" [value]="Item.username ? Item.username : ''" (change)="Item.username = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_password">
+              {{ getTitle('password') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_password" type="text" [value]="Item.password ? Item.password : ''" (change)="Item.password = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_realm">
+              {{ getTitle('realm') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_realm" type="text" [value]="Item.realm ? Item.realm : ''" (change)="Item.realm = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_profile">
+              {{ getTitle('profile') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_profile" type="text" [value]="Item.profile ? Item.profile : ''" (change)="Item.profile = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_fromDate">
+              {{ getTitle('fromDate') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_fromDate" type="text" [value]="Item.fromDate ? Item.fromDate : ''" (change)="Item.fromDate = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_toDate">
+              {{ getTitle('toDate') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_toDate" type="text" [value]="Item.toDate ? Item.toDate : ''" (change)="Item.toDate = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_name">
+              {{ getTitle('name') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_name" type="text" [value]="Item.name ? Item.name : ''" (change)="Item.name = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_surname">
+              {{ getTitle('surname') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_surname" type="text" [value]="Item.surname ? Item.surname : ''" (change)="Item.surname = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_phone">
+              {{ getTitle('phone') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_phone" type="text" [value]="Item.phone ? Item.phone : ''" (change)="Item.phone = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_email">
+              {{ getTitle('email') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl id="form_email" type="text" [value]="Item.email ? Item.email : ''" (change)="Item.email = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_address">
+              {{ getTitle('address') }}
+            </label>
+            <c-col md="8">
+              <textarea cFormControl id="form_address" rows="3" [value]="Item.address ? Item.address : ''"
+                (change)="Item.address = val($event)"></textarea>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_modified">
+              {{ getTitle('modified') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl disabled id="form_modified" type="text" [value]="Item.modified ? Item.modified : ''" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_created">
+              {{ getTitle('created') }}
+            </label>
+            <c-col md="6">
+              <input cFormControl disabled id="form_created" type="text" [value]="Item.created ? Item.created : ''" />
+            </c-col>
+          </c-row>
+          <div class="d-grid gap-2 d-md-block">
+            <button cButton (click)="Submit()" class="me-md-2">Submit</button>
+            <button cButton routerLink="/users" class="me-md-2" color="secondary" variant="outline">Cancel</button>
+            <button cButton (click)="Delete()" class="me-md-2" color="danger" variant="outline">Delete</button>
+          </div>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
