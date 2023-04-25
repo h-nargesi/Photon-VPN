@@ -1,0 +1,123 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header ngPreserveWhitespaces>
+        <strong>Payment</strong> <small>{{ item.id ? "edit" : "add" }}</small>
+      </c-card-header>
+      <c-card-body>
+        <p class="text-medium-emphasis small">
+          More complex forms can be built using our grid classes. Use these for
+          form layouts that require multiple columns, varied widths, and
+          additional alignment options.
+        </p>
+        <form>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_nasname">
+              {{ getTitle("nasname") }}
+            </label>
+            <c-col md="5">
+              <input
+                cFormControl
+                id="form_nasname"
+                type="ip"
+                [value]="Item.nasname ? Item.nasname : ''"
+                (change)="Item.nasname = val($event)"
+              />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_shortname">
+              {{ getTitle("shortname") }}
+            </label>
+            <c-col md="5">
+              <input
+                cFormControl
+                id="form_shortname"
+                type="text"
+                [value]="Item.shortname ? Item.shortname : ''"
+                (change)="Item.shortname = val($event)"
+              />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_secret">
+              {{ getTitle("secret") }}
+            </label>
+            <c-col md="5">
+              <input
+                cFormControl
+                id="form_secret"
+                type="text"
+                [value]="Item.secret ? Item.secret : ''"
+                (change)="Item.secret = val($event)"
+              />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_auto_close">
+              {{ getTitle("heartbeatDeadAfter") }}
+            </label>
+            <c-col lg="2" md="3">
+              <input
+                cFormControl
+                id="form_auto_close"
+                type="number"
+                [value]="Item.heartbeatDeadAfter ? Item.heartbeatDeadAfter : ''"
+                (change)="Item.heartbeatDeadAfter = val($event)"
+              />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_modified">
+              {{ getTitle("modified") }}
+            </label>
+            <c-col md="5">
+              <input
+                cFormControl
+                disabled
+                id="form_modified"
+                type="text"
+                [value]="Item.modified ? Item.modified : ''"
+              />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_created">
+              {{ getTitle("created") }}
+            </label>
+            <c-col md="5">
+              <input
+                cFormControl
+                disabled
+                id="form_created"
+                type="text"
+                [value]="Item.created ? Item.created : ''"
+              />
+            </c-col>
+          </c-row>
+          <div class="d-grid gap-2 d-md-block">
+            <button cButton (click)="Submit()" class="me-md-2">Submit</button>
+            <button
+              cButton
+              routerLink="/payments"
+              class="me-md-2"
+              color="secondary"
+              variant="outline"
+            >
+              Cancel
+            </button>
+            <button
+              cButton
+              (click)="Delete()"
+              class="me-md-2"
+              color="danger"
+              variant="outline"
+            >
+              Delete
+            </button>
+          </div>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
