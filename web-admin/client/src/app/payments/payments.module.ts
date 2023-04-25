@@ -34,7 +34,7 @@ import { ComponentsModule } from '../components/components.module';
 
 // views
 import { PaymentListComponent } from './payment-list.component';
-import { PaymentComponent } from './edit/payment.component';
+import { PaymentComponent } from './payment.component';
 
 // Components Routing
 import { PaymentsRoutingModule } from './payments-routing.module';

@@ -1,35 +1,35 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListViewModel, Result, ResultStatus } from '../../components';
-import { PaymentsService } from '../payments.service';
-import { Payment } from '../payments.model';
-import Titles from '../payments.json';
+import { ListViewModel, Result, ResultStatus } from '../components';
+import { ServersService } from './servers.service';
+import { Server } from './servers.model';
+import Titles from './servers.json';
 
 @Component({
-  selector: 'app-payment',
-  templateUrl: './payment.component.html',
+  selector: 'app-server',
+  templateUrl: './server.component.html',
 })
-export class PaymentComponent {
+export class ServerComponent {
+
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: Payment = {} as Payment;
+  public item: Server = { } as Server;
 
   constructor(
-    private readonly service: PaymentsService,
+    private readonly service: ServersService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router) { }
 
-  get Item(): Payment {
+  get Item(): Server {
     return this.item;
   }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe((params) => {
+    this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe({
-          next: (result: Payment) => (this.item = result),
-          error: console.error,
+          next: (result: Server) => this.item = result,
+          error: console.error
         });
       }
     });
@@ -40,9 +40,7 @@ export class PaymentComponent {
   }
 
   getTitle(name: string) {
-    return this.columns_info != null && name in this.columns_info
-      ? this.columns_info[name].title
-      : name;
+    return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
   }
 
   val(event: any): any {
@@ -60,7 +58,7 @@ export class PaymentComponent {
           if (!this.item.id) this.item.id = Number(result.data);
         }
       },
-      error: console.error,
+      error: console.error
     });
   }
 
@@ -70,9 +68,9 @@ export class PaymentComponent {
     this.service.Delete(this.item.id).subscribe({
       next: (result: Result) => {
         if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['payments']);
+        else this.router.navigate(['servers']);
       },
-      error: console.error,
+      error: console.error
     });
   }
 }

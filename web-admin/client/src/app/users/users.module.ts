@@ -34,7 +34,7 @@ import { ComponentsModule } from '../components/components.module';
 
 // views
 import { UsersListComponent } from './user-list.component';
-import { UserComponent } from './edit/user.component';
+import { UserComponent } from './user.component';
 
 // Components Routing
 import { UsersRoutingModule } from './users-routing.module';

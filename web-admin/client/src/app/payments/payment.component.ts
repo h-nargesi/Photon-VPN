@@ -1,35 +1,35 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListViewModel, Result, ResultStatus } from '../../components';
-import { ServersService } from '../servers.service';
-import { Server } from '../servers.model';
-import Titles from '../servers.json';
+import { ListViewModel, Result, ResultStatus } from '../components';
+import { PaymentsService } from './payments.service';
+import { Payment } from './payments.model';
+import Titles from './payments.json';
 
 @Component({
-  selector: 'app-server',
-  templateUrl: './server.component.html',
+  selector: 'app-payment',
+  templateUrl: './payment.component.html',
 })
-export class ServerComponent {
-
+export class PaymentComponent {
   private sub: any;
   public columns_info: ListViewModel = Titles.list;
-  public item: Server = { } as Server;
+  public item: Payment = {} as Payment;
 
   constructor(
-    private readonly service: ServersService,
+    private readonly service: PaymentsService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) { }
+    private readonly router: Router
+  ) {}
 
-  get Item(): Server {
+  get Item(): Payment {
     return this.item;
   }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.subscribe((params) => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe({
-          next: (result: Server) => this.item = result,
-          error: console.error
+          next: (result: Payment) => (this.item = result),
+          error: console.error,
         });
       }
     });
@@ -40,7 +40,9 @@ export class ServerComponent {
   }
 
   getTitle(name: string) {
-    return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
+    return this.columns_info != null && name in this.columns_info
+      ? this.columns_info[name].title
+      : name;
   }
 
   val(event: any): any {
@@ -58,7 +60,7 @@ export class ServerComponent {
           if (!this.item.id) this.item.id = Number(result.data);
         }
       },
-      error: console.error
+      error: console.error,
     });
   }
 
@@ -68,9 +70,9 @@ export class ServerComponent {
     this.service.Delete(this.item.id).subscribe({
       next: (result: Result) => {
         if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['servers']);
+        else this.router.navigate(['payments']);
       },
-      error: console.error
+      error: console.error,
     });
   }
 }

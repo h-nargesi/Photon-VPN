@@ -34,7 +34,7 @@ import { ComponentsModule } from '../components/components.module';
 
 // views
 import { ServerListComponent } from './server-list.component';
-import { ServerComponent } from './edit/server.component';
+import { ServerComponent } from './server.component';
 
 // Components Routing
 import { ServersRoutingModule } from './servers-routing.module';

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListViewModel, Result, ResultStatus } from '../../components';
-import { UsersService } from '../users.service';
-import { User } from '../users.model';
-import Titles from '../users.json';
+import { ListViewModel, Result, ResultStatus } from '../components';
+import { UsersService } from './users.service';
+import { User } from './users.model';
+import Titles from './users.json';
 
 @Component({
   selector: 'app-user',
