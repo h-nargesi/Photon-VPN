@@ -1,0 +1,120 @@
+{
+  "list": {
+    "radacctid": {
+      "title": "rad acct id",
+      "show": false
+    },
+    "acctsessionid": {
+      "title": "acct session id",
+      "show": false
+    },
+    "acctuniqueid": {
+      "title": "acct unique id",
+      "show": false
+    },
+    "username": {
+      "title": "username",
+      "show": true
+    },
+    "groupname": {
+      "title": "groupname",
+      "show": true
+    },
+    "realm": {
+      "title": "realm",
+      "show": true
+    },
+    "nasipaddress": {
+      "title": "nas ip address",
+      "show": true
+    },
+    "nasidentifier": {
+      "title": "nas identifier",
+      "show": true
+    },
+    "nasportid": {
+      "title": "nas port id",
+      "show": true
+    },
+    "nasporttype": {
+      "title": "nas port type",
+      "show": true
+    },
+    "acctstarttime": {
+      "title": "acct start time",
+      "show": true
+    },
+    "acctupdatetime": {
+      "title": "acct up date time",
+      "show": true
+    },
+    "acctstoptime": {
+      "title": "acct stop time",
+      "show": true
+    },
+    "acctinterval": {
+      "title": "acctinterval",
+      "show": true
+    },
+    "acctsessiontime": {
+      "title": "acctsessiontime",
+      "show": true
+    },
+    "acctauthentic": {
+      "title": "acctauthentic",
+      "show": true
+    },
+    "connectinfoStart": {
+      "title": "connectinfoStart",
+      "show": true
+    },
+    "connectinfoStop": {
+      "title": "connectinfoStop",
+      "show": true
+    },
+    "acctinputoctets": {
+      "title": "acctinputoctets",
+      "show": true
+    },
+    "acctoutputoctets": {
+      "title": "acctoutputoctets",
+      "show": true
+    },
+    "calledstationid": {
+      "title": "calledstationid",
+      "show": true
+    },
+    "callingstationid": {
+      "title": "callingstationid",
+      "show": true
+    },
+    "acctterminatecause": {
+      "title": "acctterminatecause",
+      "show": true
+    },
+    "servicetype": {
+      "title": "servicetype",
+      "show": true
+    },
+    "framedprotocol": {
+      "title": "framedprotocol",
+      "show": true
+    },
+    "framedipaddress": {
+      "title": "framedipaddress",
+      "show": true
+    },
+    "acctstartdelay": {
+      "title": "acctstartdelay",
+      "show": true
+    },
+    "acctstopdelay": {
+      "title": "acctstopdelay",
+      "show": true
+    },
+    "xascendsessionsvrkey": {
+      "title": "xascendsessionsvrkey",
+      "show": true
+    }
+  }
+}
