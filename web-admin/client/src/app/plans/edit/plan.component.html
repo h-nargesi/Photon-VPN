@@ -14,7 +14,7 @@
             <c-col sm="10" class="offset-md-2">
               <c-form-check>
                 <input cFormCheckInput id="form_active" name="form_active" type="checkbox"
-                  [value]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
+                  [checked]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
                 <label cFormCheckLabel for="form_active">{{ getTitle('active') }}</label>
               </c-form-check>
             </c-col>
