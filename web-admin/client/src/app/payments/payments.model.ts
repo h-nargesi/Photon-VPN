@@ -1,11 +1,11 @@
 export interface Payment {
-    Id: number,
-    PermanentUserId: number,
-    Approved: boolean,
-    Value: number,
-    TrnsactionId: string,
-    DateTime: Date,
-    BankName: string,
-    BankAccount: string,
-    RegisterTime: Date
+    id: number,
+    permanentUserId: number,
+    approved: boolean,
+    value: number,
+    trnsactionId: string,
+    dateTime: Date,
+    bankName: string,
+    bankAccount: string,
+    created: Date
 }

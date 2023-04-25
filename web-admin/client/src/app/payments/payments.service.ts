@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Payment } from './payments.model';
-import { BaseService } from 'src/app/components/services/base-service';
+import { LGMDService, ListQuery, Result } from '../components';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PaymentsService extends BaseService {
+export class PaymentsService extends LGMDService {
 
 	constructor(
 		http: HttpClient,
@@ -16,15 +16,20 @@ export class PaymentsService extends BaseService {
 		super(http, api_url, base_url, 'api/payments/');
 	}
 
-  public List(user_id: number): Observable<Payment[]> {
-    if (user_id < 1) {
-      return this.http.get<Payment[]>(this.base_url + 'list');
-    } else {
-      return this.http.get<Payment[]>(this.base_url + 'list', { params: { user_id: user_id } });
-    }
+  public List(filter: ListQuery | null): Observable<Payment[]> {
+    if (filter == null) filter = {} as ListQuery;
+    return this.http.post<Payment[]>(this.module_url + 'list', filter);
   }
 
   public Get(id: number): Observable<Payment> {
-    return this.http.get<Payment>(this.base_url + 'get', { params: { id: id } });
+    return this.http.get<Payment>(this.module_url + 'get/' + id);
+  }
+
+  public Modify(plan: Payment): Observable<Result> {
+    return this.http.post<Result>(this.module_url + 'modify', plan);
+  }
+
+  public Delete(id: number): Observable<Result> {
+    return this.http.post<Result>(this.module_url + 'delete', id);
   }
 }

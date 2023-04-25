@@ -1,0 +1,40 @@
+{
+  "list": {
+    "id": {
+      "title": "Id",
+      "show": false
+    },
+    "permanentUserId": {
+      "title": "Payer",
+      "show": true
+    },
+    "approved": {
+      "title": "Approved",
+      "show": true
+    },
+    "value": {
+      "title": "Value",
+      "show": true
+    },
+    "trnsactionId": {
+      "title": "Trnsaction Id",
+      "show": false
+    },
+    "dateTime": {
+      "title": "Pay Time",
+      "show": false
+    },
+    "bankName": {
+      "title": "Bank Name",
+      "show": true
+    },
+    "bankAccount": {
+      "title": "Bank Account",
+      "show": true
+    },
+    "created": {
+      "title": "Created On",
+      "show": true
+    }
+  }
+}

@@ -12,72 +12,86 @@
         </p>
         <form>
           <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_nasname">
-              {{ getTitle("nasname") }}
+            <label cLabel class="col-md-2 col-form-label" for="form_permanentUserId">
+              {{ getTitle("permanentUserId") }}
             </label>
             <c-col md="5">
               <input
                 cFormControl
-                id="form_nasname"
+                id="form_permanentUserId"
                 type="ip"
-                [value]="Item.nasname ? Item.nasname : ''"
-                (change)="Item.nasname = val($event)"
+                [value]="Item.permanentUserId ? Item.permanentUserId : ''"
+                (change)="Item.permanentUserId = val($event)"
               />
             </c-col>
           </c-row>
           <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_shortname">
-              {{ getTitle("shortname") }}
+            <label cLabel class="col-md-2 col-form-label" for="form_value">
+              {{ getTitle("value") }}
             </label>
             <c-col md="5">
               <input
                 cFormControl
-                id="form_shortname"
+                id="form_value"
                 type="text"
-                [value]="Item.shortname ? Item.shortname : ''"
-                (change)="Item.shortname = val($event)"
+                [value]="Item.value ? Item.value : ''"
+                (change)="Item.value = val($event)"
               />
             </c-col>
           </c-row>
           <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_secret">
-              {{ getTitle("secret") }}
+            <label cLabel class="col-md-2 col-form-label" for="form_trnsactionId">
+              {{ getTitle("trnsactionId") }}
             </label>
             <c-col md="5">
               <input
                 cFormControl
-                id="form_secret"
+                id="form_trnsactionId"
                 type="text"
-                [value]="Item.secret ? Item.secret : ''"
-                (change)="Item.secret = val($event)"
+                [value]="Item.trnsactionId ? Item.trnsactionId : ''"
+                (change)="Item.trnsactionId = val($event)"
               />
             </c-col>
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_auto_close">
-              {{ getTitle("heartbeatDeadAfter") }}
+              {{ getTitle("dateTime") }}
             </label>
             <c-col lg="2" md="3">
               <input
                 cFormControl
                 id="form_auto_close"
-                type="number"
-                [value]="Item.heartbeatDeadAfter ? Item.heartbeatDeadAfter : ''"
-                (change)="Item.heartbeatDeadAfter = val($event)"
+                type="date"
+                [value]="Item.dateTime ? Item.dateTime : ''"
+                (change)="Item.dateTime = val($event)"
               />
             </c-col>
           </c-row>
           <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_modified">
-              {{ getTitle("modified") }}
+            <label cLabel class="col-md-2 col-form-label" for="form_bankName">
+              {{ getTitle("bankName") }}
             </label>
             <c-col md="5">
               <input
                 cFormControl
-                disabled
-                id="form_modified"
+                id="form_bankName"
                 type="text"
-                [value]="Item.modified ? Item.modified : ''"
+                [value]="Item.bankName ? Item.bankName : ''"
+                (change)="Item.bankName = val($event)"
+              />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_bankAccount">
+              {{ getTitle("bankAccount") }}
+            </label>
+            <c-col md="5">
+              <input
+                cFormControl
+                id="form_bankAccount"
+                type="text"
+                [value]="Item.bankAccount ? Item.bankAccount : ''"
+                (change)="Item.bankAccount = val($event)"
               />
             </c-col>
           </c-row>
@@ -93,6 +107,15 @@
                 type="text"
                 [value]="Item.created ? Item.created : ''"
               />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <c-col sm="10" class="offset-md-2">
+              <c-form-check>
+                <input cFormCheckInput id="form_approved" name="form_approved" type="checkbox"
+                  [checked]="Item.approved ? Item.approved : true" (change)="Item.approved = val($event)" />
+                <label cFormCheckLabel for="form_approved">{{ getTitle('approved') }}</label>
+              </c-form-check>
             </c-col>
           </c-row>
           <div class="d-grid gap-2 d-md-block">
