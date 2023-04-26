@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Session } from './sessions.model';
-import { LGMDService, ListQuery, Result } from '../components';
+import { BaseService, LGMDService, ListQuery, Result } from '../components';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SessionsService extends LGMDService {
+export class SessionsService extends BaseService implements LGMDService {
 
 	constructor(
 		http: HttpClient,

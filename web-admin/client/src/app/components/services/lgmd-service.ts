@@ -1,23 +1,13 @@
-import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { BaseService } from './base-service';
 import { ListQuery, Result } from './list-query.model';
 
-export abstract class LGMDService extends BaseService {
+export interface LGMDService {
 
-    constructor(
-        http: HttpClient,
-        api_url: string,
-        base_url: string,
-        module_url: string) {
-        super(http, api_url, base_url, module_url);
-    }
+    List(filter: ListQuery | null): Observable<any[]>;
 
-    abstract List(filter: ListQuery | null): Observable<any[]>;
+    Get(id: number): Observable<any>;
 
-    abstract Get(id: number): Observable<any>;
+    Modify(server: any): Observable<Result>;
 
-    abstract Modify(server: any): Observable<Result>;
-
-    abstract Delete(id: number): Observable<Result>;
+    Delete(id: number): Observable<Result>;
 }

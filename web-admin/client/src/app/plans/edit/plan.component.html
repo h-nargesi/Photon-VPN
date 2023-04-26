@@ -14,7 +14,7 @@
             <c-col sm="10" class="offset-md-2">
               <c-form-check>
                 <input cFormCheckInput id="form_active" name="form_active" type="checkbox"
-                  [checked]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
+                       [checked]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
                 <label cFormCheckLabel for="form_active">{{ titleOf('active') }}</label>
               </c-form-check>
             </c-col>
@@ -25,7 +25,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_name" type="ip" [value]="Item.title ? Item.title : ''"
-                (change)="Item.title = val($event)" />
+                     (change)="Item.title = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -34,7 +34,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_price" type="number" [value]="Item.price ? Item.price : ''"
-                (change)="Item.price = val($event)" />
+                     (change)="Item.price = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -43,7 +43,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ? Item.imageFile : ''"
-                (change)="Item.imageFile = val($event)" />
+                     (change)="Item.imageFile = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -51,9 +51,11 @@
               {{ titleOf('color') }}
             </label>
             <c-col lg="2" md="3">
-              <select aria-label="Pick a color" id="form_color" cSelect [value]="Item.color ? Item.color : ''"
-                (change)="Item.color = val($event)">
-                <option *ngFor="let color of Colors;" value="{{ color.value }}">{{ color.title }}</option>
+              <select app-select cSelect
+                      aria-label="Pick a color" id="form_color"
+                      [value]="Item.color ? Item.color : ''"
+                      (change)="Item.color = val($event)"
+                      [options]="Colors">
               </select>
             </c-col>
           </c-row>
@@ -63,7 +65,7 @@
             </label>
             <c-col md="5">
               <textarea cFormControl id="form_description" rows="3" [value]="Item.description ? Item.description : ''"
-                (change)="Item.description = val($event)"></textarea>
+                        (change)="Item.description = val($event)"></textarea>
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -72,7 +74,7 @@
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_modified" type="text"
-                [value]="Item.modified ? Item.modified : ''" />
+                     [value]="Item.modified ? Item.modified : ''" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -81,7 +83,7 @@
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_created" type="text"
-                [value]="Item.created ? Item.created : ''" />
+                     [value]="Item.created ? Item.created : ''" />
             </c-col>
           </c-row>
           <div class="d-grid gap-2 d-md-block">

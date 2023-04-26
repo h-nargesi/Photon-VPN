@@ -20,6 +20,7 @@ public class Profiles : Controller
                     join pl in db.Packages.AsNoTracking()
                             on pr.Id equals pl.ProfileId into @join
                     from pl in @join.DefaultIfEmpty()
+                    where pl.PlanId == plan_id
                     select pr;
 
         var result = await filter.ApplyFilter(query, db);
@@ -27,6 +28,25 @@ public class Profiles : Controller
         return Ok(result);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> Options([FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = from pr in db.Profiles.AsNoTracking()
+                    join pl in db.Packages.AsNoTracking()
+                            on pr.Id equals pl.ProfileId into @join
+                    from pl in @join.DefaultIfEmpty()
+                    select new
+                    {
+                        id = pr.Id,
+                        title = pr.Name,
+                    };
+
+        var result = await filter.ApplyFilter(query, db);
+
+        return Ok(result);
+    }
 
     [HttpGet]
     [Route("{id:int}")]

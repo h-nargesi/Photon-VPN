@@ -16,14 +16,14 @@ export class PlanComponent extends BaseComponent {
   public item: Plan = {} as Plan;
 
   Colors = [
-    { title: UIColors[UIColors.secondary], value: UIColors.secondary },
-    { title: UIColors[UIColors.primary], value: UIColors.primary },
-    { title: UIColors[UIColors.danger], value: UIColors.danger },
-    { title: UIColors[UIColors.dark], value: UIColors.dark },
-    { title: UIColors[UIColors.info], value: UIColors.info },
-    { title: UIColors[UIColors.light], value: UIColors.light },
-    { title: UIColors[UIColors.success], value: UIColors.success },
-    { title: UIColors[UIColors.warning], value: UIColors.warning },
+    { title: UIColors[UIColors.secondary], id: UIColors.secondary },
+    { title: UIColors[UIColors.primary], id: UIColors.primary },
+    { title: UIColors[UIColors.danger], id: UIColors.danger },
+    { title: UIColors[UIColors.dark], id: UIColors.dark },
+    { title: UIColors[UIColors.info], id: UIColors.info },
+    { title: UIColors[UIColors.light], id: UIColors.light },
+    { title: UIColors[UIColors.success], id: UIColors.success },
+    { title: UIColors[UIColors.warning], id: UIColors.warning },
   ];
 
   constructor(
