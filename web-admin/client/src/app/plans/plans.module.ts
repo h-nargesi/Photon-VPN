@@ -34,8 +34,8 @@ import { DocsComponentsModule } from '@docs-components/docs-components.module';
 import { ComponentsModule } from '../components/components.module';
 
 // views
-import { PlanListComponent } from './list/plan-list.component';
-import { PlanComponent } from './edit/plan.component';
+import { PlanListComponent } from './plan-list.component';
+import { PlanComponent } from './plan.component';
 
 // Components Routing
 import { PlansRoutingModule } from './plans-routing.module';

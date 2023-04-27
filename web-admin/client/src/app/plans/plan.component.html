@@ -8,7 +8,7 @@
         <c-col sm="10" class="offset-md-2">
           <c-form-check>
             <input cFormCheckInput id="form_active" name="form_active" type="checkbox"
-              [checked]="Item.active ? Item.active : true" (change)="Item.active = val($event)" />
+              [checked]="Item.active" (change)="Item.active = val($event)" />
             <label cFormCheckLabel for="form_active">{{ titleOf('active') }}</label>
           </c-form-check>
         </c-col>
@@ -36,7 +36,7 @@
           {{ titleOf('imageFile') }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile"
+          <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ?? ''"
             (change)="Item.imageFile = val($event)" />
         </c-col>
       </c-row>
@@ -55,7 +55,7 @@
           {{ titleOf('description') }}
         </label>
         <c-col md="5">
-          <textarea cFormControl id="form_description" rows="3" [value]="Item.description"
+          <textarea cFormControl id="form_description" rows="3" [value]="Item.description ?? ''"
             (change)="Item.description = val($event)"></textarea>
         </c-col>
       </c-row>

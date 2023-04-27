@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PlanListComponent } from './list/plan-list.component';
-import { PlanComponent } from './edit/plan.component';
+import { PlanListComponent } from './plan-list.component';
+import { PlanComponent } from './plan.component';
 
 const routes: Routes = [
   {
