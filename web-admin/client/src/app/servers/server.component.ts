@@ -12,8 +12,8 @@ import Titles from './servers.json';
 export class ServerComponent extends BaseComponent {
 
   private sub: any;
+  private item: Server = {} as Server;
   public columns_info: ListViewModel = Titles.list;
-  public item: Server = {} as Server;
 
   constructor(
     private readonly service: ServersService,

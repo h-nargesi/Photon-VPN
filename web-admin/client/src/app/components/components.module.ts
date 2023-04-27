@@ -23,6 +23,8 @@ import { TableViewComponent } from './list/table-view/table-view.component';
 import { TablePageComponent } from './list/table-page/table-page.component';
 import { WidgetViewComponent } from './list/widget-view/widget-view.component';
 import { SelectComponent } from './list/selector/select.component';
+import { FormComponent } from './form/form.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [
@@ -31,6 +33,7 @@ import { SelectComponent } from './list/selector/select.component';
         TablePageComponent,
         WidgetViewComponent,
         SelectComponent,
+        FormComponent,
     ],
     imports: [
         CommonModule,
@@ -46,6 +49,7 @@ import { SelectComponent } from './list/selector/select.component';
         WidgetModule,
         ChartjsModule,
         ModalModule,
+        RouterModule,
     ],
     exports: [
         ListButtonsComponent,
@@ -53,6 +57,7 @@ import { SelectComponent } from './list/selector/select.component';
         TablePageComponent,
         WidgetViewComponent,
         SelectComponent,
+        FormComponent,
     ]
 })
 export class ComponentsModule { }

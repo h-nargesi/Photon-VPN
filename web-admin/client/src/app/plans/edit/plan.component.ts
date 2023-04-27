@@ -12,8 +12,8 @@ import { BaseComponent, ListViewModel, Result, ResultStatus, UIColors } from '..
 export class PlanComponent extends BaseComponent {
 
   private sub: any;
+  private item: Plan = {} as Plan;
   public columns_info: ListViewModel = Titles.list;
-  public item: Plan = {} as Plan;
 
   Colors = [
     { title: UIColors[UIColors.secondary], id: UIColors.secondary },

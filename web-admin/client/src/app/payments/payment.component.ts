@@ -11,8 +11,8 @@ import Titles from './payments.json';
 })
 export class PaymentComponent extends BaseComponent {
   private sub: any;
+  private item: Payment = {} as Payment;
   public columns_info: ListViewModel = Titles.list;
-  public item: Payment = {} as Payment;
 
   constructor(
     private readonly service: PaymentsService,

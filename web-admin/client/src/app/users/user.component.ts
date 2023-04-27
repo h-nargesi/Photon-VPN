@@ -12,8 +12,8 @@ import Titles from './users.json';
 export class UserComponent extends BaseComponent {
 
   private sub: any;
+  private item: User = {} as User;
   public columns_info: ListViewModel = Titles.list;
-  public item: User = {} as User;
 
   constructor(
     private readonly service: UsersService,

@@ -1,16 +1,9 @@
 <c-row>
   <c-col xs="12">
-    <c-card class="mb-4">
-      <c-card-header ngPreserveWhitespaces>
-        <strong>Payment</strong> <small>{{ item.id ? "edit" : "add" }}</small>
-      </c-card-header>
-      <c-card-body>
-        <p class="text-medium-emphasis small">
-          More complex forms can be built using our grid classes. Use these for
-          form layouts that require multiple columns, varied widths, and
-          additional alignment options.
-        </p>
-        <form>
+    <app-form title="Payment"
+      comment="More complex forms can be built using our grid classes. Use these for form layouts that require multiple columns, varied widths, and additional alignment options."
+      list-route="/payments" [is-new]="Item.id ? false: true" (submit)="Submit()" (delete)="Delete()">
+
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_permanentUserId">
               {{ titleOf("permanentUserId") }}
@@ -118,29 +111,6 @@
               </c-form-check>
             </c-col>
           </c-row>
-          <div class="d-grid gap-2 d-md-block">
-            <button cButton (click)="Submit()" class="me-md-2">Submit</button>
-            <button
-              cButton
-              routerLink="/payments"
-              class="me-md-2"
-              color="secondary"
-              variant="outline"
-            >
-              Cancel
-            </button>
-            <button
-              cButton
-              (click)="Delete()"
-              class="me-md-2"
-              color="danger"
-              variant="outline"
-            >
-              Delete
-            </button>
-          </div>
-        </form>
-      </c-card-body>
-    </c-card>
+    </app-form>
   </c-col>
 </c-row>
