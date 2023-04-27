@@ -63,7 +63,7 @@
         <label cLabel class="col-md-2 col-form-label" for="form_modified">
           {{ titleOf('modified') }}
         </label>
-        <c-col md="3">
+        <c-col md="5">
           <input cFormControl disabled id="form_modified" type="text"
             [value]="Item.modified ? getDateTimeString(Item.modified) : ''" />
         </c-col>
@@ -72,7 +72,7 @@
         <label cLabel class="col-md-2 col-form-label" for="form_created">
           {{ titleOf('created') }}
         </label>
-        <c-col md="3">
+        <c-col md="5">
           <input cFormControl disabled id="form_created" type="text"
             [value]="Item.created ? getDateTimeString(Item.created) : ''" />
         </c-col>

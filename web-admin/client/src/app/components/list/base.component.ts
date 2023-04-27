@@ -13,7 +13,7 @@ export abstract class BaseComponent {
     }
 
     getDateString(date: Date) {
-        return date.toLocaleString().substring(0, 9).replace('-', '/');
+        return date.toLocaleString().substring(0, 9);
     }
 
     getTimeString(time: Date) {

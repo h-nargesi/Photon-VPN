@@ -21,7 +21,7 @@
           {{ titleOf('username') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_username" type="ip" [value]="Item.username ? Item.username : ''"
+          <input cFormControl id="form_username" type="text" [value]="Item.username ? Item.username : ''"
             (change)="Item.username = val($event)" />
         </c-col>
       </c-row>
@@ -57,7 +57,7 @@
           {{ titleOf('fromDate') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_fromDate" type="text" [value]="Item.fromDate ? Item.fromDate : ''"
+          <input cFormControl id="form_fromDate" type="date" [value]="Item.fromDate | date:'yyyy-MM-dd'"
             (change)="Item.fromDate = val($event)" />
         </c-col>
       </c-row>
@@ -66,7 +66,7 @@
           {{ titleOf('toDate') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_toDate" type="text" [value]="Item.toDate ? Item.toDate : ''"
+          <input cFormControl id="form_toDate" type="date" [value]="Item.toDate | date:'yyyy-MM-dd'"
             (change)="Item.toDate = val($event)" />
         </c-col>
       </c-row>
@@ -93,7 +93,7 @@
           {{ titleOf('phone') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_phone" type="text" [value]="Item.phone ? Item.phone : ''"
+          <input cFormControl id="form_phone" type="phone" [value]="Item.phone ? Item.phone : ''"
             (change)="Item.phone = val($event)" />
         </c-col>
       </c-row>
@@ -102,7 +102,7 @@
           {{ titleOf('email') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_email" type="text" [value]="Item.email ? Item.email : ''"
+          <input cFormControl id="form_email" type="email" [value]="Item.email ? Item.email : ''"
             (change)="Item.email = val($event)" />
         </c-col>
       </c-row>
@@ -119,7 +119,7 @@
         <label cLabel class="col-md-2 col-form-label" for="form_modified">
           {{ titleOf('modified') }}
         </label>
-        <c-col md="3">
+        <c-col md="6">
           <input cFormControl disabled id="form_modified" type="text"
             [value]="Item.modified ? getDateTimeString(Item.modified) : ''" />
         </c-col>
@@ -128,7 +128,7 @@
         <label cLabel class="col-md-2 col-form-label" for="form_created">
           {{ titleOf('created') }}
         </label>
-        <c-col md="3">
+        <c-col md="6">
           <input cFormControl disabled id="form_created" type="text"
             [value]="Item.created ? getDateTimeString(Item.created) : ''" />
         </c-col>
