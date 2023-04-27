@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
 import { ProfilesService } from '../profiles/profiles.service';
+import { RealmsService } from '../global-services/realms.service';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import Titles from './users.json';
@@ -20,7 +21,8 @@ export class UserComponent extends BaseComponent {
     private readonly service: UsersService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    public readonly profile_srv: ProfilesService) {
+    public readonly profile_srv: ProfilesService,
+    public readonly realms_srv: RealmsService) {
     super();
   }
 

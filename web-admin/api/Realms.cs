@@ -16,7 +16,7 @@ public class Realms : Controller
         var query = from rl in db.Realms.AsNoTracking()
                     select new
                     {
-                        id = rl.Id,
+                        id = rl.Name,
                         title = rl.Name,
                     };
 

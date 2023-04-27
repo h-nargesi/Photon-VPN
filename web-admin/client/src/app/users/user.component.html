@@ -39,8 +39,9 @@
           {{ titleOf('realm') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_realm" type="text" [value]="Item.realm"
-            (change)="Item.realm = val($event)" />
+          <select app-select cSelect aria-label="Realm" id="form_realm" [value]="Item.realm"
+            (change)="Item.realm = val($event)" [service]="realms_srv">
+          </select>
         </c-col>
       </c-row>
       <c-row class="mb-3">
@@ -76,8 +77,7 @@
           {{ titleOf('name') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_name" type="text" [value]="Item.name"
-            (change)="Item.name = val($event)" />
+          <input cFormControl id="form_name" type="text" [value]="Item.name" (change)="Item.name = val($event)" />
         </c-col>
       </c-row>
       <c-row class="mb-3">
@@ -94,8 +94,7 @@
           {{ titleOf('phone') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_phone" type="phone" [value]="Item.phone"
-            (change)="Item.phone = val($event)" />
+          <input cFormControl id="form_phone" type="phone" [value]="Item.phone" (change)="Item.phone = val($event)" />
         </c-col>
       </c-row>
       <c-row class="mb-3">
@@ -103,8 +102,7 @@
           {{ titleOf('email') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_email" type="email" [value]="Item.email"
-            (change)="Item.email = val($event)" />
+          <input cFormControl id="form_email" type="email" [value]="Item.email" (change)="Item.email = val($event)" />
         </c-col>
       </c-row>
       <c-row class="mb-3">
