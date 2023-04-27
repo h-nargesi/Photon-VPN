@@ -39,7 +39,7 @@ public class Profiles : Controller
                     from pl in @join.DefaultIfEmpty()
                     select new
                     {
-                        id = pr.Id,
+                        id = pr.Name,
                         title = pr.Name,
                     };
 

@@ -9,7 +9,7 @@
           {{ titleOf('nasname') }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_nasname" type="ip" [value]="Item.nasname ? Item.nasname : ''"
+          <input cFormControl id="form_nasname" type="ip" [value]="Item.nasname"
             (change)="Item.nasname = val($event)" />
         </c-col>
       </c-row>
@@ -18,7 +18,7 @@
           {{ titleOf('shortname') }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_shortname" type="text" [value]="Item.shortname ? Item.shortname : ''"
+          <input cFormControl id="form_shortname" type="text" [value]="Item.shortname"
             (change)="Item.shortname = val($event)" />
         </c-col>
       </c-row>
@@ -27,7 +27,7 @@
           {{ titleOf('secret') }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_secret" type="text" [value]="Item.secret ? Item.secret : ''"
+          <input cFormControl id="form_secret" type="text" [value]="Item.secret"
             (change)="Item.secret = val($event)" />
         </c-col>
       </c-row>
@@ -37,7 +37,7 @@
         </label>
         <c-col lg="2" md="3">
           <input cFormControl id="form_auto_close" type="number"
-            [value]="Item.heartbeatDeadAfter ? Item.heartbeatDeadAfter : ''"
+            [value]="Item.heartbeatDeadAfter"
             (change)="Item.heartbeatDeadAfter = val($event)" />
         </c-col>
       </c-row>

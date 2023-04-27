@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
+import { ProfilesService } from '../profiles/profiles.service';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import Titles from './users.json';
@@ -18,7 +19,8 @@ export class UserComponent extends BaseComponent {
   constructor(
     private readonly service: UsersService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) {
+    private readonly router: Router,
+    public readonly profile_srv: ProfilesService) {
     super();
   }
 

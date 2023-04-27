@@ -10,7 +10,7 @@
         </label>
         <c-col md="5">
           <input cFormControl id="form_permanentUserId" type="ip"
-            [value]="Item.permanentUserId ? Item.permanentUserId : ''" (change)="Item.permanentUserId = val($event)" />
+            [value]="Item.permanentUserId" (change)="Item.permanentUserId = val($event)" />
         </c-col>
       </c-row>
       <c-row class="mb-3">
@@ -18,7 +18,7 @@
           {{ titleOf("value") }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_value" type="text" [value]="Item.value ? Item.value : ''"
+          <input cFormControl id="form_value" type="text" [value]="Item.value"
             (change)="Item.value = val($event)" />
         </c-col>
       </c-row>
@@ -27,7 +27,7 @@
           {{ titleOf("trnsactionId") }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_trnsactionId" type="text" [value]="Item.trnsactionId ? Item.trnsactionId : ''"
+          <input cFormControl id="form_trnsactionId" type="text" [value]="Item.trnsactionId"
             (change)="Item.trnsactionId = val($event)" />
         </c-col>
       </c-row>
@@ -36,7 +36,7 @@
           {{ titleOf("dateTime") }}
         </label>
         <c-col lg="2" md="3">
-          <input cFormControl id="form_auto_close" type="date" [value]="Item.dateTime ? Item.dateTime : ''"
+          <input cFormControl id="form_auto_close" type="date" [value]="Item.dateTime"
             (change)="Item.dateTime = val($event)" />
         </c-col>
       </c-row>
@@ -45,7 +45,7 @@
           {{ titleOf("bankName") }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_bankName" type="text" [value]="Item.bankName ? Item.bankName : ''"
+          <input cFormControl id="form_bankName" type="text" [value]="Item.bankName"
             (change)="Item.bankName = val($event)" />
         </c-col>
       </c-row>
@@ -54,7 +54,7 @@
           {{ titleOf("bankAccount") }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_bankAccount" type="text" [value]="Item.bankAccount ? Item.bankAccount : ''"
+          <input cFormControl id="form_bankAccount" type="text" [value]="Item.bankAccount"
             (change)="Item.bankAccount = val($event)" />
         </c-col>
       </c-row>

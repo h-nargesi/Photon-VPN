@@ -18,7 +18,7 @@
           {{ titleOf('name') }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_name" type="ip" [value]="Item.title ? Item.title : ''"
+          <input cFormControl id="form_name" type="ip" [value]="Item.title"
             (change)="Item.title = val($event)" />
         </c-col>
       </c-row>
@@ -27,7 +27,7 @@
           {{ titleOf('price') }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_price" type="number" [value]="Item.price ? Item.price : ''"
+          <input cFormControl id="form_price" type="number" [value]="Item.price"
             (change)="Item.price = val($event)" />
         </c-col>
       </c-row>
@@ -36,7 +36,7 @@
           {{ titleOf('imageFile') }}
         </label>
         <c-col md="5">
-          <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ? Item.imageFile : ''"
+          <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile"
             (change)="Item.imageFile = val($event)" />
         </c-col>
       </c-row>
@@ -45,7 +45,7 @@
           {{ titleOf('color') }}
         </label>
         <c-col lg="2" md="3">
-          <select app-select cSelect aria-label="Pick a color" id="form_color" [value]="Item.color ? Item.color : ''"
+          <select app-select cSelect aria-label="Pick a color" id="form_color" [value]="Item.color"
             (change)="Item.color = val($event)" [options]="Colors">
           </select>
         </c-col>
@@ -55,7 +55,7 @@
           {{ titleOf('description') }}
         </label>
         <c-col md="5">
-          <textarea cFormControl id="form_description" rows="3" [value]="Item.description ? Item.description : ''"
+          <textarea cFormControl id="form_description" rows="3" [value]="Item.description"
             (change)="Item.description = val($event)"></textarea>
         </c-col>
       </c-row>

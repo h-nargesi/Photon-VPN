@@ -21,7 +21,7 @@
           {{ titleOf('username') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_username" type="text" [value]="Item.username ? Item.username : ''"
+          <input cFormControl id="form_username" type="text" [value]="Item.username"
             (change)="Item.username = val($event)" />
         </c-col>
       </c-row>
@@ -30,7 +30,7 @@
           {{ titleOf('password') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_password" type="text" [value]="Item.password ? Item.password : ''"
+          <input cFormControl id="form_password" type="text" [value]="Item.password"
             (change)="Item.password = val($event)" />
         </c-col>
       </c-row>
@@ -39,7 +39,7 @@
           {{ titleOf('realm') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_realm" type="text" [value]="Item.realm ? Item.realm : ''"
+          <input cFormControl id="form_realm" type="text" [value]="Item.realm"
             (change)="Item.realm = val($event)" />
         </c-col>
       </c-row>
@@ -48,8 +48,9 @@
           {{ titleOf('profile') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_profile" type="text" [value]="Item.profile ? Item.profile : ''"
-            (change)="Item.profile = val($event)" />
+          <select app-select cSelect aria-label="Profile" id="form_profile" [value]="Item.profile"
+            (change)="Item.profile = val($event)" [service]="profile_srv">
+          </select>
         </c-col>
       </c-row>
       <c-row class="mb-3">
@@ -75,7 +76,7 @@
           {{ titleOf('name') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_name" type="text" [value]="Item.name ? Item.name : ''"
+          <input cFormControl id="form_name" type="text" [value]="Item.name"
             (change)="Item.name = val($event)" />
         </c-col>
       </c-row>
@@ -84,7 +85,7 @@
           {{ titleOf('surname') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_surname" type="text" [value]="Item.surname ? Item.surname : ''"
+          <input cFormControl id="form_surname" type="text" [value]="Item.surname"
             (change)="Item.surname = val($event)" />
         </c-col>
       </c-row>
@@ -93,7 +94,7 @@
           {{ titleOf('phone') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_phone" type="phone" [value]="Item.phone ? Item.phone : ''"
+          <input cFormControl id="form_phone" type="phone" [value]="Item.phone"
             (change)="Item.phone = val($event)" />
         </c-col>
       </c-row>
@@ -102,7 +103,7 @@
           {{ titleOf('email') }}
         </label>
         <c-col md="6">
-          <input cFormControl id="form_email" type="email" [value]="Item.email ? Item.email : ''"
+          <input cFormControl id="form_email" type="email" [value]="Item.email"
             (change)="Item.email = val($event)" />
         </c-col>
       </c-row>
@@ -111,7 +112,7 @@
           {{ titleOf('address') }}
         </label>
         <c-col md="8">
-          <textarea cFormControl id="form_address" rows="3" [value]="Item.address ? Item.address : ''"
+          <textarea cFormControl id="form_address" rows="3" [value]="Item.address"
             (change)="Item.address = val($event)"></textarea>
         </c-col>
       </c-row>
