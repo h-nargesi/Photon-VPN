@@ -119,16 +119,18 @@
         <label cLabel class="col-md-2 col-form-label" for="form_modified">
           {{ titleOf('modified') }}
         </label>
-        <c-col md="6">
-          <input cFormControl disabled id="form_modified" type="text" [value]="Item.modified ? Item.modified : ''" />
+        <c-col md="3">
+          <input cFormControl disabled id="form_modified" type="text"
+            [value]="Item.modified ? getDateTimeString(Item.modified) : ''" />
         </c-col>
       </c-row>
       <c-row class="mb-3">
         <label cLabel class="col-md-2 col-form-label" for="form_created">
           {{ titleOf('created') }}
         </label>
-        <c-col md="6">
-          <input cFormControl disabled id="form_created" type="text" [value]="Item.created ? Item.created : ''" />
+        <c-col md="3">
+          <input cFormControl disabled id="form_created" type="text"
+            [value]="Item.created ? getDateTimeString(Item.created) : ''" />
         </c-col>
       </c-row>
     </app-form>

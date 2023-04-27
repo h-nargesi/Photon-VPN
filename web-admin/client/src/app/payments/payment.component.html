@@ -4,113 +4,78 @@
       comment="More complex forms can be built using our grid classes. Use these for form layouts that require multiple columns, varied widths, and additional alignment options."
       list-route="/payments" [is-new]="Item.id ? false: true" (submit)="Submit()" (delete)="Delete()">
 
-          <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_permanentUserId">
-              {{ titleOf("permanentUserId") }}
-            </label>
-            <c-col md="5">
-              <input
-                cFormControl
-                id="form_permanentUserId"
-                type="ip"
-                [value]="Item.permanentUserId ? Item.permanentUserId : ''"
-                (change)="Item.permanentUserId = val($event)"
-              />
-            </c-col>
-          </c-row>
-          <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_value">
-              {{ titleOf("value") }}
-            </label>
-            <c-col md="5">
-              <input
-                cFormControl
-                id="form_value"
-                type="text"
-                [value]="Item.value ? Item.value : ''"
-                (change)="Item.value = val($event)"
-              />
-            </c-col>
-          </c-row>
-          <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_trnsactionId">
-              {{ titleOf("trnsactionId") }}
-            </label>
-            <c-col md="5">
-              <input
-                cFormControl
-                id="form_trnsactionId"
-                type="text"
-                [value]="Item.trnsactionId ? Item.trnsactionId : ''"
-                (change)="Item.trnsactionId = val($event)"
-              />
-            </c-col>
-          </c-row>
-          <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_auto_close">
-              {{ titleOf("dateTime") }}
-            </label>
-            <c-col lg="2" md="3">
-              <input
-                cFormControl
-                id="form_auto_close"
-                type="date"
-                [value]="Item.dateTime ? Item.dateTime : ''"
-                (change)="Item.dateTime = val($event)"
-              />
-            </c-col>
-          </c-row>
-          <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_bankName">
-              {{ titleOf("bankName") }}
-            </label>
-            <c-col md="5">
-              <input
-                cFormControl
-                id="form_bankName"
-                type="text"
-                [value]="Item.bankName ? Item.bankName : ''"
-                (change)="Item.bankName = val($event)"
-              />
-            </c-col>
-          </c-row>
-          <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_bankAccount">
-              {{ titleOf("bankAccount") }}
-            </label>
-            <c-col md="5">
-              <input
-                cFormControl
-                id="form_bankAccount"
-                type="text"
-                [value]="Item.bankAccount ? Item.bankAccount : ''"
-                (change)="Item.bankAccount = val($event)"
-              />
-            </c-col>
-          </c-row>
-          <c-row class="mb-3">
-            <label cLabel class="col-md-2 col-form-label" for="form_created">
-              {{ titleOf("created") }}
-            </label>
-            <c-col md="5">
-              <input
-                cFormControl
-                disabled
-                id="form_created"
-                type="date-time"
-                [value]="Item.created ? Item.created : ''"
-              />
-            </c-col>
-          </c-row>
-          <c-row class="mb-3">
-            <c-col sm="10" class="offset-md-2">
-              <c-form-check>
-                <input cFormCheckInput id="form_approved" name="form_approved" type="checkbox"
-                  [checked]="Item.approved ? Item.approved : true" (change)="Item.approved = val($event)" />
-                <label cFormCheckLabel for="form_approved">{{ titleOf('approved') }}</label>
-              </c-form-check>
-            </c-col>
-          </c-row>
+      <c-row class="mb-3">
+        <label cLabel class="col-md-2 col-form-label" for="form_permanentUserId">
+          {{ titleOf("permanentUserId") }}
+        </label>
+        <c-col md="5">
+          <input cFormControl id="form_permanentUserId" type="ip"
+            [value]="Item.permanentUserId ? Item.permanentUserId : ''" (change)="Item.permanentUserId = val($event)" />
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <label cLabel class="col-md-2 col-form-label" for="form_value">
+          {{ titleOf("value") }}
+        </label>
+        <c-col md="5">
+          <input cFormControl id="form_value" type="text" [value]="Item.value ? Item.value : ''"
+            (change)="Item.value = val($event)" />
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <label cLabel class="col-md-2 col-form-label" for="form_trnsactionId">
+          {{ titleOf("trnsactionId") }}
+        </label>
+        <c-col md="5">
+          <input cFormControl id="form_trnsactionId" type="text" [value]="Item.trnsactionId ? Item.trnsactionId : ''"
+            (change)="Item.trnsactionId = val($event)" />
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <label cLabel class="col-md-2 col-form-label" for="form_auto_close">
+          {{ titleOf("dateTime") }}
+        </label>
+        <c-col lg="2" md="3">
+          <input cFormControl id="form_auto_close" type="date" [value]="Item.dateTime ? Item.dateTime : ''"
+            (change)="Item.dateTime = val($event)" />
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <label cLabel class="col-md-2 col-form-label" for="form_bankName">
+          {{ titleOf("bankName") }}
+        </label>
+        <c-col md="5">
+          <input cFormControl id="form_bankName" type="text" [value]="Item.bankName ? Item.bankName : ''"
+            (change)="Item.bankName = val($event)" />
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <label cLabel class="col-md-2 col-form-label" for="form_bankAccount">
+          {{ titleOf("bankAccount") }}
+        </label>
+        <c-col md="5">
+          <input cFormControl id="form_bankAccount" type="text" [value]="Item.bankAccount ? Item.bankAccount : ''"
+            (change)="Item.bankAccount = val($event)" />
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <label cLabel class="col-md-2 col-form-label" for="form_created">
+          {{ titleOf('created') }}
+        </label>
+        <c-col md="3">
+          <input cFormControl disabled id="form_created" type="text"
+            [value]="Item.created ? getDateTimeString(Item.created) : ''" />
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <c-col sm="10" class="offset-md-2">
+          <c-form-check>
+            <input cFormCheckInput id="form_approved" name="form_approved" type="checkbox"
+              [checked]="Item.approved ? Item.approved : true" (change)="Item.approved = val($event)" />
+            <label cFormCheckLabel for="form_approved">{{ titleOf('approved') }}</label>
+          </c-form-check>
+        </c-col>
+      </c-row>
     </app-form>
   </c-col>
 </c-row>
