@@ -25,6 +25,7 @@ import {
   SpinnerModule,
   TableModule,
   UtilitiesModule,
+  TabsModule,
 } from '@coreui/angular';
 
 import { IconModule } from '@coreui/icons-angular';
@@ -34,7 +35,7 @@ import { DocsComponentsModule } from '@docs-components/docs-components.module';
 import { ComponentsModule } from '../components/components.module';
 
 // views
-import { UsersListComponent } from './user-list.component';
+import { UserListComponent } from './user-list.component';
 import { UserComponent } from './user.component';
 
 // Components Routing
@@ -42,7 +43,7 @@ import { UsersRoutingModule } from './users-routing.module';
 
 @NgModule({
   declarations: [
-    UsersListComponent,
+    UserListComponent,
     UserComponent,
   ],
   imports: [
@@ -74,6 +75,7 @@ import { UsersRoutingModule } from './users-routing.module';
     TableModule,
     DocsComponentsModule,
     ComponentsModule,
+    TabsModule,
   ],
 })
 export class UsersModule {}

@@ -1,82 +1,92 @@
 <c-row>
   <c-col xs="12">
-    <app-form title="Plan"
-      comment="More complex forms can be built using our grid classes. Use these for form layouts that require multiple columns, varied widths, and additional alignment options."
-      list-route="/plans" [is-new]="Item.id ? false: true" (submit)="Submit()" (delete)="Delete()">
-
-      <c-row class="mb-3">
-        <c-col sm="10" class="offset-md-2">
-          <c-form-check>
-            <input cFormCheckInput id="form_active" name="form_active" type="checkbox"
-              [checked]="Item.active" (change)="Item.active = val($event)" />
-            <label cFormCheckLabel for="form_active">{{ titleOf('active') }}</label>
-          </c-form-check>
-        </c-col>
-      </c-row>
-      <c-row class="mb-3">
-        <label cLabel class="col-md-2 col-form-label" for="form_name">
-          {{ titleOf('name') }}
-        </label>
-        <c-col md="5">
-          <input cFormControl id="form_name" type="ip" [value]="Item.title"
-            (change)="Item.title = val($event)" />
-        </c-col>
-      </c-row>
-      <c-row class="mb-3">
-        <label cLabel class="col-md-2 col-form-label" for="form_price">
-          {{ titleOf('price') }}
-        </label>
-        <c-col md="5">
-          <input cFormControl id="form_price" type="number" [value]="Item.price"
-            (change)="Item.price = val($event)" />
-        </c-col>
-      </c-row>
-      <c-row class="mb-3">
-        <label cLabel class="col-md-2 col-form-label" for="form_imageFile">
-          {{ titleOf('imageFile') }}
-        </label>
-        <c-col md="5">
-          <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ?? ''"
-            (change)="Item.imageFile = val($event)" />
-        </c-col>
-      </c-row>
-      <c-row class="mb-3">
-        <label cLabel class="col-md-2 col-form-label" for="form_color">
-          {{ titleOf('color') }}
-        </label>
-        <c-col lg="2" md="3">
-          <select app-select cSelect aria-label="Pick a color" id="form_color" [value]="Item.color"
-            (change)="Item.color = val($event)" [options]="Colors">
-          </select>
-        </c-col>
-      </c-row>
-      <c-row class="mb-3">
-        <label cLabel class="col-md-2 col-form-label" for="form_description">
-          {{ titleOf('description') }}
-        </label>
-        <c-col md="5">
-          <textarea cFormControl id="form_description" rows="3" [value]="Item.description ?? ''"
-            (change)="Item.description = val($event)"></textarea>
-        </c-col>
-      </c-row>
-      <c-row class="mb-3">
-        <label cLabel class="col-md-2 col-form-label" for="form_modified">
-          {{ titleOf('modified') }}
-        </label>
-        <c-col md="5">
-          <input cFormControl disabled id="form_modified" type="text"
-            [value]="Item.modified ? getDateTimeString(Item.modified) : ''" />
-        </c-col>
-      </c-row>
-      <c-row class="mb-3">
-        <label cLabel class="col-md-2 col-form-label" for="form_created">
-          {{ titleOf('created') }}
-        </label>
-        <c-col md="5">
-          <input cFormControl disabled id="form_created" type="text"
-            [value]="Item.created ? getDateTimeString(Item.created) : ''" />
-        </c-col>
-      </c-row>
-    </app-form>
+    <c-card class="mb-4">
+      <c-card-header ngPreserveWhitespaces>
+        <strong>Plan</strong> <small>{{ Item.id ? "edit" : "add" }}</small>
+      </c-card-header>
+      <c-card-body>
+        <p class="text-medium-emphasis small">
+          More complex forms can be built using our grid classes. Use these for
+          form layouts that require multiple columns, varied widths, and
+          additional alignment options.
+        </p>
+        <form>
+          <c-row class="mb-3">
+            <c-col sm="10" class="offset-md-2">
+              <c-form-check>
+                <input cFormCheckInput id="form_active" name="form_active" type="checkbox" [checked]="Item.active"
+                  (change)="Item.active = val($event)" />
+                <label cFormCheckLabel for="form_active">{{ titleOf('active') }}</label>
+              </c-form-check>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_name">
+              {{ titleOf('name') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="form_name" type="ip" [value]="Item.title" (change)="Item.title = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_price">
+              {{ titleOf('price') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="form_price" type="number" [value]="Item.price"
+                (change)="Item.price = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_imageFile">
+              {{ titleOf('imageFile') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ?? ''"
+                (change)="Item.imageFile = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_color">
+              {{ titleOf('color') }}
+            </label>
+            <c-col lg="2" md="3">
+              <select app-select cSelect aria-label="Pick a color" id="form_color" [value]="Item.color"
+                (change)="Item.color = val($event)" [options]="Colors">
+              </select>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_description">
+              {{ titleOf('description') }}
+            </label>
+            <c-col md="5">
+              <textarea cFormControl id="form_description" rows="3" [value]="Item.description ?? ''"
+                (change)="Item.description = val($event)"></textarea>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_modified">
+              {{ titleOf('modified') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl disabled id="form_modified" type="text"
+                [value]="Item.modified ? getDateTimeString(Item.modified) : ''" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_created">
+              {{ titleOf('created') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl disabled id="form_created" type="text"
+                [value]="Item.created ? getDateTimeString(Item.created) : ''" />
+            </c-col>
+          </c-row>
+          <app-form list-route="/plans" [is-new]="Item.id ? false: true" (submit)="Submit()" (delete)="Delete()">
+          </app-form>
+        </form>
+      </c-card-body>
+    </c-card>
   </c-col>
 </c-row>

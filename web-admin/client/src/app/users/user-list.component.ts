@@ -7,7 +7,7 @@ import Titles from './users.json';
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
 })
-export class UsersListComponent {
+export class UserListComponent {
 
   title: string = "Users";
   columns_info: ListViewModel = Titles.list;

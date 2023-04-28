@@ -12,12 +12,51 @@ export abstract class BaseComponent {
         return date.toLocaleString().replace('T', ' ');
     }
 
-    getDateString(date: Date) {
-        return date.toLocaleString().substring(0, 9);
+    getDateString(date: Date | null): string | undefined {
+        return date?.toLocaleString().substring(0, 10);
     }
 
-    getTimeString(time: Date) {
-        return time.toLocaleString().substring(11, 20);
+    getTimeString(time: Date | null): string | undefined {
+        return time?.toLocaleString().substring(11, 20);
+    }
+
+    getRemain(date: Date | null, depth: number = 0): string {
+        if (date == null) return '';
+
+        date = new Date(Date.parse(date.toString()));
+
+        let result = [];
+        let diff = date.getTime() - new Date().getTime();
+        let slash;
+
+        if (diff < 0) {
+            diff = -diff;
+            result.push('past');
+        }
+
+        slash = Math.floor(diff / 86400000);
+        if (slash > 0) {
+            diff %= 86400000;
+            result.push(slash + ' days');
+        }
+
+        if (depth < 1) return result.join(', ');
+
+        slash = Math.floor(diff / 3600000);
+        if (slash > 0) {
+            diff %= 3600000;
+            result.push(slash + ' hours');
+        }
+
+        if (depth < 2) return result.join(', ');
+
+        slash = Math.floor(diff / 60000);
+        if (slash > 0) {
+            diff %= 60000;
+            result.push(slash + ' minutes');
+        }
+
+        return result.join(', ');
     }
 
     val(event: any): any {

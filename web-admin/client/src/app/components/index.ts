@@ -7,4 +7,5 @@ export * from './list/list-view.model';
 export * from './list/table-view/table-view.component';
 export * from './list/widget-view/widget-view.component';
 export * from './list/widget-view/widget-view.model';
+export * from './form/form-buttons.component';
 export * from './components.module';

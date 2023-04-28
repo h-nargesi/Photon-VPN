@@ -2,12 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-form',
-  templateUrl: './form.component.html',
+  templateUrl: './form-buttons.component.html',
 })
-export class FormComponent {
+export class FormButtonsComponent {
 
-  @Input('title') title: string | undefined;
-  @Input('comment') comment: string | undefined;
   @Input('list-route') list_route: string | undefined;
   @Input('is-new') is_new: boolean = true;
   

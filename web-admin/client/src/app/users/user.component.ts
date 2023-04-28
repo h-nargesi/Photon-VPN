@@ -6,6 +6,7 @@ import { RealmsService } from '../global-services/realms.service';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import Titles from './users.json';
+import { TabContentComponent } from '@coreui/angular';
 
 @Component({
   selector: 'app-user',
@@ -16,6 +17,7 @@ export class UserComponent extends BaseComponent {
   private sub: any;
   private item: User = {} as User;
   public columns_info: ListViewModel = Titles.list;
+  m : TabContentComponent | undefined;
 
   constructor(
     private readonly service: UsersService,
