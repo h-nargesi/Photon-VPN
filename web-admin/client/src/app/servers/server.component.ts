@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, EntitySchema, Result, ResultStatus } from '../components';
+import { BaseComponent, CookieService, EntitySchema, Result, ResultStatus } from '../components';
 import { ServersService } from './servers.service';
 import { Server } from './servers.model';
 import Titles from './servers.json';
@@ -18,7 +18,9 @@ export class ServerComponent extends BaseComponent {
   constructor(
     private readonly service: ServersService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) {
+    private readonly router: Router,
+    // protected override readonly cookies: CookieService
+    ) {
     super();
   }
 
@@ -27,6 +29,8 @@ export class ServerComponent extends BaseComponent {
   }
 
   ngOnInit() {
+    // this.setCookie('server', 'hamed');
+    // this.getCookie('server');
     this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe({

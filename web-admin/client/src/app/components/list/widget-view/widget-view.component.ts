@@ -3,6 +3,8 @@ import { ListViewComponent } from "../list-view.component";
 import { EntitySchema, UIColors } from "../../";
 import { WidgetSchema } from "./widget-view.model";
 
+type Data = { [name: string]: any };
+
 @Component({
   selector: 'app-widget-view',
   templateUrl: './widget-view.component.html',
@@ -47,5 +49,3 @@ export class WidgetViewComponent extends ListViewComponent {
   }
 
 }
-
-type Data = { [name: string]: any };

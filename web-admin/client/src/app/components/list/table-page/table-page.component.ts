@@ -9,7 +9,7 @@ import { Result, ResultStatus } from '../../services/list-query.model';
   selector: 'app-table-page',
   templateUrl: './table-page.component.html',
 })
-export class TablePageComponent {
+export class TablePageComponent extends BaseComponent {
 
   @Input("small") small: boolean = true;
   @Input("title") title: string | undefined;
@@ -22,9 +22,19 @@ export class TablePageComponent {
   @Input('show-undo') show_undo: boolean = true;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
-  constructor(private readonly router: Router) { }
+  Query: ListQuery | null = null;
+
+  constructor(
+    private readonly router: Router,
+    // protected override readonly cookies: CookieService
+    ) {
+    super();
+  }
 
   ngOnInit(): void {
+    // this.Query = this.getCookie('query');
+    // this.setCookie('table', 'hamed');
+    // this.getCookie('table');
     this.service?.List(null).subscribe({
       next: (result: any[]) => this.table_view?.SetDataSource(result),
       error: console.error
