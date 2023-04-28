@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
+import { BaseComponent, ListViewModel, Result, ResultStatus, SelectComponent } from '../components';
 import { PaymentsService } from './payments.service';
 import { Payment } from './payments.model';
 import Titles from './payments.json';
+import { UsersService } from '../users/users.service';
 
 @Component({
   selector: 'app-payment',
@@ -11,13 +12,20 @@ import Titles from './payments.json';
 })
 export class PaymentComponent extends BaseComponent {
   private sub: any;
-  private item: Payment = {} as Payment;
+  private item: Payment = {
+    value: 0,
+    trnsactionId: '',
+    approved: true,
+    dateTime: new Date(),
+  } as Payment;
   public columns_info: ListViewModel = Titles.list;
+  @ViewChild('userSelector') private user_selector: SelectComponent | undefined;
 
   constructor(
     private readonly service: PaymentsService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) {
+    private readonly router: Router,
+    public readonly users_srv: UsersService) {
     super();
   }
 
@@ -65,5 +73,9 @@ export class PaymentComponent extends BaseComponent {
       },
       error: console.error,
     });
+  }
+
+  LoadUsers() {
+    this.user_selector?.Load();
   }
 }

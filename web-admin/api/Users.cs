@@ -20,6 +20,25 @@ public class Users : Controller
         return Ok(result);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> Options([FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = from ur in db.PermanentUsers.AsNoTracking()
+                    select new
+                    {
+                        id = ur.Id,
+                        title = ur.Username +
+                            (string.IsNullOrEmpty(ur.Name) ? "" : " " + ur.Name) +
+                            (string.IsNullOrEmpty(ur.Surname) ? "" : " " + ur.Surname),
+                    };
+
+        var result = await filter.ApplyFilter(query, db);
+
+        return Ok(result);
+    }
+
     [HttpGet]
     [Route("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)

@@ -22,8 +22,8 @@ import { ListButtonsComponent } from './list/list-buttons/list-buttons.component
 import { TableViewComponent } from './list/table-view/table-view.component';
 import { TablePageComponent } from './list/table-page/table-page.component';
 import { WidgetViewComponent } from './list/widget-view/widget-view.component';
-import { SelectComponent } from './list/selector/select.component';
-import { FormButtonsComponent } from './form/form-buttons.component';
+import { SelectComponent } from './form/selector/select.component';
+import { FormButtonsComponent } from './form/form-buttons/form-buttons.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({

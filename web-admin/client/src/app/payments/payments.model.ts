@@ -5,7 +5,7 @@ export interface Payment {
     value: number,
     trnsactionId: string,
     dateTime: Date,
-    bankName: string,
-    bankAccount: string,
+    bankName: string | null,
+    bankAccount: string | null,
     created: Date
 }
