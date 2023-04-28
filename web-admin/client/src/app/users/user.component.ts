@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
+import { BaseComponent, ListViewModel, Result, ResultStatus, TableViewComponent } from '../components';
 import { ProfilesService } from '../profiles/profiles.service';
 import { RealmsService } from '../global-services/realms.service';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import Titles from './users.json';
-import { TabContentComponent } from '@coreui/angular';
+import { PaymentsService } from '../payments/payments.service';
 
 @Component({
   selector: 'app-user',
@@ -17,10 +17,11 @@ export class UserComponent extends BaseComponent {
   private sub: any;
   private item: User = {} as User;
   public columns_info: ListViewModel = Titles.list;
-  m : TabContentComponent | undefined;
+  @ViewChild('PaymentView') private payment_list: TableViewComponent | undefined;
 
   constructor(
     private readonly service: UsersService,
+    private readonly payment_srv: PaymentsService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     public readonly profile_srv: ProfilesService,
@@ -40,6 +41,11 @@ export class UserComponent extends BaseComponent {
           error: console.error
         });
       }
+    });
+
+    this.payment_srv?.List(null).subscribe({
+      next: (result: any[]) => this.payment_list?.SetDataSource(result),
+      error: console.error
     });
   }
 

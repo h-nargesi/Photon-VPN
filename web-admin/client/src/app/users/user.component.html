@@ -55,9 +55,12 @@
             content visibility and styling. You can use it with tabs, pills, and any other .nav-powered navigation.
           </c-tab-pane>
           <c-tab-pane>
-            This is some placeholder content the <strong>Payment</strong> tab's associated content. Clicking another
-            tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
-            content visibility and styling. You can use it with tabs, pills, and any other .nav-powered navigation.
+            <table cTable app-table-view #PaymentView
+              [columns-info]="columns_info"
+              [striped]="true" 
+              [hover]="true"
+              [small]="true">
+            </table>
           </c-tab-pane>
           <c-tab-pane>
             <p class="text-medium-emphasis small">
