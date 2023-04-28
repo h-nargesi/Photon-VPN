@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ListViewComponent } from "../list-view.component";
-import { ListViewModel, ListViewSchema } from "../list-view.model";
-import { UIColors } from "./widget-view.model";
+import { EntitySchema, UIColors } from "../../";
+import { WidgetSchema } from "./widget-view.model";
 
 @Component({
   selector: 'app-widget-view',
@@ -9,8 +9,8 @@ import { UIColors } from "./widget-view.model";
 })
 export class WidgetViewComponent extends ListViewComponent {
 
-  @Input("columns-info") columns_info: ListViewModel | undefined;
-  @Input("columns-schema") columns_schema: ListViewSchema | undefined;
+  @Input("columns-info") columns_info: EntitySchema | undefined;
+  @Input("columns-schema") columns_schema: WidgetSchema | undefined;
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
   @Output("dbClick") doubleClicke = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();

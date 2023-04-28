@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ListViewModel } from '../components';
+import { EntitySchema } from '../components';
 import { SessionsService } from './sessions.service';
 import Titles from './sessions.json';
 
@@ -9,7 +9,7 @@ import Titles from './sessions.json';
 })
 export class SessionListComponent {
   title: string = 'Sessions';
-  columns_info: ListViewModel = Titles.list;
+  columns_info: EntitySchema = Titles.list;
 
   constructor(public readonly service: SessionsService) {}
 }

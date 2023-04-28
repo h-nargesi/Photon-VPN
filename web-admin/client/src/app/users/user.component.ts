@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, ListViewModel, Result, ResultStatus, TableViewComponent } from '../components';
+import { BaseComponent, EntitySchema, Result, ResultStatus, TableViewComponent } from '../components';
 import { ProfilesService } from '../profiles/profiles.service';
 import { RealmsService } from '../global-services/realms.service';
 import { UsersService } from './users.service';
@@ -16,7 +16,7 @@ export class UserComponent extends BaseComponent {
 
   private sub: any;
   private item: User = {} as User;
-  public columns_info: ListViewModel = Titles.list;
+  public columns_info: EntitySchema = Titles.list;
   @ViewChild('PaymentView') private payment_list: TableViewComponent | undefined;
 
   constructor(

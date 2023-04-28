@@ -1,8 +1,8 @@
-import { ListViewModel } from './list-view.model';
+import { EntitySchema } from './base.models';
 
 export abstract class BaseComponent {
 
-    protected abstract get columns_info(): ListViewModel | undefined;
+    protected abstract get columns_info(): EntitySchema | undefined;
 
     titleOf(name: string) {
         return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;

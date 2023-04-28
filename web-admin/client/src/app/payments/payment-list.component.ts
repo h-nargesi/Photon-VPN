@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ListViewModel } from '../components';
+import { EntitySchema } from '../components';
 import { PaymentsService } from './payments.service';
 import Titles from './payments.json';
 
@@ -9,7 +9,7 @@ import Titles from './payments.json';
 })
 export class PaymentListComponent {
   title: string = 'Payments';
-  columns_info: ListViewModel = Titles.list;
+  columns_info: EntitySchema = Titles.list;
 
   constructor(public readonly service: PaymentsService) { }
 }

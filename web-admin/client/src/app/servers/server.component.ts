@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
+import { BaseComponent, EntitySchema, Result, ResultStatus } from '../components';
 import { ServersService } from './servers.service';
 import { Server } from './servers.model';
 import Titles from './servers.json';
@@ -13,7 +13,7 @@ export class ServerComponent extends BaseComponent {
 
   private sub: any;
   private item: Server = {} as Server;
-  public columns_info: ListViewModel = Titles.list;
+  public columns_info: EntitySchema = Titles.list;
 
   constructor(
     private readonly service: ServersService,

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, ListViewModel, Result, ResultStatus, SelectComponent } from '../components';
+import { BaseComponent, EntitySchema, Result, ResultStatus, SelectComponent } from '../components';
 import { PaymentsService } from './payments.service';
 import { Payment } from './payments.model';
 import Titles from './payments.json';
@@ -18,7 +18,7 @@ export class PaymentComponent extends BaseComponent {
     approved: true,
     dateTime: new Date(),
   } as Payment;
-  public columns_info: ListViewModel = Titles.list;
+  public columns_info: EntitySchema = Titles.list;
   @ViewChild('userSelector') private user_selector: SelectComponent | undefined;
 
   constructor(

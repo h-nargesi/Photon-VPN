@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ListViewModel } from '../list-view.model';
-import { TableViewComponent } from '../table-view/table-view.component';
-import { LGMDService } from '../../services/lgmd-service';
-import { Result, ResultStatus } from '../../services/list-query.model';
+import {
+  EntitySchema, LGMDService, TableViewComponent,
+  Result, ResultStatus, CookieService
+} from '../../';
 
 @Component({
   selector: 'app-table-page',
@@ -11,10 +11,10 @@ import { Result, ResultStatus } from '../../services/list-query.model';
 })
 export class TablePageComponent {
 
-  @Input("small") small : boolean = true;
-  @Input("title") title : string | undefined;
-  @Input("columns-info") columns_info: ListViewModel | undefined;
-  @Input("service") service : LGMDService | undefined;
+  @Input("small") small: boolean = true;
+  @Input("title") title: string | undefined;
+  @Input("columns-info") columns_info: EntitySchema | undefined;
+  @Input("service") service: LGMDService | undefined;
   @Input('show-reload') show_reload: boolean = true;
   @Input('show-add') show_add: boolean = true;
   @Input('show-edit') show_edit: boolean = true;
@@ -22,7 +22,9 @@ export class TablePageComponent {
   @Input('show-undo') show_undo: boolean = true;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
-  constructor(private readonly router: Router) { }
+  constructor(
+    private readonly router: Router,
+    private readonly cookie: CookieService) { }
 
   ngOnInit(): void {
     this.service?.List(null).subscribe({
@@ -40,12 +42,11 @@ export class TablePageComponent {
   }
 
   onDeleteClick() {
-    if (!this.table_view?.SelectedItems.size) 
-    {
+    if (!this.table_view?.SelectedItems.size) {
       console.error('No item has been selected.');
       return;
     }
-    
+
     let items = Array.from(this.table_view?.SelectedItems.values());
 
     items.forEach((element) => {

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PlanModel } from './plans.models';
 import { PlansService } from './plans.service';
-import { ListViewModel, WidgetViewComponent, Result, ResultStatus, ListViewSchema, BaseComponent } from '../components';
+import { EntitySchema, WidgetViewComponent, Result, ResultStatus, WidgetSchema, BaseComponent } from '../components';
 import Titles from './plans.json';
 
 @Component({
@@ -11,8 +11,8 @@ import Titles from './plans.json';
   templateUrl: './plan-list.component.html',
 })
 export class PlanListComponent extends BaseComponent {
-  public columns_info: ListViewModel = Titles.list;
-  public columns_schema: ListViewSchema = Titles.schema;
+  public columns_info: EntitySchema = Titles.list;
+  public columns_schema: WidgetSchema = Titles.schema;
   public data_provider: Observable<PlanModel[]> | undefined;
   public reload: EventEmitter<any[]> | undefined;
 

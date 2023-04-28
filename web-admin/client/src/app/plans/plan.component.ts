@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Plan } from './plans.models';
 import Titles from './plans.json';
 import { PlansService } from './plans.service';
-import { BaseComponent, ListViewModel, Result, ResultStatus, UIColors } from '../components';
+import { BaseComponent, EntitySchema, Result, ResultStatus, UIColors } from '../components';
 
 @Component({
   selector: 'app-plan',
@@ -13,7 +13,7 @@ export class PlanComponent extends BaseComponent {
 
   private sub: any;
   private item: Plan = { title: '', active: true } as Plan;
-  public columns_info: ListViewModel = Titles.list;
+  public columns_info: EntitySchema = Titles.list;
 
   Colors = [
     { title: UIColors[UIColors.secondary], id: UIColors.secondary },
