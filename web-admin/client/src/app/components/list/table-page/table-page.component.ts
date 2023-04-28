@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  EntitySchema, LGMDService, TableViewComponent,
-  Result, ResultStatus, CookieService
-} from '../../';
+import { EntitySchema } from '../../basical/base.models';
+import { TableViewComponent } from '../table-view/table-view.component';
+import { LGMDService } from '../../services/lgmd-service';
+import { Result, ResultStatus } from '../../services/list-query.model';
 
 @Component({
   selector: 'app-table-page',
@@ -22,9 +22,7 @@ export class TablePageComponent {
   @Input('show-undo') show_undo: boolean = true;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
-  constructor(
-    private readonly router: Router,
-    private readonly cookie: CookieService) { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit(): void {
     this.service?.List(null).subscribe({

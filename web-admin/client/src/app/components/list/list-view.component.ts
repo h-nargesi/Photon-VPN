@@ -1,5 +1,5 @@
 import { EventEmitter } from "@angular/core";
-import { EntitySchema, BaseComponent } from "../";
+import { BaseComponent } from "../basical/base.component";
 
 export abstract class ListViewComponent extends BaseComponent {
 
