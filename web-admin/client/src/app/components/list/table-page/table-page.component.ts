@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   EntitySchema, LGMDService, TableViewComponent,
-  Result, ResultStatus, CookieService
+  Result, ResultStatus, CookieService, BaseComponent, ListQuery
 } from '../../';
 
 @Component({
   selector: 'app-table-page',
   templateUrl: './table-page.component.html',
 })
-export class TablePageComponent {
+export class TablePageComponent extends BaseComponent {
 
   @Input("small") small: boolean = true;
   @Input("title") title: string | undefined;
@@ -22,11 +22,19 @@ export class TablePageComponent {
   @Input('show-undo') show_undo: boolean = true;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
+  Query: ListQuery | null = null;
+
   constructor(
     private readonly router: Router,
-    private readonly cookie: CookieService) { }
+    // protected override readonly cookies: CookieService
+    ) {
+    super();
+  }
 
   ngOnInit(): void {
+    // this.Query = this.getCookie('query');
+    // this.setCookie('table', 'hamed');
+    // this.getCookie('table');
     this.service?.List(null).subscribe({
       next: (result: any[]) => this.table_view?.SetDataSource(result),
       error: console.error

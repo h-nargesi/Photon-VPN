@@ -11,6 +11,7 @@ export class CookieService {
         this.cookies = {};
 
         const raw_key_values = document.cookie.split(';');
+        console.log('document.cookie', raw_key_values);
 
         for (const str_key_value of raw_key_values) {
             if (!str_key_value || str_key_value.length < 2) return;
@@ -54,7 +55,7 @@ export class CookieService {
 
         if (params.session && params.session == true) {
             let date: Date = new Date();
-            date.setTime(date.getTime() + 86400000 * (params.expireDays ? params.expireDays : 1));
+            date.setTime(date.getTime() + 86400000 * (params.expireDays ? params.expireDays : 30));
             values.push(params.session = 'expires=' + date.toUTCString());
         }
 

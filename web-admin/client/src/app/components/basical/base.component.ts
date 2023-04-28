@@ -1,11 +1,13 @@
+import { CookieService } from '../services/coockie-service';
 import { EntitySchema } from './base.models';
 
 export abstract class BaseComponent {
 
+    protected readonly cookies:  CookieService | undefined;
     protected abstract get columns_info(): EntitySchema | undefined;
 
     titleOf(name: string) {
-        return this.columns_info != null && name in this.columns_info ? this.columns_info[name].title : name;
+        return this.columns_info && name in this.columns_info ? this.columns_info[name].title : name;
     }
 
     getDateTimeString(date: Date): string {
@@ -63,4 +65,14 @@ export abstract class BaseComponent {
         return event.target.value;
     }
 
+    getCookie(name: string): any {
+        let json = this.cookies?.getCookie(name);
+        if (!json) return null;
+        return JSON.parse(json);
+    }
+
+    setCookie(name: string, object: any) {
+        let json = object ? JSON.stringify(object) : '';
+        this.cookies?.setCookie({ name: name, value: json });
+    }
 }
