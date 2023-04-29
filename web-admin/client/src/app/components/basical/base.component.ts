@@ -1,9 +1,10 @@
-import { CookieService } from '../services/coockie-service';
+import { CookieService } from '../services/cookie-service';
 import { EntitySchema } from './base.models';
 
 export abstract class BaseComponent {
 
-    protected readonly cookies:  CookieService | undefined;
+    protected path: string | undefined;
+    protected readonly cookies: CookieService | undefined;
     protected abstract get columns_info(): EntitySchema | undefined;
 
     titleOf(name: string) {
@@ -68,11 +69,13 @@ export abstract class BaseComponent {
     getCookie(name: string): any {
         let json = this.cookies?.getCookie(name);
         if (!json) return null;
-        return JSON.parse(json);
+        let obj = JSON.parse(json);
+        console.log(obj);
+        return obj;
     }
 
     setCookie(name: string, object: any) {
         let json = object ? JSON.stringify(object) : '';
-        this.cookies?.setCookie({ name: name, value: json });
+        this.cookies?.setCookie({ name: name, value: json, path: this.path ? this.path : '/' });
     }
 }

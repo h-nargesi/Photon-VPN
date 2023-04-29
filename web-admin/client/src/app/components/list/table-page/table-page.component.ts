@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { EntitySchema } from '../../basical/base.models';
 import { TableViewComponent } from '../table-view/table-view.component';
 import { LGMDService } from '../../services/lgmd-service';
-import { Result, ResultStatus } from '../../services/list-query.model';
+import { ListQuery, Result, ResultStatus } from '../../services/list-query.model';
+import { BaseComponent } from '../../basical/base.component';
+import { CookieService } from '../../services/cookie-service';
 
 @Component({
   selector: 'app-table-page',
@@ -26,17 +28,20 @@ export class TablePageComponent extends BaseComponent {
 
   constructor(
     private readonly router: Router,
-    // protected override readonly cookies: CookieService
-    ) {
+    protected override readonly cookies: CookieService) {
     super();
+    this.path = router.url;
+    console.log('router.url', router.url);
   }
 
   ngOnInit(): void {
     // this.Query = this.getCookie('query');
-    // this.setCookie('table', 'hamed');
-    // this.getCookie('table');
     this.service?.List(null).subscribe({
-      next: (result: any[]) => this.table_view?.SetDataSource(result),
+      next: (result: any[]) => {
+        this.table_view?.SetDataSource(result);
+        this.setCookie('query', this.title);
+        this.getCookie('query');
+      },
       error: console.error
     });
   }

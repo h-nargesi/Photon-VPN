@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class CookieService {
     private cookies: { [name: string]: string } | undefined;
 
@@ -23,6 +25,8 @@ export class CookieService {
     public getCookie(name: string): string | undefined {
         this.load_cookies();
         if (!this.cookies) return;
+
+        console.log('loaded.cookie', this.cookies);
 
         if (name in this.cookies) return this.cookies[name];
         else return undefined;
@@ -59,11 +63,13 @@ export class CookieService {
             values.push(params.session = 'expires=' + date.toUTCString());
         }
 
-        if (params.path && params.path.length > 0) values.push(params.path);
+        if (params.path && params.path.length > 0) values.push('path=' + params.path);
         else values.push('/');
 
         if (location.protocol === 'https:' && params.secure && params.secure == true)
             values.push('secure');
+
+        console.log('setCookie', values.join(';'));
 
         document.cookie = values.join(';') + ';';
     }
