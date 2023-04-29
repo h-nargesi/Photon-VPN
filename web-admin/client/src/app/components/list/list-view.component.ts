@@ -1,5 +1,4 @@
 import { EventEmitter } from "@angular/core";
-import { ListViewModel } from "./list-view.model";
 import { BaseComponent } from "./base.component";
 
 export abstract class ListViewComponent extends BaseComponent {

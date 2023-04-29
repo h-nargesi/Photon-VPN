@@ -4,27 +4,27 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 // CoreUI Modules
 import {
-  AccordionModule,
-  BadgeModule,
-  BreadcrumbModule,
-  ButtonGroupModule,
-  ButtonModule,
-  CardModule,
-  CarouselModule,
-  CollapseModule,
-  DropdownModule,
-  FormModule,
-  GridModule,
-  ListGroupModule,
-  NavModule,
-  PaginationModule,
-  PlaceholderModule,
-  PopoverModule,
-  ProgressModule,
-  SharedModule,
-  SpinnerModule,
-  TableModule,
-  UtilitiesModule,
+    AccordionModule,
+    BadgeModule,
+    BreadcrumbModule,
+    ButtonGroupModule,
+    ButtonModule,
+    CardModule,
+    CarouselModule,
+    CollapseModule,
+    DropdownModule,
+    FormModule,
+    GridModule,
+    ListGroupModule,
+    NavModule,
+    PaginationModule,
+    PlaceholderModule,
+    PopoverModule,
+    ProgressModule,
+    SharedModule,
+    SpinnerModule,
+    TableModule,
+    UtilitiesModule
 } from '@coreui/angular';
 
 import { IconModule } from '@coreui/icons-angular';
@@ -34,8 +34,8 @@ import { DocsComponentsModule } from '@docs-components/docs-components.module';
 import { ComponentsModule } from '../components/components.module';
 
 // views
-import { PlanListComponent } from './list/plan-list.component';
 import { PlanComponent } from './edit/plan.component';
+import { PlanListComponent } from './list/plan-list.component';
 
 // Components Routing
 import { PlansRoutingModule } from './plans-routing.module';

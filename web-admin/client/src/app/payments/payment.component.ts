@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
-import { PaymentsService } from './payments.service';
-import { Payment } from './payments.model';
 import Titles from './payments.json';
+import { Payment } from './payments.model';
+import { PaymentsService } from './payments.service';
 
 @Component({
   selector: 'app-payment',

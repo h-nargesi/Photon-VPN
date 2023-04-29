@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ListViewModel } from '../list-view.model';
-import { TableViewComponent } from '../table-view/table-view.component';
 import { LGMDService } from '../../services/lgmd-service';
 import { Result, ResultStatus } from '../../services/list-query.model';
+import { ListViewModel } from '../list-view.model';
+import { TableViewComponent } from '../table-view/table-view.component';
 
 @Component({
   selector: 'app-table-page',

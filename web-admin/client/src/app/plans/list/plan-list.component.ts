@@ -1,10 +1,10 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { BaseComponent, ListViewModel, ListViewSchema, Result, ResultStatus, WidgetViewComponent } from '../../components';
+import Titles from '../plans.json';
 import { PlanModel } from '../plans.models';
 import { PlansService } from '../plans.service';
-import { ListViewModel, WidgetViewComponent, Result, ResultStatus, ListViewSchema, BaseComponent } from '../../components';
-import Titles from '../plans.json';
 
 @Component({
   selector: 'app-plan-list',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
-import { ServersService } from './servers.service';
-import { Server } from './servers.model';
 import Titles from './servers.json';
+import { Server } from './servers.model';
+import { ServersService } from './servers.service';
 
 @Component({
   selector: 'app-server',

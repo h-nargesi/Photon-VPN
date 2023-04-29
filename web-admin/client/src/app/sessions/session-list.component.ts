@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ListViewModel } from '../components';
-import { SessionsService } from './sessions.service';
 import Titles from './sessions.json';
+import { SessionsService } from './sessions.service';
 
 @Component({
   selector: 'app-session-list',

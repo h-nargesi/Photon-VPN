@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ListViewModel } from '../components';
-import { UsersService } from './users.service';
 import Titles from './users.json';
+import { UsersService } from './users.service';
 
 @Component({
   selector: 'app-user-list',

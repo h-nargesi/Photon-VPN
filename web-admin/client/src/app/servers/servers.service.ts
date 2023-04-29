@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Server } from './servers.model';
 import { BaseService, LGMDService, ListQuery, Result } from '../components';
+import { Server } from './servers.model';
 
 @Injectable({
   providedIn: 'root',

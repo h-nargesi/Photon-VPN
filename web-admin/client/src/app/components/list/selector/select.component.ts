@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { SelectOptions } from '../list-view.model'
 import { OptionService } from '../..';
+import { SelectOptions } from '../list-view.model';
 
 @Component({
   selector: '[app-select]',

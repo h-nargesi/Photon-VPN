@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ListViewModel } from '../components';
-import { PaymentsService } from './payments.service';
 import Titles from './payments.json';
+import { PaymentsService } from './payments.service';
 
 @Component({
   selector: 'app-payment-list',

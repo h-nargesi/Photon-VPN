@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plan } from '../plans.models';
-import Titles from '../plans.json';
-import { PlansService } from '../plans.service';
 import { BaseComponent, ListViewModel, Result, ResultStatus, UIColors } from '../../components';
+import Titles from '../plans.json';
+import { Plan } from '../plans.models';
+import { PlansService } from '../plans.service';
 
 @Component({
   selector: 'app-plan',

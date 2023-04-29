@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Payment } from './payments.model';
 import { BaseService, LGMDService, ListQuery, Result } from '../components';
+import { Payment } from './payments.model';
 
 @Injectable({
   providedIn: 'root',

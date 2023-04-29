@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Membership, User } from './users.model';
 import { BaseService, LGMDService, ListQuery, Result } from '../components';
+import { User } from './users.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -31,9 +31,5 @@ export class UsersService extends BaseService implements LGMDService {
   
 	public Delete(id: number): Observable<Result> {
 	  return this.http.post<Result>(this.module_url + 'delete', id);
-	}
-
-	public Plans(user_id: number): Observable<Membership> {
-		return this.http.get<Membership>(this.base_url + 'api/membership/plans', { params: { user_id: user_id } });
 	}
 }

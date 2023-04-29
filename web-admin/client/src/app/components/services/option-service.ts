@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
+import { SelectOptions } from '../';
 import { ListQuery } from './list-query.model';
-import { SelectOptions } from '../'
 
 export interface OptionService  {
 

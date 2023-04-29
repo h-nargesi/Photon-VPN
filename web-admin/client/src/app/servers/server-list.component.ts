@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ListViewModel } from '../components';
-import { ServersService } from './servers.service';
 import Titles from './servers.json';
+import { ServersService } from './servers.service';
 
 @Component({
   selector: 'app-server-list',

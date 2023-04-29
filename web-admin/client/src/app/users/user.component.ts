@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent, ListViewModel, Result, ResultStatus } from '../components';
-import { UsersService } from './users.service';
-import { User } from './users.model';
 import Titles from './users.json';
+import { User } from './users.model';
+import { UsersService } from './users.service';
 
 @Component({
   selector: 'app-user',
