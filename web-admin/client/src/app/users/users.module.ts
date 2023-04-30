@@ -37,6 +37,7 @@ import { ComponentsModule } from '../components/components.module';
 // views
 import { UserListComponent } from './user-list.component';
 import { UserComponent } from './user.component';
+import { UserInfoComponent } from './info/user-info.component';
 
 // Components Routing
 import { UsersRoutingModule } from './users-routing.module';
@@ -45,6 +46,7 @@ import { UsersRoutingModule } from './users-routing.module';
   declarations: [
     UserListComponent,
     UserComponent,
+    UserInfoComponent,
   ],
   imports: [
     CommonModule,
