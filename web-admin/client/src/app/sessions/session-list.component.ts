@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import Titles from './sessions.json';
 import { EntitySchema } from '../components';
 import { SessionsService } from './sessions.service';
-import Titles from './sessions.json';
 
 @Component({
   selector: 'app-session-list',

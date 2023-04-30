@@ -1,8 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Photon.Service.VPN.App;
-using Photon.Service.VPN.Models;
 
 namespace Photon.Service.VPN.Handlers;
 
