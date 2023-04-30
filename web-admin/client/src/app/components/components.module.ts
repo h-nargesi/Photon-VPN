@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 // CoreUI Modules
 import {
+    AlertComponent,
     ButtonGroupModule,
     ButtonModule,
     CardModule,
@@ -34,6 +35,7 @@ import { RouterModule } from '@angular/router';
         FormButtonsComponent,
     ],
     imports: [
+        AlertComponent,
         CommonModule,
         TableModule,
         IconModule,

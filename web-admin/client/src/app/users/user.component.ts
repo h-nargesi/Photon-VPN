@@ -1,20 +1,22 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TableViewComponent } from '../components';
+import { TableViewComponent, EntitySchema, BaseComponent } from '../components';
 import { RealmsService } from '../global-services/realms.service';
 import { PaymentsService } from '../payments/payments.service';
 import { ProfilesService } from '../profiles/profiles.service';
 import { User } from './users.model';
 import { UsersService } from './users.service';
+import Titles from './users.json';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
 })
-export class UserComponent {
+export class UserComponent extends BaseComponent {
 
   private sub: any;
   public Item: User = {} as User;
+  public columns_info: EntitySchema = Titles.list;
   @ViewChild('PaymentView') private payment_list: TableViewComponent | undefined;
 
   constructor(
@@ -23,6 +25,7 @@ export class UserComponent {
     private readonly route: ActivatedRoute,
     public readonly profile_srv: ProfilesService,
     public readonly realms_srv: RealmsService) {
+    super();
   }
 
   ngOnInit() {

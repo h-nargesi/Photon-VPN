@@ -28,6 +28,11 @@ export abstract class BaseComponent {
         this.cookies?.setCookie({ name: name, value: json, path: this.path ? this.path : '/' });
     }
 
+    getDateTimeString = BaseComponent.getDateTimeString;
+    getDateString = BaseComponent.getDateString;
+    getTimeString = BaseComponent.getTimeString;
+    getRemain = BaseComponent.getRemain;
+
     static getDateTimeString(date: Date): string {
         return date.toLocaleString().replace('T', ' ');
     }

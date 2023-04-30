@@ -18,7 +18,7 @@ export class TimeLineViewComponent extends ListViewComponent {
   @Output("double-click") double_click = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();
   @Output("removeClick") remove = new EventEmitter<any>();
-  
+
   protected selectable: boolean = false;
 
   GetTime(data: Data): string {
@@ -50,4 +50,15 @@ export class TimeLineViewComponent extends ListViewComponent {
     return data[column_name];
   }
 
+  HasColumn(schema: string, data: Data): boolean {
+    if (!this.columns_schema) return false;
+
+    let column_name: string;
+    if (schema in this.columns_schema) {
+      column_name = this.columns_schema[schema];
+
+    } else column_name = schema;
+
+    return column_name in data;
+  }
 }
