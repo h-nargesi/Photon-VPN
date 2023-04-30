@@ -11,19 +11,36 @@ export abstract class BaseComponent {
         return this.columns_info && name in this.columns_info ? this.columns_info[name].title : name;
     }
 
-    getDateTimeString(date: Date): string {
+    val(event: any): any {
+        return event.target.value;
+    }
+
+    getCookie(name: string): any {
+        let json = this.cookies?.getCookie(name);
+        if (!json) return null;
+        let obj = JSON.parse(json);
+        console.log(obj);
+        return obj;
+    }
+
+    setCookie(name: string, object: any) {
+        let json = object ? JSON.stringify(object) : '';
+        this.cookies?.setCookie({ name: name, value: json, path: this.path ? this.path : '/' });
+    }
+
+    static getDateTimeString(date: Date): string {
         return date.toLocaleString().replace('T', ' ');
     }
 
-    getDateString(date: Date | null): string | undefined {
+    static getDateString(date: Date | null): string | undefined {
         return date?.toLocaleString().substring(0, 10);
     }
 
-    getTimeString(time: Date | null): string | undefined {
+    static getTimeString(time: Date | null): string | undefined {
         return time?.toLocaleString().substring(11, 20);
     }
 
-    getRemain(date: Date | null, depth: number = 0): string {
+    static getRemain(date: Date | null, details: boolean = false): string {
         if (date == null) return '';
 
         date = new Date(Date.parse(date.toString()));
@@ -43,7 +60,7 @@ export abstract class BaseComponent {
             result.push(slash + ' days');
         }
 
-        if (depth < 1) return result.join(', ');
+        if (slash > 0 && !details) return result.join(', ');
 
         slash = Math.floor(diff / 3600000);
         if (slash > 0) {
@@ -51,7 +68,7 @@ export abstract class BaseComponent {
             result.push(slash + ' hours');
         }
 
-        if (depth < 2) return result.join(', ');
+        if (slash > 0 && !details) return result.join(', ');
 
         slash = Math.floor(diff / 60000);
         if (slash > 0) {
@@ -60,22 +77,5 @@ export abstract class BaseComponent {
         }
 
         return result.join(', ');
-    }
-
-    val(event: any): any {
-        return event.target.value;
-    }
-
-    getCookie(name: string): any {
-        let json = this.cookies?.getCookie(name);
-        if (!json) return null;
-        let obj = JSON.parse(json);
-        console.log(obj);
-        return obj;
-    }
-
-    setCookie(name: string, object: any) {
-        let json = object ? JSON.stringify(object) : '';
-        this.cookies?.setCookie({ name: name, value: json, path: this.path ? this.path : '/' });
     }
 }

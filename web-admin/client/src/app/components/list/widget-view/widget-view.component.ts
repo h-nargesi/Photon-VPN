@@ -13,8 +13,9 @@ export class WidgetViewComponent extends ListViewComponent {
 
   @Input("columns-info") columns_info: EntitySchema | undefined;
   @Input("columns-schema") columns_schema: WidgetSchema | undefined;
+  @Input("data-projection") data_projection: ((data: any[]) => any[]) | undefined;
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
-  @Output("dbClick") doubleClicke = new EventEmitter<any>();
+  @Output("double-click") double_click = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();
   @Output("removeClick") remove = new EventEmitter<any>();
   

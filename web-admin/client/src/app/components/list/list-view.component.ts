@@ -9,8 +9,9 @@ export abstract class ListViewComponent extends BaseComponent {
   private selected_records: Map<number, any> = new Map<number, any>();
 
   protected abstract get selectable(): boolean | undefined;
+  protected abstract get data_projection(): ((data: any[]) => any[]) | undefined;
   protected abstract get selectedEvent(): EventEmitter<Map<number, any>>;
-  protected abstract get doubleClicke(): EventEmitter<any>;
+  protected abstract get double_click(): EventEmitter<any>;
 
   get DataSource(): any[] {
     return this.data_source;
@@ -41,7 +42,7 @@ export abstract class ListViewComponent extends BaseComponent {
     }
 
     if (this.is_double_click(index)) {
-      this.doubleClicke.emit(item);
+      this.double_click.emit(item);
 
     } else {
       this.selectedEvent.emit(this.selected_records);
@@ -58,7 +59,8 @@ export abstract class ListViewComponent extends BaseComponent {
   }
 
   SetDataSource(data: any[]) {
-    this.data_source = data;
+    if (!this.data_projection) this.data_source = data;
+    else this.data_source = this.data_projection(data);
 
     this.data_columns = [];
 

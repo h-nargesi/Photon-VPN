@@ -21,10 +21,11 @@
       <c-card-body class="overflow-auto">
         <table cTable app-table-view #tableView
           [columns-info]="columns_info"
+          [data-projection]="data_projection"
           [striped]="true" 
           [hover]="true"
           [small]="small"
-          (dbClick)="onDbClick($event)">
+          (double-click)="onDbClick($event)">
         </table>
       </c-card-body>
     </c-card>

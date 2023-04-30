@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EntitySchema } from '../components';
+import { BaseComponent, EntitySchema } from '../components';
 import { UsersService } from './users.service';
 import Titles from './users.json';
 
@@ -14,4 +14,11 @@ export class UserListComponent {
 
   constructor(public readonly service: UsersService) { }
 
+  data_projection(data: any[]): any[] {
+    for (var user of data) {
+      user.toDate = BaseComponent.getRemain(user.toDate);
+    }
+
+    return data;
+  }
 }

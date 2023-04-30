@@ -16,6 +16,7 @@ export class TablePageComponent extends BaseComponent {
   @Input("small") small: boolean = true;
   @Input("title") title: string | undefined;
   @Input("columns-info") columns_info: EntitySchema | undefined;
+  @Input("data-projection") data_projection: ((data: any[]) => any[]) | undefined;
   @Input("service") service: LGMDService | undefined;
   @Input('show-reload') show_reload: boolean = true;
   @Input('show-add') show_add: boolean = true;

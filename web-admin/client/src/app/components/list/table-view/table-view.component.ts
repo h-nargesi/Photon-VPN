@@ -10,7 +10,8 @@ export class TableViewComponent extends ListViewComponent {
 
   @Input("selectable") selectable: boolean = true;
   @Input("columns-info") columns_info: EntitySchema | undefined;
+  @Input("data-projection") data_projection: ((data: any[]) => any[]) | undefined;
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
-  @Output("dbClick") doubleClicke = new EventEmitter<any>();
+  @Output("double-click") double_click = new EventEmitter<any>();
 
 }
