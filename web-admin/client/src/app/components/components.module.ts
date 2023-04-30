@@ -18,6 +18,7 @@ import { ListButtonsComponent } from './list/list-buttons/list-buttons.component
 import { TablePageComponent } from './list/table-page/table-page.component';
 import { TableViewComponent } from './list/table-view/table-view.component';
 import { WidgetViewComponent } from './list/widget-view/widget-view.component';
+import { TimeLineViewComponent } from './list/time-line-view/time-line-view.component';
 import { SelectComponent } from './form/selector/select.component';
 import { FormButtonsComponent } from './form/form-buttons/form-buttons.component';
 import { RouterModule } from '@angular/router';
@@ -28,6 +29,7 @@ import { RouterModule } from '@angular/router';
         TableViewComponent,
         TablePageComponent,
         WidgetViewComponent,
+        TimeLineViewComponent,
         SelectComponent,
         FormButtonsComponent,
     ],
@@ -52,6 +54,7 @@ import { RouterModule } from '@angular/router';
         TableViewComponent,
         TablePageComponent,
         WidgetViewComponent,
+        TimeLineViewComponent,
         SelectComponent,
         FormButtonsComponent,
     ]

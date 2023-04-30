@@ -1,0 +1,42 @@
+{
+  "list": {
+    "id": {
+      "title": "Id",
+      "show": false
+    },
+    "permanentUserId": {
+      "title": "User Id",
+      "show": false
+    },
+    "witer": {
+      "title": "Witer",
+      "show": true
+    },
+    "title": {
+      "title": "Title",
+      "show": false
+    },
+    "color": {
+      "title": "Color",
+      "show": true
+    },
+    "content": {
+      "title": "Content",
+      "show": true
+    },
+    "created": {
+      "title": "Created",
+      "show": true
+    },
+    "modified": {
+      "title": "Modified",
+      "show": true
+    }
+  },
+  "schema": {
+    "title": "title",
+    "witer": "witer",
+    "color": "color",
+    "content": "content"
+  }
+}
