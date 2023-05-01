@@ -312,8 +312,7 @@ public partial class RdContext : DbContext
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("server=37.32.9.55;uid=photon;pwd=znf42CYfWhA3st7w;database=rd");
+        => optionsBuilder.UseMySQL("Name=ConnectionStrings:default");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -5277,16 +5276,18 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Approved).HasColumnName("approved");
             entity.Property(e => e.BankAccount)
                 .HasMaxLength(255)
+                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("bank_account");
             entity.Property(e => e.BankName)
                 .HasMaxLength(255)
+                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("bank_name");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("'current_timestamp()'")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DateTime)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("date_time");
             entity.Property(e => e.PermanentUserId)
@@ -5294,6 +5295,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.TrnsactionId)
                 .HasMaxLength(24)
+                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("trnsaction_id");
             entity.Property(e => e.Value)
                 .HasPrecision(16)
@@ -5468,6 +5470,9 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
+            entity.Property(e => e.Color)
+                .HasColumnType("int(11)")
+                .HasColumnName("color");
             entity.Property(e => e.Content)
                 .HasColumnType("text")
                 .HasColumnName("content");
@@ -5482,6 +5487,10 @@ public partial class RdContext : DbContext
             entity.Property(e => e.PermanentUserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
+            entity.Property(e => e.Title)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnName("title");
             entity.Property(e => e.Witer)
                 .HasColumnType("int(11)")
                 .HasColumnName("witer");

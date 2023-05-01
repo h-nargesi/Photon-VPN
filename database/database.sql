@@ -69,7 +69,7 @@ create table permanent_user_logs (
 	witer				int				not null,
 	title				nvarchar(50)		null,
 	color				int				not null	default 0,
-	content				ntext			not null,
+	content				text			not null,
 	created				datetime		not null	default current_timestamp,
 	modified			datetime		not null	default current_timestamp,
 

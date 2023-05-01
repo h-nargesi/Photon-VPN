@@ -13,13 +13,13 @@ public partial class Payment
 
     public decimal Value { get; set; }
 
-    public string TrnsactionId { get; set; } = null!;
+    public string? TrnsactionId { get; set; }
 
-    public DateTime DateTime { get; set; }
+    public DateTime? DateTime { get; set; }
 
-    public string BankName { get; set; } = null!;
+    public string? BankName { get; set; }
 
-    public string BankAccount { get; set; } = null!;
+    public string? BankAccount { get; set; }
 
     public DateTime Created { get; set; }
 

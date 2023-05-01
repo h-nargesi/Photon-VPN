@@ -11,6 +11,10 @@ public partial class PermanentUserLog
 
     public int Witer { get; set; }
 
+    public string? Title { get; set; }
+
+    public int Color { get; set; }
+
     public string Content { get; set; } = null!;
 
     public DateTime Created { get; set; }
