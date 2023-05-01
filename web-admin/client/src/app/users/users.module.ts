@@ -38,6 +38,7 @@ import { ComponentsModule } from '../components/components.module';
 import { UserListComponent } from './user-list.component';
 import { UserComponent } from './user.component';
 import { UserInfoComponent } from './info/user-info.component';
+import { UserLogsComponent } from './logs/log.component';
 
 // Components Routing
 import { UsersRoutingModule } from './users-routing.module';
@@ -47,6 +48,7 @@ import { UsersRoutingModule } from './users-routing.module';
     UserListComponent,
     UserComponent,
     UserInfoComponent,
+    UserLogsComponent,
   ],
   imports: [
     CommonModule,
@@ -80,4 +82,4 @@ import { UsersRoutingModule } from './users-routing.module';
     TabsModule,
   ],
 })
-export class UsersModule {}
+export class UsersModule { }

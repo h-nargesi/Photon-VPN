@@ -38,7 +38,7 @@
         <c-nav class="card-header-tabs" variant="tabs">
           <a cNavLink [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="0" [active]="true">Plans</a>
           <a cNavLink [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="1">Logs</a>
-          <a cNavLink [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="3">Info</a>
+          <a cNavLink [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="2">Info</a>
         </c-nav>
       </c-card-header>
       <c-card-body>
@@ -49,17 +49,7 @@
             content visibility and styling. You can use it with tabs, pills, and any other .nav-powered navigation.
           </c-tab-pane>
           <c-tab-pane>
-            This is some placeholder content the <strong>Logs</strong> tab's associated content. Clicking another
-            tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
-            content visibility and styling. You can use it with tabs, pills, and any other .nav-powered navigation.
-          </c-tab-pane>
-          <c-tab-pane>
-            <table cTable app-table-view #PaymentView
-              [columns-info]="columns_info"
-              [striped]="true" 
-              [hover]="true"
-              [small]="true">
-            </table>
+            <app-user-log [item]="Item"></app-user-log>
           </c-tab-pane>
           <c-tab-pane>
             <app-user-info [item]="Item"></app-user-info>

@@ -1,12 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TableViewComponent, EntitySchema, BaseComponent } from '../components';
+import { BaseComponent, EntitySchema } from '../components';
 import { RealmsService } from '../global-services/realms.service';
-import { PaymentsService } from '../payments/payments.service';
 import { ProfilesService } from '../profiles/profiles.service';
+import Titles from './info/users.json';
 import { User } from './info/users.model';
 import { UsersService } from './users.service';
-import Titles from './users.json';
 
 @Component({
   selector: 'app-user',
@@ -17,11 +16,9 @@ export class UserComponent extends BaseComponent {
   private sub: any;
   public Item: User = {} as User;
   public columns_info: EntitySchema = Titles.list;
-  @ViewChild('PaymentView') private payment_list: TableViewComponent | undefined;
 
   constructor(
     private readonly service: UsersService,
-    private readonly payment_srv: PaymentsService,
     private readonly route: ActivatedRoute,
     public readonly profile_srv: ProfilesService,
     public readonly realms_srv: RealmsService) {
@@ -36,11 +33,6 @@ export class UserComponent extends BaseComponent {
           error: console.error
         });
       }
-    });
-
-    this.payment_srv?.List(null).subscribe({
-      next: (result: any[]) => this.payment_list?.SetDataSource(result),
-      error: console.error
     });
   }
 

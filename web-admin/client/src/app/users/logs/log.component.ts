@@ -1,48 +1,74 @@
-import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { TableViewComponent } from '../components';
-import { RealmsService } from '../global-services/realms.service';
-import { PaymentsService } from '../payments/payments.service';
-import { ProfilesService } from '../profiles/profiles.service';
-import { User } from './users.model';
-import { UsersService } from './users.service';
+import { Component, Input, ViewChild } from '@angular/core';
+import { BaseComponent, EntitySchema, ListQuery, Result, ResultStatus, TimeLineSchema, TimeLineViewComponent, UIColors } from '../../components';
+import Titles from './log.json';
+import { UserLog } from './log.model';
+import { UserLogService } from './log.service';
+import { User } from '../info/users.model';
 
 @Component({
   selector: 'app-user-log',
   templateUrl: './log.component.html',
 })
-export class UserLogsComponent {
+export class UserLogsComponent extends BaseComponent {
 
-  private sub: any;
-  public Item: User = {} as User;
-  @ViewChild('PaymentView') private payment_list: TableViewComponent | undefined;
+  columns_info: EntitySchema = Titles.list;
+  columns_schema: TimeLineSchema = Titles.schema;
+  @Input('item') UserItem: User = {} as User;
+  Item: UserLog = {
+    content: '',
+  } as UserLog;
+  @ViewChild('timeLineView') private widget_view: TimeLineViewComponent | undefined;
 
   constructor(
-    private readonly service: UsersService,
-    private readonly payment_srv: PaymentsService,
-    private readonly route: ActivatedRoute,
-    public readonly profile_srv: ProfilesService,
-    public readonly realms_srv: RealmsService) {
+    private readonly service: UserLogService) {
+    super();
   }
 
-  ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      if ('id' in params) {
-        this.service.Get(+params['id']).subscribe({
-          next: (result: User) => this.Item = result,
-          error: console.error
-        });
-      }
-    });
+  Colors = [
+    { title: UIColors[UIColors.secondary], id: UIColors.secondary },
+    { title: UIColors[UIColors.primary], id: UIColors.primary },
+    { title: UIColors[UIColors.danger], id: UIColors.danger },
+    { title: UIColors[UIColors.dark], id: UIColors.dark },
+    { title: UIColors[UIColors.info], id: UIColors.info },
+    { title: UIColors[UIColors.light], id: UIColors.light },
+    { title: UIColors[UIColors.success], id: UIColors.success },
+    { title: UIColors[UIColors.warning], id: UIColors.warning },
+  ];
 
-    this.payment_srv?.List(null).subscribe({
-      next: (result: any[]) => this.payment_list?.SetDataSource(result),
+  ngOnInit(): void {
+    if (!this.UserItem || !this.UserItem.id) {
+      throw 'UserItem is not set.';
+    }
+
+    this.Item.permanentUserId = this.UserItem.id;
+    this.Item.witer = 53;
+
+    let query = {
+      Filters: [{
+        Name: "PermanentUserId",
+        Value: this.UserItem.id
+      }]
+    } as ListQuery;
+
+    this.service.List(query).subscribe({
+      next: (result: any[]) => this.widget_view?.SetDataSource(result),
       error: console.error
     });
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
+  Submit() {
+  }
+
+  Delete(item: UserLog) {
+    this.service.Delete(item.id).subscribe({
+      next: (result: Result) => {
+        if (result.status >= ResultStatus.Invalid)
+          console.error(result);
+
+        this.ngOnInit();
+      },
+      error: console.error
+    });
   }
 
 }

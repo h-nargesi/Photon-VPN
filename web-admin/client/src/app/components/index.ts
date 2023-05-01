@@ -9,6 +9,8 @@ export * from './basical/base.models';
 export * from './list/table-view/table-view.component';
 export * from './list/widget-view/widget-view.component';
 export * from './list/widget-view/widget-view.model';
+export * from './list/time-line-view/time-line-view.component';
+export * from './list/time-line-view/time-line-view.model';
 export * from './form/form-buttons/form-buttons.component';
 export * from './form/selector/select.component';
 export * from './components.module';

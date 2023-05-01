@@ -1,6 +1,6 @@
 import { UIColors } from '../../components';
 
-export interface PermanentUserLog {
+export interface UserLog {
   id: number;
   permanentUserId: number;
   witer: number;

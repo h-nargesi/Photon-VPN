@@ -17,6 +17,7 @@ export class UserListComponent {
   data_projection(data: any[]): any[] {
     for (var user of data) {
       user.toDate = BaseComponent.getRemain(user.toDate);
+      user.fromDate = BaseComponent.getDateString(user.fromDate);
     }
 
     return data;
