@@ -312,7 +312,7 @@ public partial class RdContext : DbContext
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySQL("Name=ConnectionStrings:default");
+        => optionsBuilder.UseMySQL("server=37.32.9.55;uid=photon;pwd=znf42CYfWhA3st7w;database=rd;Convert Zero Datetime=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
