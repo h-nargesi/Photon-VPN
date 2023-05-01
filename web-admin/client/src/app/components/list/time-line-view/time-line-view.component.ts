@@ -22,11 +22,11 @@ export class TimeLineViewComponent extends ListViewComponent {
   protected selectable: boolean = false;
 
   GetTime(data: Data): string {
-    const created = this.GetColumn('created', data) as Date;
-    const modified = this.GetColumn('modified', data) as Date;
+    const created = new Date(Date.parse(this.GetColumn('created', data)));
+    const modified = new Date(Date.parse(this.GetColumn('modified', data)));
     let result = BaseComponent.getDateTimeString(created);
 
-    if (created.getTime() >= modified.getTime())
+    if (created && modified && created.getTime() >= modified.getTime())
       result = `created:${result} / modified:${BaseComponent.getDateTimeString(modified)}`;
 
     return result;

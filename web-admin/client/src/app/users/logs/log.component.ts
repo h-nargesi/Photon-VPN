@@ -13,13 +13,9 @@ export class UserLogsComponent extends BaseComponent {
 
   columns_info: EntitySchema = Titles.list;
   columns_schema: TimeLineSchema = Titles.schema;
-  @Input('item') UserItem: User = {} as User;
-  Item: UserLog = {
-    color: 0,
-    content: '',
-    created: new Date(),
-  } as UserLog;
-  @ViewChild('timeLineView') private widget_view: TimeLineViewComponent | undefined;
+  UserItem: User = {} as User;
+  Item: UserLog = UserLogsComponent.InitalizeModel();
+  @ViewChild('timeLineView') private time_line_view: TimeLineViewComponent | undefined;
 
   constructor(
     private readonly service: UserLogService) {
@@ -37,26 +33,51 @@ export class UserLogsComponent extends BaseComponent {
     { title: UIColors[UIColors.warning], id: UIColors.warning },
   ];
 
-  ngOnInit(): void {
-    if (!this.UserItem || !this.UserItem.id) return;
+  Reload(user: User | undefined = undefined): void {
+    if (user) this.UserItem = user;
 
-    this.Item.permanentUserId = this.UserItem.id;
-    this.Item.witer = 53;
+    if (!this.UserItem || !this.UserItem.id) {
+      throw 'permanentUserId is not set';
+    }
 
     let query = {
-      Filters: [{
-        Name: "PermanentUserId",
-        Value: this.UserItem.id
-      }]
+      Start: 0,
+      Limit: 1000,
+      Search: null,
+      Filters: {
+        permanent_user_id: { Type: null, Value: this.UserItem.id.toString() }
+      },
+      Ordering: null,
+      Columns: null,
     } as ListQuery;
 
     this.service.List(query).subscribe({
-      next: (result: any[]) => this.widget_view?.SetDataSource(result),
+      next: (result: any[]) => {
+        this.time_line_view?.SetDataSource(result)
+      },
       error: console.error
     });
   }
 
   Submit() {
+    if (!this.UserItem || !this.UserItem.id) {
+      throw 'permanentUserId is not set';
+    }
+
+    this.Item.permanentUserId = this.UserItem.id;
+
+    console.log(this.Item);
+
+    this.service.Modify(this.Item).subscribe({
+      next: (result: Result) => {
+        if (result.status >= ResultStatus.Invalid) console.error(result);
+        else {
+          this.Item = UserLogsComponent.InitalizeModel();
+          this.Reload();
+        }
+      },
+      error: console.error
+    });
   }
 
   Delete(item: UserLog) {
@@ -65,10 +86,18 @@ export class UserLogsComponent extends BaseComponent {
         if (result.status >= ResultStatus.Invalid)
           console.error(result);
 
-        this.ngOnInit();
+        this.Reload();
       },
       error: console.error
     });
   }
 
+  static InitalizeModel(): UserLog {
+    return {
+      witer: 53,
+      color: 0,
+      content: '',
+      created: new Date(),
+    } as UserLog;
+  }
 }

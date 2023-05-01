@@ -1,5 +1,5 @@
 <c-row>
-  <c-col md="3">
+  <c-col lg="3" class=" md-3">
     <c-card class="text-center" [cBorder]="{top: {color: 'primary', width: 3}}">
       <c-card-body>
         <h5 cCardTitle *ngIf="Item.surname ?? Item.name ? true : false">
@@ -29,7 +29,7 @@
       </c-card-body>
     </c-card>
   </c-col>
-  <c-col md="9">
+  <c-col lg="9">
     <c-card>
       <c-card-header ngPreserveWhitespaces>
         <strong>User</strong> <small>{{ Item.id ? "edit" : "add" }}</small>
@@ -44,12 +44,12 @@
       <c-card-body>
         <c-tab-content #tabContent="cTabContent">
           <c-tab-pane>
-            This is some placeholder content the <strong>Home</strong> tab's associated content. Clicking another tab
+            This is some placeholder content the <strong>Plans</strong> tab's associated content. Clicking another tab
             will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
             content visibility and styling. You can use it with tabs, pills, and any other .nav-powered navigation.
           </c-tab-pane>
           <c-tab-pane>
-            <app-user-log [item]="Item"></app-user-log>
+            <app-user-log #UserLogs></app-user-log>
           </c-tab-pane>
           <c-tab-pane>
             <app-user-info [item]="Item"></app-user-info>

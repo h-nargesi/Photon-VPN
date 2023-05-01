@@ -32,7 +32,6 @@ export class TablePageComponent extends BaseComponent {
     protected override readonly cookies: CookieService) {
     super();
     this.path = router.url;
-    console.log('router.url', router.url);
   }
 
   ngOnInit(): void {

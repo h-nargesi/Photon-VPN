@@ -13,7 +13,7 @@ public class UserLogs : Controller
     {
         using var db = new RdContext();
 
-        var query = db.PermanentUserLogs.AsNoTracking();
+        var query = db.PermanentUserLogs.AsNoTracking().OrderByDescending(c => c.Id);
 
         var result = await filter.ApplyFilter(query, db);
 
