@@ -25,7 +25,7 @@
               {{ titleOf('shortname') }}
             </label>
             <c-col md="5">
-              <input cFormControl id="form_shortname" type="text" [value]="Item.shortname"
+              <input cFormControl id="form_shortname" type="text" [value]="Item.shortname ?? ''"
                 (change)="Item.shortname = val($event)" />
             </c-col>
           </c-row>

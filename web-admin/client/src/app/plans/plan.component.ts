@@ -12,7 +12,7 @@ import { BaseComponent, EntitySchema, Result, ResultStatus, UIColors } from '../
 export class PlanComponent extends BaseComponent {
 
   private sub: any;
-  private item: Plan = { title: '', active: true } as Plan;
+  private item: Plan = { title: '', active: true, created: new Date() } as Plan;
   public columns_info: EntitySchema = Titles.list;
 
   Colors = [

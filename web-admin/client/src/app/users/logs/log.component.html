@@ -4,7 +4,7 @@
             {{ titleOf('title') }}
         </label>
         <c-col md="6">
-            <input cFormControl id="form_title" type="text" [value]="Item.title"
+            <input cFormControl id="form_title" type="text" [value]="Item.title ?? ''"
                 (change)="Item.title = val($event)" />
         </c-col>
     </c-row>

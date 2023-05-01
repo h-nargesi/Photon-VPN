@@ -74,7 +74,7 @@
       {{ titleOf('name') }}
     </label>
     <c-col md="6">
-      <input cFormControl id="form_name" type="text" [value]="Item.name"
+      <input cFormControl id="form_name" type="text" [value]="Item.name ?? ''"
              (change)="Item.name = val($event)" />
     </c-col>
   </c-row>
@@ -83,7 +83,7 @@
       {{ titleOf('surname') }}
     </label>
     <c-col md="6">
-      <input cFormControl id="form_surname" type="text" [value]="Item.surname"
+      <input cFormControl id="form_surname" type="text" [value]="Item.surname ?? ''"
              (change)="Item.surname = val($event)" />
     </c-col>
   </c-row>
@@ -92,7 +92,7 @@
       {{ titleOf('phone') }}
     </label>
     <c-col md="6">
-      <input cFormControl id="form_phone" type="phone" [value]="Item.phone"
+      <input cFormControl id="form_phone" type="phone" [value]="Item.phone ?? ''"
              (change)="Item.phone = val($event)" />
     </c-col>
   </c-row>
@@ -101,7 +101,7 @@
       {{ titleOf('email') }}
     </label>
     <c-col md="6">
-      <input cFormControl id="form_email" type="email" [value]="Item.email"
+      <input cFormControl id="form_email" type="email" [value]="Item.email ?? ''"
              (change)="Item.email = val($event)" />
     </c-col>
   </c-row>
@@ -110,7 +110,7 @@
       {{ titleOf('address') }}
     </label>
     <c-col md="8">
-      <textarea cFormControl id="form_address" rows="3" [value]="Item.address"
+      <textarea cFormControl id="form_address" rows="3" [value]="Item.address ?? ''"
                 (change)="Item.address = val($event)"></textarea>
     </c-col>
   </c-row>

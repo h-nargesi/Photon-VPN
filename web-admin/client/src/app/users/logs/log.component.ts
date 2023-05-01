@@ -15,7 +15,9 @@ export class UserLogsComponent extends BaseComponent {
   columns_schema: TimeLineSchema = Titles.schema;
   @Input('item') UserItem: User = {} as User;
   Item: UserLog = {
+    color: 0,
     content: '',
+    created: new Date(),
   } as UserLog;
   @ViewChild('timeLineView') private widget_view: TimeLineViewComponent | undefined;
 
@@ -36,9 +38,7 @@ export class UserLogsComponent extends BaseComponent {
   ];
 
   ngOnInit(): void {
-    if (!this.UserItem || !this.UserItem.id) {
-      throw 'UserItem is not set.';
-    }
+    if (!this.UserItem || !this.UserItem.id) return;
 
     this.Item.permanentUserId = this.UserItem.id;
     this.Item.witer = 53;

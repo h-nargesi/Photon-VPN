@@ -17,6 +17,7 @@ export class PaymentComponent extends BaseComponent {
     trnsactionId: '',
     approved: true,
     dateTime: new Date(),
+    created: new Date(),
   } as Payment;
   public columns_info: EntitySchema = Titles.list;
   @ViewChild('userSelector') private user_selector: SelectComponent | undefined;

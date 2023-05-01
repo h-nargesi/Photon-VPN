@@ -14,7 +14,12 @@ import { UsersService } from './users.service';
 export class UserComponent extends BaseComponent {
 
   private sub: any;
-  public Item: User = {} as User;
+  public Item: User = {
+    active: true,
+    username: '',
+    password: '',
+    created: new Date(),
+  } as User;
   public columns_info: EntitySchema = Titles.list;
 
   constructor(

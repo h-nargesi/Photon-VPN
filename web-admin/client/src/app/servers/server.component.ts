@@ -12,7 +12,14 @@ import Titles from './servers.json';
 export class ServerComponent extends BaseComponent {
 
   private sub: any;
-  private item: Server = {} as Server;
+  private item: Server = {
+    nasname: '',
+    nasidentifier: '',
+    type: 'other',
+    secret: '',
+    heartbeatDeadAfter: 3600,
+    created: new Date(),
+  } as Server;
   public columns_info: EntitySchema = Titles.list;
 
   constructor(

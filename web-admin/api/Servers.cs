@@ -43,6 +43,7 @@ public class Servers : Controller
 
         if (original == null)
         {
+            na.Timezone = "262";
             na.Created = na.Modified = DateTime.Now;
 
             await db.Nas.AddAsync(na);
