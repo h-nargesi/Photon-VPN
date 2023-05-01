@@ -14,10 +14,10 @@ create table payments (
 	approved			tinyint(1)		not null	default 0,
 	
 	value				decimal(16)		not null,
-	trnsaction_id		varchar(24)		not null,
-	date_time			datetime		not null	default current_timestamp,
-	bank_name			varchar(255)	not null,
-	bank_account		varchar(255)	not null,
+	trnsaction_id		varchar(24)			null,
+	date_time			datetime			null,
+	bank_name			varchar(255)		null,
+	bank_account		varchar(255)		null,
 
 	created				datetime		not null	default current_timestamp,
 

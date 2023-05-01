@@ -94,4 +94,28 @@ public class Payments : Controller
 
         return Ok(Result.Success());
     }
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> Transaction([FromRoute] string id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
+        using var db = new RdContext();
+
+        var model = await db.Payments.AsNoTracking()
+                                     .Where(c => c.TrnsactionId == id)
+                                     .Select(c => new
+                                     {
+                                         c.DateTime,
+                                         c.BankName,
+                                         c.BankAccount
+                                     })
+                                     .FirstOrDefaultAsync();
+
+        return Ok(model);
+    }
 }

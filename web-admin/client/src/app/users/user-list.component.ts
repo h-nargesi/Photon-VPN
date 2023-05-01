@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { BaseComponent, EntitySchema } from '../components';
 import { UsersService } from './users.service';
-import Titles from './users.json';
-import { User } from './users.model';
+import Titles from './info/users.json';
 
 @Component({
   selector: 'app-user-list',

@@ -10,13 +10,13 @@ namespace Photon.Service.VPN.Handlers;
 public class Membership : Controller
 {
     [HttpGet]
-    public async Task<IActionResult> Plans([FromQuery] int user_id)
+    public async Task<IActionResult> Balance([FromQuery] int user_id)
     {
         using var db = new RdContext();
 
         var plans = from pk in db.Packages.AsNoTracking()
                     join pl in db.Plans.AsNoTracking()
-                            on pk.ProfileId equals pl.Id
+                            on pk.PlanId equals pl.Id
                     select new
                     {
                         pl.Id,
@@ -25,10 +25,35 @@ public class Membership : Controller
                         pk.ProfileId,
                     };
 
+        var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
+                                where rad.Attribute == ""
+                                select new
+                                {
+                                    rad.Groupname,
+                                    rad.Value
+                                };
+
+        var profiles = from pr in from pr in db.Profiles.AsNoTracking()
+                                  select new
+                                  {
+                                      pr.Id,
+                                      pr.Name,
+                                      Key = "Sample_Code_" + pr.Id,
+                                  }
+                       let SimulateCount = rad_group_replies.Where(c => c.Groupname == pr.Key)
+                                                            .Select(c => (int?)int.Parse(c.Value))
+                                                            .FirstOrDefault()
+                       select new
+                       {
+                           pr.Id,
+                           pr.Name,
+                           PriceFactor = SimulateCount ?? 0,
+                       };
+
         var query = from up in db.PermanentUserPlans.AsNoTracking()
                     where up.PermanentUserId == user_id
 
-                    join pr in db.Profiles.AsNoTracking()
+                    join pr in profiles
                             on up.ProfileId equals pr.Id
 
                     join pl in plans
@@ -39,12 +64,12 @@ public class Membership : Controller
                     {
                         PlanId = pl.Id,
                         ProfileId = pr.Id,
-                        Name = pr.Name,
-                        ValidTime = up.ValidTime,
-                        Price = up.OverridePrice ?? pl.Price,
-                        Color = pl.Color,
-                        Created = up.Created,
-                        Modified = up.Modified,
+                        pr.Name,
+                        up.ValidTime,
+                        Price = up.OverridePrice ?? (pl.Price * pr.PriceFactor),
+                        pl.Color,
+                        up.Created,
+                        up.Modified,
                     };
 
         return Ok(await query.FirstOrDefaultAsync());

@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { RealmsService } from '../../global-services/realms.service';
 import { ProfilesService } from '../../profiles/profiles.service';
 import { BaseComponent, EntitySchema, Result, ResultStatus } from '../../components';
-import Titles from '../users.json';
-import { User } from '../users.model';
+import Titles from './users.json';
+import { User } from './users.model';
 import { UsersService } from '../users.service';
 
 @Component({
