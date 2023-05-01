@@ -30,7 +30,18 @@ public static class DatabaseExtension
             result.Add(record);
 
             for (var i = 0; i < reader.FieldCount; i++)
-                peroperties[reader.GetName(i)].SetValue(record, reader.GetValue(i));
+            {
+                if (!peroperties.TryGetValue(reader.GetName(i).Replace("_", ""), out var property))
+                {
+                    if (!peroperties.TryGetValue(reader.GetName(i), out property))
+                    {
+                        throw new Exception($"The property ({reader.GetName(i)}) not found in type ({typeof(T).Name})");
+                    }
+                }
+                
+                var value = reader.GetValue(i);
+                property.SetValue(record, value is DBNull ? null : value);
+            }
         }
 
         return result;
