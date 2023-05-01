@@ -9,7 +9,7 @@ export interface ListQuery {
 
 export interface Filter {
     Name: string,
-    Value: string,
+    Value: any,
 }
 
 export interface Result {
