@@ -1,4 +1,4 @@
-<c-alert *ngFor="let row of DataSource;" color="GetColor(row)">
+<c-alert *ngFor="let row of DataSource;" [color]="GetColor(row)" (click)="edit.emit(row)">
   <h4 cAlertHeading *ngIf="HasColumn('title', row)">{{ GetColumn('title', row) }}</h4>
   <p>{{ GetColumn('content', row) }}</p>
   <hr />

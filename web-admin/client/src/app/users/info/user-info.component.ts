@@ -1,11 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { BaseComponent, EntitySchema, Result, ResultStatus } from '../../components';
 import { RealmsService } from '../../global-services/realms.service';
 import { ProfilesService } from '../../profiles/profiles.service';
-import { BaseComponent, EntitySchema, Result, ResultStatus } from '../../components';
+import { UsersService } from '../users.service';
 import Titles from './users.json';
 import { User } from './users.model';
-import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-user-info',
@@ -18,7 +17,6 @@ export class UserInfoComponent extends BaseComponent {
 
   constructor(
     private readonly service: UsersService,
-    private readonly router: Router,
     public readonly profile_srv: ProfilesService,
     public readonly realms_srv: RealmsService) {
     super();
@@ -37,15 +35,4 @@ export class UserInfoComponent extends BaseComponent {
     });
   }
 
-  Delete() {
-    if (!this.Item.id) return;
-
-    this.service.Delete(this.Item.id).subscribe({
-      next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['users']);
-      },
-      error: console.error
-    });
-  }
 }

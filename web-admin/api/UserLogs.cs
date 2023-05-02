@@ -9,7 +9,7 @@ namespace Photon.Service.VPN.Handlers;
 public class UserLogs : Controller
 {
     [HttpPost]
-    [Route("{id:int}")]
+    [Route("{user_id:int}")]
     public async Task<IActionResult> List([FromRoute] int user_id, [FromBody] ListQuery filter)
     {
         using var db = new RdContext();

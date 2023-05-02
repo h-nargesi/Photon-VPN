@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BaseComponent, EntitySchema } from '../components';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent, EntitySchema, Result, ResultStatus } from '../components';
 import { RealmsService } from '../global-services/realms.service';
 import { ProfilesService } from '../profiles/profiles.service';
 import Titles from './info/users.json';
 import { User } from './info/users.model';
-import { UsersService } from './users.service';
 import { UserLogsComponent } from './logs/log.component';
+import { UsersService } from './users.service';
 
 @Component({
   selector: 'app-user',
@@ -27,6 +27,7 @@ export class UserComponent extends BaseComponent {
   constructor(
     private readonly service: UsersService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     public readonly profile_srv: ProfilesService,
     public readonly realms_srv: RealmsService) {
     super();
@@ -50,4 +51,15 @@ export class UserComponent extends BaseComponent {
     this.sub.unsubscribe();
   }
 
+  Delete() {
+    if (!this.Item.id) return;
+
+    this.service.Delete(this.Item.id).subscribe({
+      next: (result: Result) => {
+        if (result.status >= ResultStatus.Invalid) console.error(result);
+        else this.router.navigate(['users']);
+      },
+      error: console.error
+    });
+  }
 }

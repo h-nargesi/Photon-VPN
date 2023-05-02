@@ -8,8 +8,12 @@ import {
     ButtonModule,
     CardModule,
     DropdownModule,
-    GridModule, ModalModule, ProgressModule,
-    SharedModule, TableModule, WidgetModule
+    GridModule, 
+    ModalModule, 
+    ProgressModule,
+    SharedModule, 
+    TableModule, 
+    WidgetModule,
 } from '@coreui/angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
 import { IconModule } from '@coreui/icons-angular';

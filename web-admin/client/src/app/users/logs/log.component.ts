@@ -45,6 +45,10 @@ export class UserLogsComponent extends BaseComponent {
     });
   }
 
+  Selected(userLog: UserLog) {
+    this.Item = userLog;
+  }
+
   Submit() {
     if (!this.UserItem || !this.UserItem.id) {
       throw 'user-id is not set';
@@ -66,12 +70,17 @@ export class UserLogsComponent extends BaseComponent {
     });
   }
 
-  Delete(item: UserLog) {
-    this.service.Delete(item.id).subscribe({
+  Cancel() {
+    this.Item = UserLogsComponent.InitalizeModel();
+  }
+
+  Delete() {
+    this.service.Delete(this.Item.id).subscribe({
       next: (result: Result) => {
         if (result.status >= ResultStatus.Invalid)
           console.error(result);
 
+        this.Cancel();
         this.Reload();
       },
       error: console.error
