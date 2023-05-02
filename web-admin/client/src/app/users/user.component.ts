@@ -36,19 +36,24 @@ export class UserComponent extends BaseComponent {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
-        this.service.Get(+params['id']).subscribe({
-          next: (result: User) => {
-            this.Item = result;
-            this.user_logs?.Reload(result);
-          },
-          error: console.error
-        });
+        this.Item.id = +params['id'];
+        this.Reload();
       }
     });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  Reload() {
+    this.service.Get(this.Item.id).subscribe({
+      next: (result: User) => {
+        this.Item = result;
+        this.user_logs?.Reload(result);
+      },
+      error: console.error
+    });
   }
 
   Delete() {

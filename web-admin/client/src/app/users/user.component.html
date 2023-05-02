@@ -24,13 +24,13 @@
           <dd class="col-sm-9 text-end">{{ getRemain(Item.toDate) }}</dd>
         </dl>
         <div class="mx-3 mb-1" style="position: relative; display: inline-block; vertical-align: middle;">
-          <button cButton class="me-1 mb-1" variant="outline" color="secondary">
+          <button cButton routerLink="/users" class="me-1 mb-1" variant="outline" color="secondary">
               <svg cIcon name="cilArrowLeft" title="Cancel" size="2xl"></svg>
           </button>
-          <button cButton class="me-1 mb-1" variant="outline" color="secondary">
+          <button cButton (click)="Reload()" class="me-1 mb-1" variant="outline" color="secondary">
               <svg cIcon name="cilReload" title="cilReload" size="2xl"></svg>
           </button>
-          <button cButton class="me-1 mb-1" variant="outline" color="danger">
+          <button cButton [cModalToggle]="UserConfirmDelete.id" class="me-1 mb-1" variant="outline" color="danger">
             <svg cIcon name="cilTrash" title="Delete" size="2xl"></svg>
           </button>
           <button cButton class="me-1 mb-1" variant="outline" color="primary">
@@ -39,7 +39,7 @@
           <button cButton class="me-1 mb-1" variant="outline" color="success">
             <svg cIcon name="cilChartLine" title="cilChartLine" size="2xl"></svg>
           </button>
-          <button cButton class="me-1 mb-1" variant="outline" [routerLink]="'/paymets/edit/user/' + Item.id" color="info">
+          <button cButton [routerLink]="'/paymets/edit/user/' + Item.id" class="me-1 mb-1" variant="outline" color="info">
             <svg cIcon name="cilMoney" title="Payment" size="2xl"></svg>
           </button>
           <button cButton class="me-1 mb-1" variant="outline" color="info">
@@ -48,6 +48,19 @@
           <button cButton class="me-1 mb-1" variant="outline" color="info">
             <svg cIcon name="cibWhatsapp" title="Send to Whatsapp" size="2xl"></svg>
           </button>
+          <c-modal #UserConfirmDelete alignment="center" id="UserConfirmDelete">
+            <c-modal-header>
+              <h5 cModalTitle>Delete Confirm</h5>
+              <button [cModalToggle]="UserConfirmDelete.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+              Deleting Item
+            </c-modal-body>
+            <c-modal-footer>
+              <button cButton [cModalToggle]="UserConfirmDelete.id" color="secondary">Close</button>
+              <button cButton [cModalToggle]="UserConfirmDelete.id" color="danger" (click)="Delete()">Delete</button>
+            </c-modal-footer>
+          </c-modal>
         </div>
       </c-card-body>
     </c-card>
