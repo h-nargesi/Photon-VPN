@@ -36,6 +36,24 @@ public class ListQuery
         return db.ReadSql<T>(query_string.ToString(), Filters);
     }
 
+    public async Task<int> ExecuteFilterCount<T>(IQueryable<T> query, RdContext db)
+    {
+        if (!HasFiltering())
+        {
+            return await ApplyRecordLimits(query).CountAsync();
+        }
+
+        var query_string = new StringBuilder(query.ToQueryString());
+
+        ApplyCount(query_string);
+        ApplyWhere(query_string);
+        ApplyOrdering(query_string, typeof(T));
+
+        var result = await db.ReadSql<int>(query_string.ToString(), Filters);
+
+        return result.First();
+    }
+
     private bool HasFiltering()
     {
         return !string.IsNullOrEmpty(Search) || Filters?.Count > 0 || Ordering?.Count > 0 || Columns?.Length > 0;
@@ -63,6 +81,11 @@ public class ListQuery
         else selection = string.Join(",", Columns);
 
         query.Insert(0, " FROM (\n").Insert(0, selection).Insert(0, "SELECT ").Append("\n) qs\n");
+    }
+
+    private void ApplyCount(StringBuilder query)
+    {
+        query.Insert(0, "SELECT COUNT(1) FROM (\n").Append("\n) qs\n");
     }
 
     private void ApplyWhere(StringBuilder query)
