@@ -1,48 +1,38 @@
-import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { TableViewComponent } from '../components';
-import { RealmsService } from '../global-services/realms.service';
-import { PaymentsService } from '../payments/payments.service';
-import { ProfilesService } from '../profiles/profiles.service';
-import { User } from './users.model';
-import { UsersService } from './users.service';
+import { Component } from '@angular/core';
+import { User } from '../info/users.model';
+import { Invoice, Membership } from './membership.model';
+import { MembershipService } from './membership.service';
 
 @Component({
-  selector: 'app-user-log',
+  selector: 'app-user-invoice',
   templateUrl: './membership.component.html',
 })
 export class MembershipComponent {
 
-  private sub: any;
-  public Item: User = {} as User;
-  @ViewChild('PaymentView') private payment_list: TableViewComponent | undefined;
+  UserItem: User = {} as User;
+  Item: Membership = MembershipComponent.InitalizeModel();
 
-  constructor(
-    private readonly service: UsersService,
-    private readonly payment_srv: PaymentsService,
-    private readonly route: ActivatedRoute,
-    public readonly profile_srv: ProfilesService,
-    public readonly realms_srv: RealmsService) {
-  }
+  constructor(private readonly service: MembershipService) { }
 
-  ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      if ('id' in params) {
-        this.service.Get(+params['id']).subscribe({
-          next: (result: User) => this.Item = result,
-          error: console.error
-        });
-      }
-    });
+  Reload(user: User | undefined = undefined): void {
+    if (user) this.UserItem = user;
 
-    this.payment_srv?.List(null).subscribe({
-      next: (result: any[]) => this.payment_list?.SetDataSource(result),
+    if (!this.UserItem || !this.UserItem.id) {
+      throw 'user-id is not set';
+    }
+
+    this.service.Balance(this.UserItem.id).subscribe({
+      next: (result: any[]) => this.SetDataSource(result),
       error: console.error
     });
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
+  SetDataSource(invoice: Invoice[]) {
+
   }
 
+  static InitalizeModel(): Membership {
+    return {
+    } as Membership;
+  }
 }

@@ -1,22 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseService, LGMDService } from '../../components';
-import { Membership } from './membership.model';
+import { BaseService, Result } from '../../components';
+import { Invoice, Membership } from './membership.model';
 
 @Injectable({
-	providedIn: 'root',
+  providedIn: 'root',
 })
-export class MembershipService extends BaseService implements LGMDService {
+export class MembershipService extends BaseService {
 
-	constructor(
-		http: HttpClient,
-		@Inject('API_URL') api_url: string,
-		@Inject('BASE_URL') base_url: string) {
+  constructor(
+    http: HttpClient,
+    @Inject('API_URL') api_url: string,
+    @Inject('BASE_URL') base_url: string) {
     super(http, api_url, base_url, 'api/membership/');
-	  }
+  }
 
-	public Plans(user_id: number): Observable<Membership> {
-    return this.http.get<Membership>(this.module_url + 'plans', { params: { user_id: user_id } });
-	}
+  public Balance(user_id: number): Observable<Invoice[]> {
+    return this.http.get<Invoice[]>(this.module_url + 'balance' + user_id);
+  }
+
+  public Add(entity: Membership): Observable<Result> {
+    return this.http.post<Result>(this.module_url + 'add', entity);
+  }
+
+  public Delete(id: number): Observable<Result> {
+    return this.http.post<Result>(this.module_url + 'delete', id);
+  }
 }

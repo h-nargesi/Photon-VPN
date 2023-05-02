@@ -17,6 +17,7 @@
             </label>
             <c-col md="5">
               <select app-select cSelect #userSelector aria-label="User" id="form_permanentUserId"
+                [attr.disabled]="Item.permanentUserId ? '' : null"
                 [value]="Item.permanentUserId" [lazy-load]="true" (focus)="LoadUsers()"
                 (change)="Item.permanentUserId = val($event)" [service]="users_srv">
               </select>

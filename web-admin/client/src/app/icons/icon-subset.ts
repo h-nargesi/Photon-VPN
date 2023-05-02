@@ -100,6 +100,8 @@ import {
   cilActionUndo,
   cilLinkBroken,
   cilX,
+  cilMoney,
+  cibWhatsapp,
 } from '@coreui/icons';
 
 export const iconSubset = {
@@ -204,6 +206,8 @@ export const iconSubset = {
   cilActionUndo,
   cilLinkBroken,
   cilX,
+  cilMoney,
+  cibWhatsapp,
 };
 
 export enum IconSubset {
@@ -308,4 +312,6 @@ export enum IconSubset {
   cilLinkBroken = 'cilLinkBroken',
   cilX = "cilX",
   cilChartLine = 'cilChartLine',
+  cilMoney = "cilMoney",
+  cibWhatsapp = "cibWhatsapp",
 }

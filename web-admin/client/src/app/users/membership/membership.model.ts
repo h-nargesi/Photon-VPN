@@ -1,20 +1,19 @@
-import { UIColors } from "../../components"
+import { UIColors } from '../../components';
+import { Payment } from '../../payments/payments.model';
 
-export interface PermanentUserPlan {
-    permanentUserId: number,
-    validTime: Date,
-    profileId: number,
-    overridePrice: number | null,
-    created: Date,
+export interface Invoice {
+  balance: number,
+  plan: Membership | null,
+  payments: Payment[],
 }
 
 export interface Membership {
-    planId: number,
-    profileId: number,
-    name: string,
-    validTime: Date,
-    price: number,
-    color: UIColors,
-    created: Date,
-    modified: Date,
+  planId: number,
+  profileId: number,
+  name: string,
+  validTime: Date,
+  price: number,
+  color: UIColors,
+  created: Date,
+  modified: Date,
 }

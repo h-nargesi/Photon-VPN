@@ -39,6 +39,7 @@ import { UserListComponent } from './user-list.component';
 import { UserComponent } from './user.component';
 import { UserInfoComponent } from './info/user-info.component';
 import { UserLogsComponent } from './logs/log.component';
+import { MembershipComponent } from './membership/membership.component';
 
 // Components Routing
 import { UsersRoutingModule } from './users-routing.module';
@@ -49,6 +50,7 @@ import { UsersRoutingModule } from './users-routing.module';
     UserComponent,
     UserInfoComponent,
     UserLogsComponent,
+    MembershipComponent,
   ],
   imports: [
     CommonModule,

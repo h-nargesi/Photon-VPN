@@ -1,5 +1,5 @@
 <c-row>
-  <c-col lg="3" class=" md-3">
+  <c-col lg="3" class=" mb-3">
     <c-card class="text-center" [cBorder]="{top: {color: 'primary', width: 3}}">
       <c-card-body>
         <h5 cCardTitle *ngIf="Item.surname ?? Item.name ? true : false">
@@ -23,9 +23,23 @@
           <dt class="col-sm-3 text-start">to</dt>
           <dd class="col-sm-9 text-end">{{ getRemain(Item.toDate) }}</dd>
         </dl>
-
-        <button cButton color="primary" class="mb-3">Send Email</button>
-        <button cButton color="primary" class="mb-3">Send Whats App</button>
+        <c-button-group class="me-3">
+          <button cButton variant="outline" [routerLink]="'/paymets/edit/user/' + Item.id" color="warning">
+            <svg cIcon name="cilMoney" title="Payment" size="2xl"></svg>
+          </button>
+          <button cButton variant="outline" color="danger">
+            <svg cIcon name="cilEnvelopeClosed" title="Send to Email" size="2xl"></svg>
+          </button>
+          <button cButton variant="outline" color="danger">
+            <svg cIcon name="cibWhatsapp" title="Send to Whatsapp" size="2xl"></svg>
+          </button>
+          <button cButton variant="outline" color="primary">
+            <svg cIcon name="cilChart" title="cilChart" size="2xl"></svg>
+          </button>
+          <button cButton variant="outline" color="success">
+            <svg cIcon name="cilChartLine" title="cilChartLine" size="2xl"></svg>
+          </button>
+        </c-button-group>
       </c-card-body>
     </c-card>
   </c-col>
@@ -44,9 +58,7 @@
       <c-card-body>
         <c-tab-content #tabContent="cTabContent">
           <c-tab-pane>
-            This is some placeholder content the <strong>Plans</strong> tab's associated content. Clicking another tab
-            will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
-            content visibility and styling. You can use it with tabs, pills, and any other .nav-powered navigation.
+            <app-user-invoice></app-user-invoice>
           </c-tab-pane>
           <c-tab-pane>
             <app-user-log #UserLogs></app-user-log>

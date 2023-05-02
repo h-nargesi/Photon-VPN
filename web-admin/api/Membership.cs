@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
+using System.Numerics;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -10,9 +11,17 @@ namespace Photon.Service.VPN.Handlers;
 public class Membership : Controller
 {
     [HttpGet]
-    public async Task<IActionResult> Balance([FromQuery] int user_id)
+    [Route("{user_id}")]
+    public async Task<IActionResult> Balance([FromRoute] int user_id)
     {
         using var db = new RdContext();
+
+        var user_payments_query = from py in db.Payments.AsNoTracking()
+                                  where py.PermanentUserId == user_id
+                                  orderby py.DateTime descending, py.Created descending
+                                  select py;
+
+        var user_payments_task = user_payments_query.ToListAsync();
 
         var plans = from pk in db.Packages.AsNoTracking()
                     join pl in db.Plans.AsNoTracking()
@@ -26,7 +35,7 @@ public class Membership : Controller
                     };
 
         var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
-                                where rad.Attribute == ""
+                                where rad.Attribute == "Simultaneous-Use"
                                 select new
                                 {
                                     rad.Groupname,
@@ -38,41 +47,103 @@ public class Membership : Controller
                                   {
                                       pr.Id,
                                       pr.Name,
-                                      Key = "Sample_Code_" + pr.Id,
+                                      Key = "SimpleAdd_" + pr.Id,
                                   }
                        let SimulateCount = rad_group_replies.Where(c => c.Groupname == pr.Key)
                                                             .Select(c => (int?)int.Parse(c.Value))
-                                                            .FirstOrDefault()
+                                                            .FirstOrDefault() ?? 0
                        select new
                        {
                            pr.Id,
                            pr.Name,
-                           PriceFactor = SimulateCount ?? 0,
+                           PriceFactor = SimulateCount <= 1 ? SimulateCount :
+                                         SimulateCount == 2 ? 1.9 :
+                                         SimulateCount == 3 ? 2.85 : (SimulateCount - 0.2),
                        };
 
-        var query = from up in db.PermanentUserPlans.AsNoTracking()
-                    where up.PermanentUserId == user_id
+        var user_plan_query = from up in db.PermanentUserPlans.AsNoTracking()
+                              where up.PermanentUserId == user_id
 
-                    join pr in profiles
-                            on up.ProfileId equals pr.Id
+                              join pr in profiles
+                                      on up.ProfileId equals pr.Id
 
-                    join pl in plans
-                            on up.ProfileId equals pl.ProfileId
+                              join pl in plans
+                                      on up.ProfileId equals pl.ProfileId
 
-                    orderby up.ValidTime descending, up.Created descending
-                    select new
-                    {
-                        PlanId = pl.Id,
-                        ProfileId = pr.Id,
-                        pr.Name,
-                        up.ValidTime,
-                        Price = up.OverridePrice ?? (pl.Price * pr.PriceFactor),
-                        pl.Color,
-                        up.Created,
-                        up.Modified,
-                    };
+                              orderby up.ValidTime descending, up.Created descending
+                              select new
+                              {
+                                  PlanId = pl.Id,
+                                  ProfileId = pr.Id,
+                                  pr.Name,
+                                  up.ValidTime,
+                                  Price = up.OverridePrice ?? (pl.Price * (decimal)pr.PriceFactor),
+                                  pl.Color,
+                                  up.Created,
+                                  up.Modified,
+                              };
 
-        return Ok(await query.FirstOrDefaultAsync());
+        var user_plan_task = user_plan_query.ToListAsync();
+
+        var user_payments = await user_payments_task;
+        var user_plan = await user_plan_task;
+
+        var plan_index = 0;
+        var balance = (decimal)0;
+        var invoice_payments = new List<Payment>();
+        var invoices = new List<object>();
+        foreach (var payment in user_payments)
+        {
+            balance += payment.Value;
+            invoice_payments.Add(payment);
+
+            if (user_plan.Count > plan_index && user_plan[plan_index].Price <= balance)
+            {
+                balance -= user_plan[plan_index].Price;
+
+                invoices.Add(new
+                {
+                    Balance = balance,
+                    Plan = user_plan[plan_index],
+                    Payments = invoice_payments,
+                });
+
+                invoice_payments = new List<Payment>();
+                plan_index++;
+            }
+        }
+
+        if (invoice_payments.Count > 0)
+        {
+            object? plan = null;
+            if (user_plan.Count > plan_index)
+            {
+                balance -= user_plan[plan_index].Price;
+                plan = user_plan[plan_index];
+                plan_index++;
+            }
+
+            invoices.Add(new
+            {
+                Balance = balance,
+                Plan = plan,
+                Payments = invoice_payments,
+            });
+        }
+
+        while (user_plan.Count > plan_index)
+        {
+            balance -= user_plan[plan_index].Price;
+            invoices.Add(new
+            {
+                Balance = balance,
+                Plan = user_plan[plan_index],
+                Payments = new Payment[0],
+            });
+            plan_index++;
+        }
+
+        return Ok(invoices);
     }
 
     [HttpPost]

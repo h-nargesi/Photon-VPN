@@ -32,6 +32,13 @@ const routes: Routes = [
           title: 'Edit Payment',
         },
       },
+      {
+        path: 'edit/user/:userid',
+        component: PaymentComponent,
+        data: {
+          title: 'Add Payment',
+        },
+      },
     ],
   },
 ];

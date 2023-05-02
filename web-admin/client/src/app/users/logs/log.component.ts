@@ -17,8 +17,7 @@ export class UserLogsComponent extends BaseComponent {
   Item: UserLog = UserLogsComponent.InitalizeModel();
   @ViewChild('timeLineView') private time_line_view: TimeLineViewComponent | undefined;
 
-  constructor(
-    private readonly service: UserLogService) {
+  constructor(private readonly service: UserLogService) {
     super();
   }
 
@@ -37,7 +36,7 @@ export class UserLogsComponent extends BaseComponent {
     if (user) this.UserItem = user;
 
     if (!this.UserItem || !this.UserItem.id) {
-      throw 'permanentUserId is not set';
+      throw 'user-id is not set';
     }
 
     let query = {
@@ -52,16 +51,14 @@ export class UserLogsComponent extends BaseComponent {
     } as ListQuery;
 
     this.service.List(query).subscribe({
-      next: (result: any[]) => {
-        this.time_line_view?.SetDataSource(result)
-      },
+      next: (result: any[]) => this.time_line_view?.SetDataSource(result),
       error: console.error
     });
   }
 
   Submit() {
     if (!this.UserItem || !this.UserItem.id) {
-      throw 'permanentUserId is not set';
+      throw 'user-id is not set';
     }
 
     this.Item.permanentUserId = this.UserItem.id;

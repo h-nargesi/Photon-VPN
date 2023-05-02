@@ -38,9 +38,13 @@ export class PaymentComponent extends BaseComponent {
     this.sub = this.route.params.subscribe((params) => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe({
-          next: (result: Payment) => (this.item = result),
+          next: (result: Payment) => this.item = result,
           error: console.error,
         });
+
+      } else if ('userid' in params) {
+        this.item.permanentUserId = +params['id'];
+        this.LoadUsers();
       }
     });
   }
