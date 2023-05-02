@@ -22,61 +22,50 @@ public class Membership : Controller
 
         var user_payments_task = user_payments_query.ToListAsync();
 
-        var plans = from pk in db.Packages.AsNoTracking()
-                    join pl in db.Plans.AsNoTracking()
-                            on pk.PlanId equals pl.Id
-                    select new
-                    {
-                        pl.Id,
-                        pl.Price,
-                        pl.Color,
-                        pk.ProfileId,
-                    };
-
         var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
-                                where rad.Attribute == "Simultaneous-Use"
+                                where rad.Attribute == "Simultaneous-Use" &&
+                                      rad.Value != null
+                                group rad by rad.Groupname into @group
                                 select new
                                 {
-                                    rad.Groupname,
-                                    rad.Value
+                                    Groupname = @group.Key,
+                                    SimulateCount = int.Parse(@group.Max(c => c.Value) ?? "0"),
                                 };
 
-        var profiles = from pr in from pr in db.Profiles.AsNoTracking()
-                                  select new
-                                  {
-                                      pr.Id,
-                                      pr.Name,
-                                      Key = "SimpleAdd_" + pr.Id,
-                                  }
-                       let SimulateCount = rad_group_replies.Where(c => c.Groupname == pr.Key)
-                                                            .Select(c => (int?)int.Parse(c.Value))
-                                                            .FirstOrDefault() ?? 0
+        var profiles = from pr in db.Profiles.AsNoTracking()
+                       join pk in db.Packages.AsNoTracking()
+                               on pr.Id equals pk.ProfileId
+                       join at in rad_group_replies
+                       on new { Groupname = "SimpleAdd_" + pr.Id } equals new { at.Groupname }
+
                        select new
                        {
-                           pr.Id,
+                           pk.ProfileId,
+                           pk.PlanId,
                            pr.Name,
-                           PriceFactor = SimulateCount <= 1 ? SimulateCount :
-                                         SimulateCount == 2 ? 1.9 :
-                                         SimulateCount == 3 ? 2.85 : (SimulateCount - 0.2),
+                           at.SimulateCount,
+                           PriceFactor = at.SimulateCount <= 1 ? at.SimulateCount :
+                                         at.SimulateCount == 2 ? 1.9 :
+                                         at.SimulateCount == 3 ? 2.85 : (at.SimulateCount - 0.2),
                        };
 
-        var user_plan_query = from up in db.PermanentUserPlans.AsNoTracking()
+        var user_plan_query = from pr in profiles
+                              join pl in db.Plans.AsNoTracking()
+                                      on pr.PlanId equals pl.Id
+                              join up in db.PermanentUserPlans.AsNoTracking()
+                                      on pr.ProfileId equals up.ProfileId
+
                               where up.PermanentUserId == user_id
-
-                              join pr in profiles
-                                      on up.ProfileId equals pr.Id
-
-                              join pl in plans
-                                      on up.ProfileId equals pl.ProfileId
 
                               orderby up.ValidTime descending, up.Created descending
                               select new
                               {
-                                  PlanId = pl.Id,
-                                  ProfileId = pr.Id,
-                                  pr.Name,
+                                  pr.PlanId,
+                                  pr.ProfileId,
+                                  pl.Title,
+                                  pr.SimulateCount,
                                   up.ValidTime,
-                                  Price = up.OverridePrice ?? (pl.Price * (decimal)pr.PriceFactor),
+                                  Price = up.OverridePrice ?? (pl.Price * (decimal)pr.PriceFactor * up.Periods),
                                   pl.Color,
                                   up.Created,
                                   up.Modified,

@@ -43,7 +43,7 @@ create table plans (
 
 create table packages (
 	profile_id			int				not null,
-	plan_id			int				not null,
+	plan_id				int				not null,
 	
 	primary key (profile_id),
 	foreign key (plan_id) references plans (id) on delete cascade,
@@ -52,8 +52,9 @@ create table packages (
 
 create table permanent_user_plan (
 	permanent_user_id	int				not null,
-	valid_time			datetime		not null,
 	profile_id			int				not null,
+	periods				int				not null,
+	valid_time			datetime		not null,
 	override_price		decimal(16)			null,
 	created				datetime		not null	default current_timestamp,
 	modified			datetime		not null	default current_timestamp,

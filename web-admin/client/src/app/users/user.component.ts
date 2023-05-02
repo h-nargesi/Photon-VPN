@@ -6,6 +6,7 @@ import { ProfilesService } from '../profiles/profiles.service';
 import Titles from './info/users.json';
 import { User } from './info/users.model';
 import { UserLogsComponent } from './logs/log.component';
+import { MembershipComponent } from './membership/membership.component';
 import { UsersService } from './users.service';
 
 @Component({
@@ -23,6 +24,7 @@ export class UserComponent extends BaseComponent {
   } as User;
   public columns_info: EntitySchema = Titles.list;
   @ViewChild('UserLogs') private user_logs: UserLogsComponent | undefined;
+  @ViewChild('Membership') private membership: MembershipComponent | undefined;
 
   constructor(
     private readonly service: UsersService,
@@ -51,6 +53,7 @@ export class UserComponent extends BaseComponent {
       next: (result: User) => {
         this.Item = result;
         this.user_logs?.Reload(result);
+        this.membership?.Reload(result);
       },
       error: console.error
     });
