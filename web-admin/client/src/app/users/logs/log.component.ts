@@ -39,18 +39,7 @@ export class UserLogsComponent extends BaseComponent {
       throw 'user-id is not set';
     }
 
-    let query = {
-      Start: 0,
-      Limit: 1000,
-      Search: null,
-      Filters: {
-        permanent_user_id: { Type: null, Value: this.UserItem.id.toString() }
-      },
-      Ordering: null,
-      Columns: null,
-    } as ListQuery;
-
-    this.service.List(query).subscribe({
+    this.service.SetUserId(this.UserItem.id).List().subscribe({
       next: (result: any[]) => this.time_line_view?.SetDataSource(result),
       error: console.error
     });

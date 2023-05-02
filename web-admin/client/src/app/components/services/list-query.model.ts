@@ -1,15 +1,15 @@
 export interface ListQuery {
-    Start: number,
-    Limit: number,
-    Search: string | null,
-    Filters: { [column: string]: Filter } | null,
-    Ordering: { [column: string]: boolean } | null,
-    Columns: string[] | null,
+    start: number,
+    limit: number,
+    search: string | null,
+    filters: { [column: string]: Filter } | null,
+    ordering: { [column: string]: boolean } | null,
+    columns: string[] | null,
 }
 
 export interface Filter {
-    Type: string | null,
-    Value: string | null,
+    type: string | null,
+    value: string | null,
 }
 
 export interface Result {

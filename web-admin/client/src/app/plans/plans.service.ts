@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EntityService, ListQuery, OptionService, Result, SelectOptions } from '../components';
+import { EntityService, ListQuery, OptionService, SelectOptions } from '../components';
 import { Plan, PlanModel } from './plans.models';
 
 @Injectable({

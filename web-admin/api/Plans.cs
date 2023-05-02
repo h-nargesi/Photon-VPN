@@ -30,9 +30,7 @@ public class Plans : Controller
                         pl.Modified,
                     };
 
-        var result = await filter.ApplyFilter(query, db);
-
-        return Ok(result);
+        return Ok(await filter.ApplyFilter(query, db));
     }
 
 

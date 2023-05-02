@@ -15,9 +15,7 @@ public class Users : Controller
 
         var query = db.PermanentUsers.AsNoTracking();
 
-        var result = await filter.ApplyFilter(query, db);
-
-        return Ok(result);
+        return Ok(await filter.ApplyFilter(query, db));
     }
 
     [HttpPost]
@@ -28,15 +26,13 @@ public class Users : Controller
         var query = from ur in db.PermanentUsers.AsNoTracking()
                     select new
                     {
-                        id = ur.Id,
-                        title = ur.Username +
+                        Id = ur.Id,
+                        Title = ur.Username +
                             (string.IsNullOrEmpty(ur.Name) ? "" : " " + ur.Name) +
                             (string.IsNullOrEmpty(ur.Surname) ? "" : " " + ur.Surname),
                     };
 
-        var result = await filter.ApplyFilter(query, db);
-
-        return Ok(result);
+        return Ok(await filter.ApplyFilter(query, db));
     }
 
     [HttpGet]

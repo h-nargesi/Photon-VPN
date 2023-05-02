@@ -9,15 +9,16 @@ namespace Photon.Service.VPN.Handlers;
 public class UserLogs : Controller
 {
     [HttpPost]
-    public async Task<IActionResult> List([FromBody] ListQuery filter)
+    [Route("{id:int}")]
+    public async Task<IActionResult> List([FromRoute] int user_id, [FromBody] ListQuery filter)
     {
         using var db = new RdContext();
 
-        var query = db.PermanentUserLogs.AsNoTracking().OrderByDescending(c => c.Id);
+        var query = db.PermanentUserLogs.AsNoTracking()
+                                        .Where(c => c.PermanentUserId == user_id)
+                                        .OrderByDescending(c => c.Id);
 
-        var result = await filter.ApplyFilter(query, db);
-
-        return Ok(result);
+        return Ok(await filter.ApplyFilter(query, db));
     }
 
     [HttpGet]

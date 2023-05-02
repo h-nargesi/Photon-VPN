@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
-using System.Numerics;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -11,7 +10,7 @@ namespace Photon.Service.VPN.Handlers;
 public class Membership : Controller
 {
     [HttpGet]
-    [Route("{user_id}")]
+    [Route("{user_id:int}")]
     public async Task<IActionResult> Balance([FromRoute] int user_id)
     {
         using var db = new RdContext();

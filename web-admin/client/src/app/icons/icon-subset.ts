@@ -102,6 +102,7 @@ import {
   cilX,
   cilMoney,
   cibWhatsapp,
+  cilEqualizer,
 } from '@coreui/icons';
 
 export const iconSubset = {
@@ -208,6 +209,7 @@ export const iconSubset = {
   cilX,
   cilMoney,
   cibWhatsapp,
+  cilEqualizer,
 };
 
 export enum IconSubset {
@@ -314,4 +316,5 @@ export enum IconSubset {
   cilChartLine = 'cilChartLine',
   cilMoney = "cilMoney",
   cibWhatsapp = "cibWhatsapp",
+  cilEqualizer = "cilEqualizer",
 }
