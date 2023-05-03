@@ -26,6 +26,9 @@ import {
   TableModule,
   UtilitiesModule,
   TabsModule,
+  AlertComponent,
+  ModalModule, 
+  WidgetModule,
 } from '@coreui/angular';
 
 import { IconModule } from '@coreui/icons-angular';
@@ -82,6 +85,9 @@ import { UsersRoutingModule } from './users-routing.module';
     DocsComponentsModule,
     ComponentsModule,
     TabsModule,
+    AlertComponent,
+    ModalModule, 
+    WidgetModule,
   ],
 })
 export class UsersModule { }

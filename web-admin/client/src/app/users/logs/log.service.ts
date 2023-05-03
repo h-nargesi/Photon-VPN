@@ -15,4 +15,10 @@ export class UserLogService extends EntityService<UserLog, UserLog> {
     super(http, api_url, base_url, 'userlogs');
   }
 
+  public SetUserId(user_id: number): UserLogService {
+    super.ClearQueryString();
+    super.SetRoute(user_id);
+    return this;
+  }
+
 }

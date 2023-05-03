@@ -7,9 +7,11 @@ public partial class PermanentUserPlan
 {
     public int PermanentUserId { get; set; }
 
-    public DateTime ValidTime { get; set; }
-
     public int ProfileId { get; set; }
+
+    public int Periods { get; set; }
+
+    public DateTime ValidTime { get; set; }
 
     public decimal? OverridePrice { get; set; }
 

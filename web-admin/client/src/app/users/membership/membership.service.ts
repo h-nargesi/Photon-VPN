@@ -17,7 +17,7 @@ export class MembershipService extends BaseService {
   }
 
   public Balance(user_id: number): Observable<Invoice[]> {
-    return this.http.get<Invoice[]>(this.module_url + 'balance' + user_id);
+    return this.http.get<Invoice[]>(this.module_url + 'balance/' + user_id);
   }
 
   public Add(entity: Membership): Observable<Result> {

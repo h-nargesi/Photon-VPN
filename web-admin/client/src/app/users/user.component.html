@@ -23,23 +23,45 @@
           <dt class="col-sm-3 text-start">to</dt>
           <dd class="col-sm-9 text-end">{{ getRemain(Item.toDate) }}</dd>
         </dl>
-        <c-button-group class="me-3">
-          <button cButton variant="outline" [routerLink]="'/paymets/edit/user/' + Item.id" color="warning">
-            <svg cIcon name="cilMoney" title="Payment" size="2xl"></svg>
+        <div class="mx-3 mb-1" style="position: relative; display: inline-block; vertical-align: middle;">
+          <button cButton routerLink="/users" class="me-1 mb-1" variant="outline" color="secondary">
+              <svg cIcon name="cilArrowLeft" title="Cancel" size="2xl"></svg>
           </button>
-          <button cButton variant="outline" color="danger">
-            <svg cIcon name="cilEnvelopeClosed" title="Send to Email" size="2xl"></svg>
+          <button cButton (click)="Reload()" class="me-1 mb-1" variant="outline" color="secondary">
+              <svg cIcon name="cilReload" title="cilReload" size="2xl"></svg>
           </button>
-          <button cButton variant="outline" color="danger">
-            <svg cIcon name="cibWhatsapp" title="Send to Whatsapp" size="2xl"></svg>
+          <button cButton [cModalToggle]="UserConfirmDelete.id" class="me-1 mb-1" variant="outline" color="danger">
+            <svg cIcon name="cilTrash" title="Delete" size="2xl"></svg>
           </button>
-          <button cButton variant="outline" color="primary">
+          <button cButton class="me-1 mb-1" variant="outline" color="primary">
             <svg cIcon name="cilChart" title="cilChart" size="2xl"></svg>
           </button>
-          <button cButton variant="outline" color="success">
+          <button cButton class="me-1 mb-1" variant="outline" color="success">
             <svg cIcon name="cilChartLine" title="cilChartLine" size="2xl"></svg>
           </button>
-        </c-button-group>
+          <button cButton [routerLink]="'/paymets/edit/user/' + Item.id" class="me-1 mb-1" variant="outline" color="info">
+            <svg cIcon name="cilMoney" title="Payment" size="2xl"></svg>
+          </button>
+          <button cButton class="me-1 mb-1" variant="outline" color="info">
+            <svg cIcon name="cilEnvelopeClosed" title="Send to Email" size="2xl"></svg>
+          </button>
+          <button cButton class="me-1 mb-1" variant="outline" color="info">
+            <svg cIcon name="cibWhatsapp" title="Send to Whatsapp" size="2xl"></svg>
+          </button>
+          <c-modal #UserConfirmDelete alignment="center" id="UserConfirmDelete">
+            <c-modal-header>
+              <h5 cModalTitle>Delete Confirm</h5>
+              <button [cModalToggle]="UserConfirmDelete.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
+              Deleting Item
+            </c-modal-body>
+            <c-modal-footer>
+              <button cButton [cModalToggle]="UserConfirmDelete.id" color="secondary">Close</button>
+              <button cButton [cModalToggle]="UserConfirmDelete.id" color="danger" (click)="Delete()">Delete</button>
+            </c-modal-footer>
+          </c-modal>
+        </div>
       </c-card-body>
     </c-card>
   </c-col>
@@ -58,7 +80,7 @@
       <c-card-body>
         <c-tab-content #tabContent="cTabContent">
           <c-tab-pane>
-            <app-user-invoice></app-user-invoice>
+            <app-user-invoice #Membership></app-user-invoice>
           </c-tab-pane>
           <c-tab-pane>
             <app-user-log #UserLogs></app-user-log>

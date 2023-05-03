@@ -25,7 +25,7 @@ export class PlanListComponent extends BaseComponent {
   }
 
   ngOnInit(): void {
-    this.service.List(null).subscribe({
+    this.service.List().subscribe({
       next: (result: any[]) => this.widget_view?.SetDataSource(result),
       error: console.error
     });

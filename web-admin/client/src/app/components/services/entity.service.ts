@@ -5,7 +5,9 @@ import { BaseService } from './base-service';
 import { LGMDService } from './lgmd-service';
 import { ListQuery, Result } from './list-query.model';
 
-export class EntityService<L, E> extends BaseService implements LGMDService {
+export abstract class EntityService<L, E> extends BaseService implements LGMDService {
+
+  private query_string: string = '';
 
   constructor(
     http: HttpClient,
@@ -15,9 +17,9 @@ export class EntityService<L, E> extends BaseService implements LGMDService {
     super(http, api_url, base_url, `api/${entity_name}/`);
   }
 
-  public List(filter: ListQuery | null): Observable<L[]> {
+  public List(filter: ListQuery | null = null): Observable<L[]> {
     if (filter == null) filter = {} as ListQuery;
-    return this.http.post<L[]>(this.module_url + 'list', filter);
+    return this.http.post<L[]>(this.module_url + 'list' + this.query_string, filter);
   }
 
   public Get(id: number): Observable<E> {
@@ -31,4 +33,20 @@ export class EntityService<L, E> extends BaseService implements LGMDService {
   public Delete(id: number): Observable<Result> {
     return this.http.post<Result>(this.module_url + 'delete', id);
   }
+
+  protected SetQueryString(name: string, value: any): EntityService<L, E> {
+    this.query_string += `${this.query_string.length > 0 ? '&' : '?'}${name}=${value}`;
+    return this;
+  }
+
+  protected SetRoute(value: any): EntityService<L, E> {
+    this.query_string += `/${value}`;
+    return this;
+  }
+
+  protected ClearQueryString(): EntityService<L, E> {
+    this.query_string = '';
+    return this;
+  }
+
 }

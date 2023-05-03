@@ -39,21 +39,14 @@ export class UserLogsComponent extends BaseComponent {
       throw 'user-id is not set';
     }
 
-    let query = {
-      Start: 0,
-      Limit: 1000,
-      Search: null,
-      Filters: {
-        permanent_user_id: { Type: null, Value: this.UserItem.id.toString() }
-      },
-      Ordering: null,
-      Columns: null,
-    } as ListQuery;
-
-    this.service.List(query).subscribe({
+    this.service.SetUserId(this.UserItem.id).List().subscribe({
       next: (result: any[]) => this.time_line_view?.SetDataSource(result),
       error: console.error
     });
+  }
+
+  Selected(userLog: UserLog) {
+    this.Item = userLog;
   }
 
   Submit() {
@@ -77,12 +70,17 @@ export class UserLogsComponent extends BaseComponent {
     });
   }
 
-  Delete(item: UserLog) {
-    this.service.Delete(item.id).subscribe({
+  Cancel() {
+    this.Item = UserLogsComponent.InitalizeModel();
+  }
+
+  Delete() {
+    this.service.Delete(this.Item.id).subscribe({
       next: (result: Result) => {
         if (result.status >= ResultStatus.Invalid)
           console.error(result);
 
+        this.Cancel();
         this.Reload();
       },
       error: console.error

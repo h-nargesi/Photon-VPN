@@ -14,6 +14,8 @@ export class TimeLineViewComponent extends ListViewComponent {
   @Input("columns-info") columns_info: EntitySchema | undefined;
   @Input("columns-schema") columns_schema: TimeLineSchema | undefined;
   @Input("data-projection") data_projection: ((data: any[]) => any[]) | undefined;
+  @Input("deletable") deletable: boolean = false;
+  
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
   @Output("double-click") double_click = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();

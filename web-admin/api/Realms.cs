@@ -16,12 +16,10 @@ public class Realms : Controller
         var query = from rl in db.Realms.AsNoTracking()
                     select new
                     {
-                        id = rl.Name,
-                        title = rl.Name,
+                        Id = rl.Name,
+                        Title = rl.Name,
                     };
 
-        var result = await filter.ApplyFilter(query, db);
-
-        return Ok(result);
+        return Ok(await filter.ApplyFilter(query, db));
     }
 }

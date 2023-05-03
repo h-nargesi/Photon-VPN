@@ -10,6 +10,7 @@ import { MembershipService } from './membership.service';
 export class MembershipComponent {
 
   UserItem: User = {} as User;
+  Invoices: Invoice[] = [];
   Item: Membership = MembershipComponent.InitalizeModel();
 
   constructor(private readonly service: MembershipService) { }
@@ -22,13 +23,9 @@ export class MembershipComponent {
     }
 
     this.service.Balance(this.UserItem.id).subscribe({
-      next: (result: any[]) => this.SetDataSource(result),
+      next: (result: Invoice[]) => this.Invoices = result,
       error: console.error
     });
-  }
-
-  SetDataSource(invoice: Invoice[]) {
-
   }
 
   static InitalizeModel(): Membership {

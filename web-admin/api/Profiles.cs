@@ -11,24 +11,7 @@ public class Profiles : Controller
     [HttpPost]
     [Route("")]
     [Route("/srv/[controller]/[action]")]
-    public async Task<IActionResult> List([FromRoute] int plan_id, [FromBody] ListQuery filter)
-    {
-        using var db = new RdContext();
-
-        var query = from pr in db.Profiles.AsNoTracking()
-                    join pl in db.Packages.AsNoTracking()
-                            on pr.Id equals pl.ProfileId into @join
-                    from pl in @join.DefaultIfEmpty()
-                    where pl.PlanId == plan_id
-                    select pr;
-
-        var result = await filter.ApplyFilter(query, db);
-
-        return Ok(result);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Options([FromBody] ListQuery filter)
+    public async Task<IActionResult> List([FromBody] ListQuery filter)
     {
         using var db = new RdContext();
 
@@ -38,13 +21,30 @@ public class Profiles : Controller
                     from pl in @join.DefaultIfEmpty()
                     select new
                     {
-                        id = pr.Name,
-                        title = pr.Name,
+                        Id = pr.Id,
+                        Name = pr.Name,
+                        CloudId = pr.CloudId,
+                        Created = pr.Created,
+                        Modified = pr.Modified,
+                        PlanId = pl.PlanId,
                     };
 
-        var result = await filter.ApplyFilter(query, db);
+        return Ok(await filter.ApplyFilter(query, db));
+    }
 
-        return Ok(result);
+    [HttpPost]
+    public async Task<IActionResult> Options([FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = from pr in db.Profiles.AsNoTracking()
+                    select new
+                    {
+                        Id = pr.Name,
+                        Title = pr.Name,
+                    };
+
+        return Ok(await filter.ApplyFilter(query, db));
     }
 
     [HttpGet]

@@ -1,8 +1,3 @@
-<p class="text-medium-emphasis small">
-  More complex forms can be built using our grid classes. Use these for
-  form layouts that require multiple columns, varied widths, and
-  additional alignment options.
-</p>
 <form>
   <c-row class="mb-3">
     <c-col sm="10" class="offset-md-2">
@@ -132,6 +127,6 @@
              [value]="Item.created ? getDateTimeString(Item.created) : ''" />
     </c-col>
   </c-row>
-  <app-form list-route="/users" [is-new]="Item.id ? false: true" (submit)="Submit()" (delete)="Delete()">
+  <app-form list-route="/users" [is-new]="Item.id ? false: true" (submit)="Submit()" [show-mode]="1">
   </app-form>
 </form>
