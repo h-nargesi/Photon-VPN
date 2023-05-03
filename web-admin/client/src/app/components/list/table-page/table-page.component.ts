@@ -25,23 +25,13 @@ export class TablePageComponent extends BaseComponent {
   @Input('show-undo') show_undo: boolean = true;
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
-  Query: ListQuery | null = null;
-
-  constructor(
-    private readonly router: Router,
-    protected override readonly cookies: CookieService) {
+  constructor(private readonly router: Router) {
     super();
-    this.path = router.url;
   }
 
   ngOnInit(): void {
-    // this.Query = this.getCookie('query');
     this.service?.List(null).subscribe({
-      next: (result: any[]) => {
-        this.table_view?.SetDataSource(result);
-        this.setCookie('query', this.title);
-        this.getCookie('query');
-      },
+      next: (result: any[]) => this.table_view?.SetDataSource(result),
       error: console.error
     });
   }

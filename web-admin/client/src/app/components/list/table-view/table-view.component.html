@@ -3,6 +3,8 @@
 		<th scope="col">#</th>
 		<th *ngFor="let column of DataColumns;">
 			<span>{{ titleOf(column) }}</span>
+			<hr *ngIf="filter" />
+			<input cFormControl *ngIf="filter" [value]="column_filter_values[column] ?? ''" (change)="FilterColumn(column, $event)" type="text" />
 		</th>
 	</tr>
 </thead>
