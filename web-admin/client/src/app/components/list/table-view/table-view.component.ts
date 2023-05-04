@@ -33,31 +33,36 @@ export class TableViewComponent extends ListViewComponent {
 
       if (!this.Query) this.Query = {} as ListQuery;
 
-      if (!this.Query.Columns) {
-        this.Query.Columns = [];
+      if (!this.Query.columns) {
+        this.Query.columns = [];
         if (this.columns_info) {
           for (const column in this.columns_info)
             if (this.columns_info[column].show)
-              this.Query.Columns.push(column);
+              this.Query.columns.push(column);
         }
 
       } else if (this.columns_info) {
         for (const column in this.columns_info)
           this.columns_info[column].show = false;
 
-        for (const column in this.Query.Columns)
+        for (const column in this.Query.columns)
           if (column in this.columns_info)
             this.columns_info[column].show = true;
       }
 
-      this.setCookie('query-test', this.Query);
+      this.setCookie('query', this.Query);
     }
   }
 
-  FilterColumn(column: string, value: string) {
+  SetFilterColumn(column: string, value: string) {
     if (!this.Query) return;
-    if (!this.Query.Filters) this.Query.Filters = {};
-    this.Query.Filters[column] = { Value: value } as Filter;
+    if (!this.Query.filters) this.Query.filters = {};
+    this.Query.filters[column] = { value: value } as Filter;
+  }
+
+  GetFilterColumn(column: string): string {
+    if (!this.Query || !this.Query.filters) return '';
+    return this.Query.filters[column].value ?? '';
   }
 
   override SetDataSource(data: any[]) {
