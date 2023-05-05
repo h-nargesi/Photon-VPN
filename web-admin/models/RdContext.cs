@@ -312,10 +312,14 @@ public partial class RdContext : DbContext
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySQL("server=37.32.9.55;uid=photon;pwd=znf42CYfWhA3st7w;database=rd;Convert Zero Datetime=True");
+        => optionsBuilder.UseMySql("server=37.32.9.55;uid=photon;pwd=znf42CYfWhA3st7w;database=rd;Convert Zero Datetime=True", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder
+            .UseCollation("utf8mb4_general_ci")
+            .HasCharSet("utf8mb4");
+
         modelBuilder.Entity<Account>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -331,7 +335,6 @@ public partial class RdContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("password");
             entity.Property(e => e.PermanentUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.Username)
@@ -348,18 +351,21 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("actions");
+            entity
+                .ToTable("actions")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10)")
                 .HasColumnName("id");
             entity.Property(e => e.Action1)
-                .HasDefaultValueSql("'''execute'''")
+                .HasDefaultValueSql("'execute'")
                 .HasColumnType("enum('execute')")
                 .HasColumnName("action");
             entity.Property(e => e.Command)
                 .HasMaxLength(500)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("command");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
@@ -371,7 +377,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(10)")
                 .HasColumnName("na_id");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'''awaiting'''")
+                .HasDefaultValueSql("'awaiting'")
                 .HasColumnType("enum('awaiting','fetched','replied')")
                 .HasColumnName("status");
         });
@@ -380,21 +386,21 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("alerts");
+            entity
+                .ToTable("alerts")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Acknowledged)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("acknowledged");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.ApProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_id");
             entity.Property(e => e.Created)
@@ -404,26 +410,22 @@ public partial class RdContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("description");
             entity.Property(e => e.Detected)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("detected");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Resolved)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("resolved");
             entity.Property(e => e.UserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("user_id");
         });
@@ -432,17 +434,18 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("aps");
+            entity
+                .ToTable("aps")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_id");
             entity.Property(e => e.ConfigFetched)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("config_fetched");
             entity.Property(e => e.Created)
@@ -461,39 +464,32 @@ public partial class RdContext : DbContext
                 .HasColumnName("enable_overviews");
             entity.Property(e => e.EnableSchedules).HasColumnName("enable_schedules");
             entity.Property(e => e.Gateway)
-                .HasDefaultValueSql("'''none'''")
+                .HasDefaultValueSql("'none'")
                 .HasColumnType("enum('none','lan','3g','wifi','wifi_static','wifi_ppp','wifi_pppoe','wan_static','wan_ppp','wan_pppoe')")
                 .HasColumnName("gateway");
             entity.Property(e => e.Hardware)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("hardware");
             entity.Property(e => e.LanGw)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("lan_gw");
             entity.Property(e => e.LanIp)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("lan_ip");
             entity.Property(e => e.LanProto)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("lan_proto");
             entity.Property(e => e.LastContact)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact");
             entity.Property(e => e.LastContactFromIp)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_contact_from_ip");
-            entity.Property(e => e.Lat)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lat");
-            entity.Property(e => e.Lon)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lon");
+            entity.Property(e => e.Lat).HasColumnName("lat");
+            entity.Property(e => e.Lon).HasColumnName("lon");
             entity.Property(e => e.Mac)
                 .HasMaxLength(255)
                 .HasColumnName("mac");
@@ -506,15 +502,13 @@ public partial class RdContext : DbContext
             entity.Property(e => e.OnPublicMaps).HasColumnName("on_public_maps");
             entity.Property(e => e.PhotoFileName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''logo.png'''")
+                .HasDefaultValueSql("'logo.png'")
                 .HasColumnName("photo_file_name");
             entity.Property(e => e.RebootFlag).HasColumnName("reboot_flag");
             entity.Property(e => e.ScheduleId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("schedule_id");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -523,13 +517,16 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_actions");
+            entity
+                .ToTable("ap_actions")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10)")
                 .HasColumnName("id");
             entity.Property(e => e.Action)
-                .HasDefaultValueSql("'''execute'''")
+                .HasDefaultValueSql("'execute'")
                 .HasColumnType("enum('execute','execute_and_reply')")
                 .HasColumnName("action");
             entity.Property(e => e.ApId)
@@ -537,7 +534,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("ap_id");
             entity.Property(e => e.Command)
                 .HasMaxLength(500)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("command");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
@@ -546,11 +543,10 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Reply)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("reply");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'''awaiting'''")
+                .HasDefaultValueSql("'awaiting'")
                 .HasColumnType("enum('awaiting','fetched','replied')")
                 .HasColumnName("status");
         });
@@ -559,13 +555,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_connection_settings");
+            entity
+                .ToTable("ap_connection_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.Created)
@@ -573,18 +571,15 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Grouping)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("grouping");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.Value)
                 .HasMaxLength(40)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("value");
         });
 
@@ -592,13 +587,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_loads");
+            entity
+                .ToTable("ap_loads")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.Created)
@@ -614,11 +611,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("float(2,2)")
                 .HasColumnName("load_3");
             entity.Property(e => e.MemFree)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mem_free");
             entity.Property(e => e.MemTotal)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mem_total");
             entity.Property(e => e.Modified)
@@ -629,7 +624,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("system_time");
             entity.Property(e => e.Uptime)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("uptime");
         });
 
@@ -637,13 +631,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profiles");
+            entity
+                .ToTable("ap_profiles")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -669,7 +665,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profile_entries");
+            entity
+                .ToTable("ap_profile_entries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -679,16 +678,15 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("accounting");
             entity.Property(e => e.ApProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_id");
             entity.Property(e => e.AuthSecret)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("auth_secret");
             entity.Property(e => e.AuthServer)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("auth_server");
             entity.Property(e => e.AutoNasid).HasColumnName("auto_nasid");
             entity.Property(e => e.ChkMaxassoc).HasColumnName("chk_maxassoc");
@@ -697,7 +695,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.DefaultKey)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'''12345678'''")
+                .HasDefaultValueSql("'12345678'")
                 .HasColumnName("default_key");
             entity.Property(e => e.DefaultVlan)
                 .HasDefaultValueSql("'100'")
@@ -705,17 +703,17 @@ public partial class RdContext : DbContext
                 .HasColumnName("default_vlan");
             entity.Property(e => e.DynamicVlan).HasColumnName("dynamic_vlan");
             entity.Property(e => e.Encryption)
-                .HasDefaultValueSql("'''none'''")
+                .HasDefaultValueSql("'none'")
                 .HasColumnType("enum('none','wep','psk','psk2','wpa','wpa2','ppsk')")
                 .HasColumnName("encryption");
             entity.Property(e => e.FrequencyBand)
-                .HasDefaultValueSql("'''both'''")
+                .HasDefaultValueSql("'both'")
                 .HasColumnType("enum('both','two','five','five_upper','five_lower')")
                 .HasColumnName("frequency_band");
             entity.Property(e => e.Hidden).HasColumnName("hidden");
             entity.Property(e => e.Isolate).HasColumnName("isolate");
             entity.Property(e => e.Macfilter)
-                .HasDefaultValueSql("'''disable'''")
+                .HasDefaultValueSql("'disable'")
                 .HasColumnType("enum('disable','allow','deny')")
                 .HasColumnName("macfilter");
             entity.Property(e => e.Maxassoc)
@@ -730,14 +728,14 @@ public partial class RdContext : DbContext
                 .HasColumnName("name");
             entity.Property(e => e.Nasid)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasid");
             entity.Property(e => e.PermanentUserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.SpecialKey)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("special_key");
         });
 
@@ -745,13 +743,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profile_exits");
+            entity
+                .ToTable("ap_profile_exits")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_id");
             entity.Property(e => e.AutoDynamicClient).HasColumnName("auto_dynamic_client");
@@ -761,49 +761,45 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Dns1)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns_1");
             entity.Property(e => e.Dns2)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns_2");
             entity.Property(e => e.DynamicDetailId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.Gateway)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("gateway");
             entity.Property(e => e.Ipaddr)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("ipaddr");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Netmask)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("netmask");
             entity.Property(e => e.OpenvpnServerId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("openvpn_server_id");
             entity.Property(e => e.Proto)
-                .HasDefaultValueSql("'''dhcp'''")
+                .HasDefaultValueSql("'dhcp'")
                 .HasColumnType("enum('static','dhcp','dhcpv6')")
                 .HasColumnName("proto");
             entity.Property(e => e.RealmList)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("realm_list");
             entity.Property(e => e.Type)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("enum('bridge','tagged_bridge','nat','captive_portal','openvpn_bridge','tagged_bridge_l3')")
                 .HasColumnName("type");
             entity.Property(e => e.Vlan)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(4)")
                 .HasColumnName("vlan");
         });
@@ -812,7 +808,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profile_exit_ap_profile_entries");
+            entity
+                .ToTable("ap_profile_exit_ap_profile_entries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -835,7 +834,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profile_exit_captive_portals");
+            entity
+                .ToTable("ap_profile_exit_captive_portals")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -844,23 +846,22 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_exit_id");
             entity.Property(e => e.ApProfileExitUpstreamId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_exit_upstream_id");
             entity.Property(e => e.CoovaOptional)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("coova_optional");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Dns1)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns1");
             entity.Property(e => e.Dns2)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns2");
             entity.Property(e => e.DnsManual).HasColumnName("dns_manual");
             entity.Property(e => e.Dnsdesk).HasColumnName("dnsdesk");
@@ -871,16 +872,16 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.ProxyAuthPassword)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("proxy_auth_password");
             entity.Property(e => e.ProxyAuthUsername)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("proxy_auth_username");
             entity.Property(e => e.ProxyEnable).HasColumnName("proxy_enable");
             entity.Property(e => e.ProxyIp)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("proxy_ip");
             entity.Property(e => e.ProxyPort)
                 .HasDefaultValueSql("'3128'")
@@ -891,7 +892,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("radius_1");
             entity.Property(e => e.Radius2)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("radius_2");
             entity.Property(e => e.RadiusNasid)
                 .HasMaxLength(128)
@@ -917,7 +918,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profile_exit_settings");
+            entity
+                .ToTable("ap_profile_exit_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -943,18 +947,20 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profile_settings");
+            entity
+                .ToTable("ap_profile_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_id");
             entity.Property(e => e.Country)
                 .HasMaxLength(5)
-                .HasDefaultValueSql("'''US'''")
+                .HasDefaultValueSql("'US'")
                 .HasColumnName("country");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
@@ -992,7 +998,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("password");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("password_hash");
             entity.Property(e => e.ReportAdvEnable)
                 .IsRequired()
@@ -1007,7 +1013,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(5)")
                 .HasColumnName("report_adv_light");
             entity.Property(e => e.ReportAdvProto)
-                .HasDefaultValueSql("'''http'''")
+                .HasDefaultValueSql("'http'")
                 .HasColumnType("enum('https','http')")
                 .HasColumnName("report_adv_proto");
             entity.Property(e => e.ReportAdvSampling)
@@ -1015,40 +1021,39 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(5)")
                 .HasColumnName("report_adv_sampling");
             entity.Property(e => e.ScheduleId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("schedule_id");
             entity.Property(e => e.Syslog1Ip)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("syslog1_ip");
             entity.Property(e => e.Syslog1Port)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("'''514'''")
+                .HasDefaultValueSql("'514'")
                 .HasColumnName("syslog1_port");
             entity.Property(e => e.Syslog2Ip)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("syslog2_ip");
             entity.Property(e => e.Syslog2Port)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("'''514'''")
+                .HasDefaultValueSql("'514'")
                 .HasColumnName("syslog2_port");
             entity.Property(e => e.Syslog3Ip)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("syslog3_ip");
             entity.Property(e => e.Syslog3Port)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("'''514'''")
+                .HasDefaultValueSql("'514'")
                 .HasColumnName("syslog3_port");
             entity.Property(e => e.TzName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''America/New York'''")
+                .HasDefaultValueSql("'America/New York'")
                 .HasColumnName("tz_name");
             entity.Property(e => e.TzValue)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''EST5EDT,M3.2.0,M11.1.0'''")
+                .HasDefaultValueSql("'EST5EDT,M3.2.0,M11.1.0'")
                 .HasColumnName("tz_value");
             entity.Property(e => e.VlanEnable).HasColumnName("vlan_enable");
             entity.Property(e => e.VlanEnd)
@@ -1057,10 +1062,10 @@ public partial class RdContext : DbContext
                 .HasColumnName("vlan_end");
             entity.Property(e => e.VlanList)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'''100'''")
+                .HasDefaultValueSql("'100'")
                 .HasColumnName("vlan_list");
             entity.Property(e => e.VlanRangeOrList)
-                .HasDefaultValueSql("'''range'''")
+                .HasDefaultValueSql("'range'")
                 .HasColumnType("enum('range','list')")
                 .HasColumnName("vlan_range_or_list");
             entity.Property(e => e.VlanStart)
@@ -1073,7 +1078,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_profile_specifics");
+            entity
+                .ToTable("ap_profile_specifics")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -1099,7 +1107,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_stations");
+            entity
+                .ToTable("ap_stations")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.ApId, "idx_ap_stations_ap_id");
 
@@ -1111,11 +1122,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.ApProfileEntryId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_entry_id");
             entity.Property(e => e.Authenticated)
@@ -1130,7 +1139,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("frequency_band");
             entity.Property(e => e.Mac)
@@ -1192,13 +1201,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_systems");
+            entity
+                .ToTable("ap_systems")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.Category)
@@ -1222,13 +1233,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_uptm_histories");
+            entity
+                .ToTable("ap_uptm_histories")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.ApState).HasColumnName("ap_state");
@@ -1250,13 +1263,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ap_wifi_settings");
+            entity
+                .ToTable("ap_wifi_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.Created)
@@ -1267,11 +1282,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.Value)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("value");
         });
 
@@ -1279,7 +1292,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("applied_fup_components");
+            entity
+                .ToTable("applied_fup_components")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -1295,7 +1311,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("profile_fup_component_id");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("username");
         });
 
@@ -1303,7 +1318,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ar_mesh_daily_summaries");
+            entity
+                .ToTable("ar_mesh_daily_summaries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshId, "idx_ar_mesh_daily_summaries_mesh_id");
 
@@ -1316,6 +1334,7 @@ public partial class RdContext : DbContext
             entity.HasIndex(e => e.TreeTagId, "idx_ar_mesh_daily_summaries_tree_tag_id");
 
             entity.Property(e => e.Id)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.MaxClients)
@@ -1353,9 +1372,7 @@ public partial class RdContext : DbContext
             entity.Property(e => e.MeshId)
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.MinClients)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
@@ -1388,11 +1405,8 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("min_single_radios");
-            entity.Property(e => e.TheDate)
-                .HasColumnType("date")
-                .HasColumnName("the_date");
+            entity.Property(e => e.TheDate).HasColumnName("the_date");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -1401,7 +1415,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ar_node_ibss_connections");
+            entity
+                .ToTable("ar_node_ibss_connections")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Mac, "idx_ar_node_ibss_connections_mac");
 
@@ -1412,14 +1429,15 @@ public partial class RdContext : DbContext
             entity.HasIndex(e => e.StationNodeId, "idx_ar_node_ibss_connections_station_node_id");
 
             entity.Property(e => e.Id)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Authenticated)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("authenticated");
             entity.Property(e => e.Authorized)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("authorized");
             entity.Property(e => e.Created)
@@ -1432,18 +1450,17 @@ public partial class RdContext : DbContext
                 .HasMaxLength(17)
                 .HasColumnName("mac");
             entity.Property(e => e.Mfp)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("MFP");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Preamble)
-                .HasDefaultValueSql("'''long'''")
+                .HasDefaultValueSql("'long'")
                 .HasColumnType("enum('long','short')")
                 .HasColumnName("preamble");
             entity.Property(e => e.RxBitrate)
@@ -1465,7 +1482,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("signal_now");
             entity.Property(e => e.StationNodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("station_node_id");
             entity.Property(e => e.TdlsPeer)
@@ -1491,10 +1507,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("tx_retries");
             entity.Property(e => e.Vendor)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("vendor");
             entity.Property(e => e.WmmWme)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("WMM_WME");
         });
@@ -1503,7 +1518,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ar_node_stations");
+            entity
+                .ToTable("ar_node_stations")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Mac, "idx_ar_node_stations_mac");
 
@@ -1514,14 +1532,15 @@ public partial class RdContext : DbContext
             entity.HasIndex(e => e.NodeId, "idx_ar_node_stations_node_id");
 
             entity.Property(e => e.Id)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Authenticated)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("authenticated");
             entity.Property(e => e.Authorized)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("authorized");
             entity.Property(e => e.Created)
@@ -1534,22 +1553,20 @@ public partial class RdContext : DbContext
                 .HasMaxLength(17)
                 .HasColumnName("mac");
             entity.Property(e => e.MeshEntryId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_entry_id");
             entity.Property(e => e.Mfp)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("MFP");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Preamble)
-                .HasDefaultValueSql("'''long'''")
+                .HasDefaultValueSql("'long'")
                 .HasColumnType("enum('long','short')")
                 .HasColumnName("preamble");
             entity.Property(e => e.RxBitrate)
@@ -1593,10 +1610,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("tx_retries");
             entity.Property(e => e.Vendor)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("vendor");
             entity.Property(e => e.WmmWme)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("WMM_WME");
         });
@@ -1605,7 +1621,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ar_node_uptm_histories");
+            entity
+                .ToTable("ar_node_uptm_histories")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Modified, "idx_ar_node_uptm_histories_modified");
 
@@ -1618,6 +1637,7 @@ public partial class RdContext : DbContext
             entity.HasIndex(e => e.StateDatetime, "idx_ar_node_uptm_histories_state_datetime");
 
             entity.Property(e => e.Id)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Created)
@@ -1627,7 +1647,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.NodeState).HasColumnName("node_state");
@@ -1643,14 +1662,17 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Mac).HasName("PRIMARY");
 
-            entity.ToTable("auto_devices");
+            entity
+                .ToTable("auto_devices")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Mac)
                 .HasMaxLength(17)
                 .HasColumnName("mac");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -1658,7 +1680,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("checks");
+            entity
+                .ToTable("checks")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -1674,7 +1699,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("name");
             entity.Property(e => e.Value)
                 .HasMaxLength(40)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("value");
         });
 
@@ -1682,7 +1707,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("clouds");
+            entity
+                .ToTable("clouds")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -1695,11 +1723,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("description");
             entity.Property(e => e.Lat)
                 .HasPrecision(11, 8)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("lat");
             entity.Property(e => e.Lng)
                 .HasPrecision(11, 8)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("lng");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -1708,7 +1734,6 @@ public partial class RdContext : DbContext
                 .HasMaxLength(64)
                 .HasColumnName("name");
             entity.Property(e => e.UserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("user_id");
         });
@@ -1717,13 +1742,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("cloud_admins");
+            entity
+                .ToTable("cloud_admins")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -1733,7 +1760,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.UserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("user_id");
         });
@@ -1742,7 +1768,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("cloud_settings");
+            entity
+                .ToTable("cloud_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.CloudId, "idx_cloud_settings_cloud_id");
 
@@ -1770,13 +1799,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("coa_requests");
+            entity
+                .ToTable("coa_requests")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.AvpJson)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("avp_json");
             entity.Property(e => e.Created)
@@ -1787,19 +1818,17 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.MultipleGateways).HasColumnName("multiple_gateways");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.RequestType)
-                .HasDefaultValueSql("'''coa'''")
+                .HasDefaultValueSql("'coa'")
                 .HasColumnType("enum('coa','pod')")
                 .HasColumnName("request_type");
             entity.Property(e => e.Result)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("result");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'''awaiting'''")
+                .HasDefaultValueSql("'awaiting'")
                 .HasColumnType("enum('awaiting','fetched','replied')")
                 .HasColumnName("status");
         });
@@ -1808,7 +1837,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("countries");
+            entity
+                .ToTable("countries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -1831,63 +1863,63 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("data_collectors");
+            entity
+                .ToTable("data_collectors")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Address)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("address");
             entity.Property(e => e.Birthday)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("birthday");
             entity.Property(e => e.City)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("city");
             entity.Property(e => e.Company)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("company");
             entity.Property(e => e.Country)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("country");
             entity.Property(e => e.CpMac)
                 .HasMaxLength(36)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("cp_mac");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Custom1)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("custom1");
             entity.Property(e => e.Custom2)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("custom2");
             entity.Property(e => e.Custom3)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("custom3");
             entity.Property(e => e.Dn)
                 .HasMaxLength(36)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dn");
             entity.Property(e => e.DynamicDetailId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.Email)
@@ -1896,17 +1928,17 @@ public partial class RdContext : DbContext
             entity.Property(e => e.EmailOptIn).HasColumnName("email_opt_in");
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("first_name");
             entity.Property(e => e.Gender)
-                .HasDefaultValueSql("'''not_recorded'''")
+                .HasDefaultValueSql("'not_recorded'")
                 .HasColumnType("enum('male','female','not_recorded')")
                 .HasColumnName("gender");
             entity.Property(e => e.IsMobile).HasColumnName("is_mobile");
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("last_name");
             entity.Property(e => e.Mac)
@@ -1917,25 +1949,22 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Nasid)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("nasid");
             entity.Property(e => e.Phone)
                 .HasMaxLength(36)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("phone");
             entity.Property(e => e.PhoneOptIn).HasColumnName("phone_opt_in");
             entity.Property(e => e.PublicIp)
                 .HasMaxLength(36)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("public_ip");
             entity.Property(e => e.Room)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("room");
             entity.Property(e => e.Ssid)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("ssid");
         });
 
@@ -1943,7 +1972,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("data_collector_otps");
+            entity
+                .ToTable("data_collector_otps")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -1958,7 +1990,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'''otp_awaiting'''")
+                .HasDefaultValueSql("'otp_awaiting'")
                 .HasColumnType("enum('otp_awaiting','otp_confirmed')")
                 .HasColumnName("status");
             entity.Property(e => e.Value)
@@ -1970,7 +2002,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("devices");
+            entity
+                .ToTable("devices")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -1980,42 +2015,34 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DataCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_cap");
             entity.Property(e => e.DataCapType)
-                .HasDefaultValueSql("'''soft'''")
+                .HasDefaultValueSql("'soft'")
                 .HasColumnType("enum('hard','soft')")
                 .HasColumnName("data_cap_type");
             entity.Property(e => e.DataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_used");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
             entity.Property(e => e.FromDate)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("from_date");
             entity.Property(e => e.LastAcceptNas)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_accept_nas");
             entity.Property(e => e.LastAcceptTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_accept_time");
             entity.Property(e => e.LastRejectMessage)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_reject_message");
             entity.Property(e => e.LastRejectNas)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_reject_nas");
             entity.Property(e => e.LastRejectTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_reject_time");
             entity.Property(e => e.Modified)
@@ -2025,47 +2052,39 @@ public partial class RdContext : DbContext
                 .HasMaxLength(128)
                 .HasColumnName("name");
             entity.Property(e => e.PercDataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(6)")
                 .HasColumnName("perc_data_used");
             entity.Property(e => e.PercTimeUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(6)")
                 .HasColumnName("perc_time_used");
             entity.Property(e => e.PermanentUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.Profile)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("profile");
             entity.Property(e => e.ProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
             entity.Property(e => e.Realm)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("realm");
             entity.Property(e => e.RealmId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("realm_id");
             entity.Property(e => e.TimeCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_cap");
             entity.Property(e => e.TimeCapType)
-                .HasDefaultValueSql("'''soft'''")
+                .HasDefaultValueSql("'soft'")
                 .HasColumnType("enum('hard','soft')")
                 .HasColumnName("time_cap_type");
             entity.Property(e => e.TimeUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_used");
             entity.Property(e => e.ToDate)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("to_date");
         });
@@ -2074,7 +2093,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_clients");
+            entity
+                .ToTable("dynamic_clients")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2085,10 +2107,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("active");
             entity.Property(e => e.Calledstationid)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("calledstationid");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -2100,7 +2121,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("float(14,3)")
                 .HasColumnName("daily_data_limit_amount");
             entity.Property(e => e.DailyDataLimitCap)
-                .HasDefaultValueSql("'''hard'''")
+                .HasDefaultValueSql("'hard'")
                 .HasColumnType("enum('hard','soft')")
                 .HasColumnName("daily_data_limit_cap");
             entity.Property(e => e.DailyDataLimitResetHour)
@@ -2110,11 +2131,10 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(3)")
                 .HasColumnName("daily_data_limit_reset_minute");
             entity.Property(e => e.DailyDataLimitUnit)
-                .HasDefaultValueSql("'''mb'''")
+                .HasDefaultValueSql("'mb'")
                 .HasColumnType("enum('kb','mb','gb','tb')")
                 .HasColumnName("daily_data_limit_unit");
             entity.Property(e => e.DailyDataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("daily_data_used");
             entity.Property(e => e.DataLimitActive).HasColumnName("data_limit_active");
@@ -2123,7 +2143,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("float(14,3)")
                 .HasColumnName("data_limit_amount");
             entity.Property(e => e.DataLimitCap)
-                .HasDefaultValueSql("'''hard'''")
+                .HasDefaultValueSql("'hard'")
                 .HasColumnType("enum('hard','soft')")
                 .HasColumnName("data_limit_cap");
             entity.Property(e => e.DataLimitResetHour)
@@ -2137,54 +2157,48 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(3)")
                 .HasColumnName("data_limit_reset_on");
             entity.Property(e => e.DataLimitUnit)
-                .HasDefaultValueSql("'''mb'''")
+                .HasDefaultValueSql("'mb'")
                 .HasColumnType("enum('kb','mb','gb','tb')")
                 .HasColumnName("data_limit_unit");
             entity.Property(e => e.DataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_used");
             entity.Property(e => e.DefaultKey)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'''12345678'''")
+                .HasDefaultValueSql("'12345678'")
                 .HasColumnName("default_key");
             entity.Property(e => e.DefaultVlan)
                 .HasDefaultValueSql("'100'")
                 .HasColumnType("int(10)")
                 .HasColumnName("default_vlan");
             entity.Property(e => e.LastContact)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact");
             entity.Property(e => e.LastContactIp)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("last_contact_ip");
-            entity.Property(e => e.Lat)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lat");
-            entity.Property(e => e.Lon)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lon");
+            entity.Property(e => e.Lat).HasColumnName("lat");
+            entity.Property(e => e.Lon).HasColumnName("lon");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Monitor)
-                .HasDefaultValueSql("'''off'''")
+                .HasDefaultValueSql("'off'")
                 .HasColumnType("enum('off','heartbeat','socket')")
                 .HasColumnName("monitor");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.Nasidentifier)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasidentifier");
             entity.Property(e => e.OnPublicMaps).HasColumnName("on_public_maps");
             entity.Property(e => e.PhotoFileName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''logo.png'''")
+                .HasDefaultValueSql("'logo.png'")
                 .HasColumnName("photo_file_name");
             entity.Property(e => e.SessionAutoClose).HasColumnName("session_auto_close");
             entity.Property(e => e.SessionDeadTime)
@@ -2193,11 +2207,11 @@ public partial class RdContext : DbContext
                 .HasColumnName("session_dead_time");
             entity.Property(e => e.Timezone)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("timezone");
             entity.Property(e => e.Type)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("'''other'''")
+                .HasDefaultValueSql("'other'")
                 .HasColumnName("type");
         });
 
@@ -2205,7 +2219,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_client_realms");
+            entity
+                .ToTable("dynamic_client_realms")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2228,7 +2245,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_client_settings");
+            entity
+                .ToTable("dynamic_client_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2254,7 +2274,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_client_states");
+            entity
+                .ToTable("dynamic_client_states")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2273,34 +2296,36 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_details");
+            entity
+                .ToTable("dynamic_details")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.AutoSuffix)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("auto_suffix");
             entity.Property(e => e.AutoSuffixCheck).HasColumnName("auto_suffix_check");
             entity.Property(e => e.AvailableLanguages)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("available_languages");
             entity.Property(e => e.Cell)
                 .HasMaxLength(14)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("cell");
             entity.Property(e => e.ChilliJsonUnavailable).HasColumnName("chilli_json_unavailable");
             entity.Property(e => e.ChilliUseChap).HasColumnName("chilli_use_chap");
             entity.Property(e => e.City)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("city");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.ConnectCheck).HasColumnName("connect_check");
@@ -2310,25 +2335,25 @@ public partial class RdContext : DbContext
             entity.Property(e => e.ConnectOnly).HasColumnName("connect_only");
             entity.Property(e => e.ConnectSuffix)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'''nasid'''")
+                .HasDefaultValueSql("'nasid'")
                 .IsFixedLength()
                 .HasColumnName("connect_suffix");
             entity.Property(e => e.ConnectUsername)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("connect_username");
             entity.Property(e => e.CoovaDesktopUrl)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("coova_desktop_url");
             entity.Property(e => e.CoovaMobileUrl)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("coova_mobile_url");
             entity.Property(e => e.Country)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("country");
             entity.Property(e => e.Created)
@@ -2337,12 +2362,12 @@ public partial class RdContext : DbContext
             entity.Property(e => e.CtcEmailOptIn).HasColumnName("ctc_email_opt_in");
             entity.Property(e => e.CtcEmailOptInTxt)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("'''Send Promotional Email'''")
+                .HasDefaultValueSql("'Send Promotional Email'")
                 .HasColumnName("ctc_email_opt_in_txt");
             entity.Property(e => e.CtcPhoneOptIn).HasColumnName("ctc_phone_opt_in");
             entity.Property(e => e.CtcPhoneOptInTxt)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("'''Send Promotional SMS'''")
+                .HasDefaultValueSql("'Send Promotional SMS'")
                 .HasColumnName("ctc_phone_opt_in_txt");
             entity.Property(e => e.CtcRequireEmail).HasColumnName("ctc_require_email");
             entity.Property(e => e.CtcResupplyEmailInterval)
@@ -2350,72 +2375,66 @@ public partial class RdContext : DbContext
                 .HasColumnName("ctc_resupply_email_interval");
             entity.Property(e => e.DefaultLanguage)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("default_language");
             entity.Property(e => e.Email)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("email");
             entity.Property(e => e.Fax)
                 .HasMaxLength(14)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("fax");
             entity.Property(e => e.IconFileName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''logo.png'''")
+                .HasDefaultValueSql("'logo.png'")
                 .HasColumnName("icon_file_name");
-            entity.Property(e => e.Lat)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lat");
-            entity.Property(e => e.Lon)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lon");
+            entity.Property(e => e.Lat).HasColumnName("lat");
+            entity.Property(e => e.Lon).HasColumnName("lon");
             entity.Property(e => e.LostPassword).HasColumnName("lost_password");
             entity.Property(e => e.LostPasswordMethod)
-                .HasDefaultValueSql("'''email'''")
+                .HasDefaultValueSql("'email'")
                 .HasColumnType("enum('email','sms')")
                 .HasColumnName("lost_password_method");
             entity.Property(e => e.MikrotikDesktopUrl)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mikrotik_desktop_url");
             entity.Property(e => e.MikrotikMobileUrl)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mikrotik_mobile_url");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.NameColour)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name_colour");
             entity.Property(e => e.Phone)
                 .HasMaxLength(14)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("phone");
             entity.Property(e => e.ProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
             entity.Property(e => e.RealmId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("realm_id");
             entity.Property(e => e.RedirectCheck).HasColumnName("redirect_check");
             entity.Property(e => e.RedirectUrl)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("redirect_url");
             entity.Property(e => e.RegAutoAdd).HasColumnName("reg_auto_add");
             entity.Property(e => e.RegAutoSuffix)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("reg_auto_suffix");
             entity.Property(e => e.RegAutoSuffixCheck).HasColumnName("reg_auto_suffix_check");
@@ -2450,38 +2469,37 @@ public partial class RdContext : DbContext
                 .HasColumnName("slideshow_enforce_watching");
             entity.Property(e => e.SocialEnable).HasColumnName("social_enable");
             entity.Property(e => e.SocialTempPermanentUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("social_temp_permanent_user_id");
             entity.Property(e => e.Street)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("street");
             entity.Property(e => e.StreetNo)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("street_no");
             entity.Property(e => e.TCCheck).HasColumnName("t_c_check");
             entity.Property(e => e.TCUrl)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("t_c_url");
             entity.Property(e => e.Theme)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("'''Default'''")
+                .HasDefaultValueSql("'Default'")
                 .IsFixedLength()
                 .HasColumnName("theme");
             entity.Property(e => e.TownSuburb)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("town_suburb");
             entity.Property(e => e.Url)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("url");
             entity.Property(e => e.UsageRefreshInterval)
                 .HasDefaultValueSql("'120'")
@@ -2502,7 +2520,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_detail_ctcs");
+            entity
+                .ToTable("dynamic_detail_ctcs")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2521,28 +2542,28 @@ public partial class RdContext : DbContext
             entity.Property(e => e.CiCustom1Required).HasColumnName("ci_custom1_required");
             entity.Property(e => e.CiCustom1Txt)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'''Custom One'''")
+                .HasDefaultValueSql("'Custom One'")
                 .IsFixedLength()
                 .HasColumnName("ci_custom1_txt");
             entity.Property(e => e.CiCustom2).HasColumnName("ci_custom2");
             entity.Property(e => e.CiCustom2Required).HasColumnName("ci_custom2_required");
             entity.Property(e => e.CiCustom2Txt)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'''Custom Two'''")
+                .HasDefaultValueSql("'Custom Two'")
                 .IsFixedLength()
                 .HasColumnName("ci_custom2_txt");
             entity.Property(e => e.CiCustom3).HasColumnName("ci_custom3");
             entity.Property(e => e.CiCustom3Required).HasColumnName("ci_custom3_required");
             entity.Property(e => e.CiCustom3Txt)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'''Custom Three'''")
+                .HasDefaultValueSql("'Custom Three'")
                 .IsFixedLength()
                 .HasColumnName("ci_custom3_txt");
             entity.Property(e => e.CiEmail).HasColumnName("ci_email");
             entity.Property(e => e.CiEmailOptIn).HasColumnName("ci_email_opt_in");
             entity.Property(e => e.CiEmailOptInTxt)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'''Send Promotional Email'''")
+                .HasDefaultValueSql("'Send Promotional Email'")
                 .IsFixedLength()
                 .HasColumnName("ci_email_opt_in_txt");
             entity.Property(e => e.CiEmailOtp).HasColumnName("ci_email_otp");
@@ -2557,7 +2578,7 @@ public partial class RdContext : DbContext
             entity.Property(e => e.CiPhoneOptIn).HasColumnName("ci_phone_opt_in");
             entity.Property(e => e.CiPhoneOptInTxt)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'''Send Promotional SMS'''")
+                .HasDefaultValueSql("'Send Promotional SMS'")
                 .IsFixedLength()
                 .HasColumnName("ci_phone_opt_in_txt");
             entity.Property(e => e.CiPhoneOtp).HasColumnName("ci_phone_otp");
@@ -2574,12 +2595,12 @@ public partial class RdContext : DbContext
             entity.Property(e => e.ConnectOnly).HasColumnName("connect_only");
             entity.Property(e => e.ConnectSuffix)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'''nasid'''")
+                .HasDefaultValueSql("'nasid'")
                 .IsFixedLength()
                 .HasColumnName("connect_suffix");
             entity.Property(e => e.ConnectUsername)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("connect_username");
             entity.Property(e => e.Created)
@@ -2587,7 +2608,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.CustInfoCheck).HasColumnName("cust_info_check");
             entity.Property(e => e.DynamicDetailId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.Modified)
@@ -2599,26 +2619,25 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_detail_languages");
+            entity
+                .ToTable("dynamic_detail_languages")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(5)")
                 .HasColumnName("id");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.IsoCode)
                 .HasMaxLength(2)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("iso_code");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.Rtl).HasColumnName("rtl");
         });
@@ -2627,46 +2646,48 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_detail_mobiles");
+            entity
+                .ToTable("dynamic_detail_mobiles")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.AndroidContent)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnType("text")
                 .HasColumnName("android_content");
             entity.Property(e => e.AndroidEnable).HasColumnName("android_enable");
             entity.Property(e => e.AndroidHref)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("android_href");
             entity.Property(e => e.AndroidText)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("android_text");
             entity.Property(e => e.AppleContent)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnType("text")
                 .HasColumnName("apple_content");
             entity.Property(e => e.AppleEnable).HasColumnName("apple_enable");
             entity.Property(e => e.AppleHref)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("apple_href");
             entity.Property(e => e.AppleText)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("apple_text");
             entity.Property(e => e.Content)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnType("text")
                 .HasColumnName("content");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DynamicDetailId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.MobileOnly).HasColumnName("mobile_only");
@@ -2679,7 +2700,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_detail_prelogins");
+            entity
+                .ToTable("dynamic_detail_prelogins")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2693,14 +2717,14 @@ public partial class RdContext : DbContext
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.Mac)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mac");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Nasid)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasid");
         });
 
@@ -2708,7 +2732,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_detail_social_logins");
+            entity
+                .ToTable("dynamic_detail_social_logins")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2722,11 +2749,11 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Enable).HasColumnName("enable");
             entity.Property(e => e.ExtraName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_name");
             entity.Property(e => e.ExtraValue)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_value");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -2743,14 +2770,14 @@ public partial class RdContext : DbContext
             entity.Property(e => e.RecordInfo).HasColumnName("record_info");
             entity.Property(e => e.Secret)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("secret");
             entity.Property(e => e.SpecialKey)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("special_key");
             entity.Property(e => e.Type)
-                .HasDefaultValueSql("'''voucher'''")
+                .HasDefaultValueSql("'voucher'")
                 .HasColumnType("enum('voucher','user')")
                 .HasColumnName("type");
         });
@@ -2759,26 +2786,26 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_detail_trans_keys");
+            entity
+                .ToTable("dynamic_detail_trans_keys")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(5)")
                 .HasColumnName("id");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DynamicDetailId)
-                .HasDefaultValueSql("'-1'")
+                .HasDefaultValueSql("-1")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
         });
 
@@ -2786,7 +2813,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_detail_translations");
+            entity
+                .ToTable("dynamic_detail_translations")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2795,11 +2825,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DynamicDetailLanguageId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_language_id");
             entity.Property(e => e.DynamicDetailTransKeyId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_trans_key_id");
             entity.Property(e => e.Modified)
@@ -2807,7 +2835,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Value)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("value");
         });
 
@@ -2815,7 +2842,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_pages");
+            entity
+                .ToTable("dynamic_pages")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2824,27 +2854,24 @@ public partial class RdContext : DbContext
                 .HasColumnType("text")
                 .HasColumnName("content");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DynamicDetailId)
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.DynamicDetailLanguageId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_language_id");
             entity.Property(e => e.Language)
                 .HasMaxLength(20)
-                .HasDefaultValueSql("'''en'''")
+                .HasDefaultValueSql("'en'")
                 .HasColumnName("language");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
         });
 
@@ -2852,7 +2879,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_pairs");
+            entity
+                .ToTable("dynamic_pairs")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2861,7 +2891,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DynamicDetailId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.Modified)
@@ -2869,7 +2898,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.Priority)
                 .HasDefaultValueSql("'1'")
@@ -2877,7 +2906,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("priority");
             entity.Property(e => e.Value)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("value");
         });
 
@@ -2885,7 +2914,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_photos");
+            entity
+                .ToTable("dynamic_photos")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Title, "title");
 
@@ -2898,25 +2930,24 @@ public partial class RdContext : DbContext
                 .HasColumnName("active");
             entity.Property(e => e.BackgroundColor)
                 .HasMaxLength(7)
-                .HasDefaultValueSql("'''ffffff'''")
+                .HasDefaultValueSql("'ffffff'")
                 .HasColumnName("background_color");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Description)
                 .HasMaxLength(250)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("description");
             entity.Property(e => e.DynamicDetailId)
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_id");
             entity.Property(e => e.FileName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''logo.png'''")
+                .HasDefaultValueSql("'logo.png'")
                 .HasColumnName("file_name");
             entity.Property(e => e.Fit)
-                .HasDefaultValueSql("'''stretch_to_fit'''")
+                .HasDefaultValueSql("'stretch_to_fit'")
                 .HasColumnType("enum('stretch_to_fit','horizontal','vertical','original','dynamic')")
                 .HasColumnName("fit");
             entity.Property(e => e.IncludeDescription)
@@ -2928,7 +2959,6 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("include_title");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.SlideDuration)
@@ -2937,11 +2967,11 @@ public partial class RdContext : DbContext
                 .HasColumnName("slide_duration");
             entity.Property(e => e.Title)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("title");
             entity.Property(e => e.Url)
                 .HasMaxLength(250)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("url");
         });
 
@@ -2949,7 +2979,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("dynamic_photo_translations");
+            entity
+                .ToTable("dynamic_photo_translations")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2959,14 +2992,11 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("description");
             entity.Property(e => e.DynamicDetailLanguageId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_detail_language_id");
             entity.Property(e => e.DynamicPhotoId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_photo_id");
             entity.Property(e => e.Modified)
@@ -2974,7 +3004,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("title");
         });
 
@@ -2982,7 +3011,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("email_histories");
+            entity
+                .ToTable("email_histories")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -2995,18 +3027,15 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Message)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("message");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Reason)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("reason");
             entity.Property(e => e.Recipient)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("recipient");
         });
 
@@ -3014,7 +3043,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("email_messages");
+            entity
+                .ToTable("email_messages")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -3024,18 +3056,18 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Message)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("message");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.Title)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("title");
         });
 
@@ -3043,7 +3075,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("forward_lookups");
+            entity
+                .ToTable("forward_lookups")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -3066,17 +3101,18 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("groups");
+            entity
+                .ToTable("groups")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
@@ -3088,13 +3124,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("hardwares");
+            entity
+                .ToTable("hardwares")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -3113,7 +3151,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("fw_id");
             entity.Property(e => e.Lan)
                 .HasMaxLength(20)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("lan");
             entity.Property(e => e.Model)
                 .HasMaxLength(255)
@@ -3126,7 +3163,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("name");
             entity.Property(e => e.PhotoFileName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''hardware.png'''")
+                .HasDefaultValueSql("'hardware.png'")
                 .HasColumnName("photo_file_name");
             entity.Property(e => e.RadioCount)
                 .HasColumnType("tinyint(2)")
@@ -3136,7 +3173,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("vendor");
             entity.Property(e => e.Wan)
                 .HasMaxLength(20)
-                .HasDefaultValueSql("'''eth1'''")
+                .HasDefaultValueSql("'eth1'")
                 .HasColumnName("wan");
         });
 
@@ -3144,7 +3181,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("hardware_radios");
+            entity
+                .ToTable("hardware_radios")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -3154,7 +3194,7 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("ap");
             entity.Property(e => e.Band)
-                .HasDefaultValueSql("'''2g'''")
+                .HasDefaultValueSql("'2g'")
                 .HasColumnType("enum('2g','5g')")
                 .HasColumnName("band");
             entity.Property(e => e.BeaconInt)
@@ -3174,12 +3214,10 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(7)")
                 .HasColumnName("distance");
             entity.Property(e => e.HardwareId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("hardware_id");
             entity.Property(e => e.HtCapab)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("ht_capab");
             entity.Property(e => e.IncludeBeaconInt).HasColumnName("include_beacon_int");
             entity.Property(e => e.IncludeDistance).HasColumnName("include_distance");
@@ -3188,7 +3226,7 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("mesh");
             entity.Property(e => e.Mode)
-                .HasDefaultValueSql("'''n'''")
+                .HasDefaultValueSql("'n'")
                 .HasColumnType("enum('a','g','n','ac','ax')")
                 .HasColumnName("mode");
             entity.Property(e => e.Modified)
@@ -3202,7 +3240,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("tinyint(2)")
                 .HasColumnName("txpower");
             entity.Property(e => e.Width)
-                .HasDefaultValueSql("'''20'''")
+                .HasDefaultValueSql("'20'")
                 .HasColumnType("enum('20','40','80','160')")
                 .HasColumnName("width");
         });
@@ -3211,26 +3249,25 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("languages");
+            entity
+                .ToTable("languages")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(5)")
                 .HasColumnName("id");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.IsoCode)
                 .HasMaxLength(2)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("iso_code");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.Rtl).HasColumnName("rtl");
         });
@@ -3239,18 +3276,19 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mac_aliases");
+            entity
+                .ToTable("mac_aliases")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Alias)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .IsFixedLength()
                 .HasColumnName("alias");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -3258,7 +3296,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Mac)
                 .HasMaxLength(20)
-                .HasDefaultValueSql("'NULL'")
                 .IsFixedLength()
                 .HasColumnName("mac");
             entity.Property(e => e.Modified)
@@ -3270,7 +3307,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mac_usages");
+            entity
+                .ToTable("mac_usages")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10)")
@@ -3279,11 +3319,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DataCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_cap");
             entity.Property(e => e.DataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_used");
             entity.Property(e => e.Mac)
@@ -3293,16 +3331,14 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.TimeCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_cap");
             entity.Property(e => e.TimeUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_used");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -3310,7 +3346,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("meshes");
+            entity
+                .ToTable("meshes")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Modified, "idx_meshes_modified");
 
@@ -3323,7 +3362,6 @@ public partial class RdContext : DbContext
                 .HasMaxLength(32)
                 .HasColumnName("bssid");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -3338,7 +3376,6 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("enable_overviews");
             entity.Property(e => e.LastContact)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact");
             entity.Property(e => e.Modified)
@@ -3351,7 +3388,6 @@ public partial class RdContext : DbContext
                 .HasMaxLength(32)
                 .HasColumnName("ssid");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -3360,7 +3396,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_daily_summaries");
+            entity
+                .ToTable("mesh_daily_summaries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshId, "idx_mesh_daily_summaries_mesh_id");
 
@@ -3410,9 +3449,7 @@ public partial class RdContext : DbContext
             entity.Property(e => e.MeshId)
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.MinClients)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
@@ -3445,11 +3482,8 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("min_single_radios");
-            entity.Property(e => e.TheDate)
-                .HasColumnType("date")
-                .HasColumnName("the_date");
+            entity.Property(e => e.TheDate).HasColumnName("the_date");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -3458,7 +3492,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_entries");
+            entity
+                .ToTable("mesh_entries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshId, "idx_mesh_entries_mesh_id");
 
@@ -3474,11 +3511,11 @@ public partial class RdContext : DbContext
             entity.Property(e => e.ApplyToAll).HasColumnName("apply_to_all");
             entity.Property(e => e.AuthSecret)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("auth_secret");
             entity.Property(e => e.AuthServer)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("auth_server");
             entity.Property(e => e.AutoNasid).HasColumnName("auto_nasid");
             entity.Property(e => e.ChkMaxassoc).HasColumnName("chk_maxassoc");
@@ -3487,7 +3524,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.DefaultKey)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'''12345678'''")
+                .HasDefaultValueSql("'12345678'")
                 .HasColumnName("default_key");
             entity.Property(e => e.DefaultVlan)
                 .HasDefaultValueSql("'100'")
@@ -3495,17 +3532,17 @@ public partial class RdContext : DbContext
                 .HasColumnName("default_vlan");
             entity.Property(e => e.DynamicVlan).HasColumnName("dynamic_vlan");
             entity.Property(e => e.Encryption)
-                .HasDefaultValueSql("'''none'''")
+                .HasDefaultValueSql("'none'")
                 .HasColumnType("enum('none','wep','psk','psk2','wpa','wpa2','ppsk')")
                 .HasColumnName("encryption");
             entity.Property(e => e.FrequencyBand)
-                .HasDefaultValueSql("'''both'''")
+                .HasDefaultValueSql("'both'")
                 .HasColumnType("enum('both','two','five','five_upper','five_lower')")
                 .HasColumnName("frequency_band");
             entity.Property(e => e.Hidden).HasColumnName("hidden");
             entity.Property(e => e.Isolate).HasColumnName("isolate");
             entity.Property(e => e.Macfilter)
-                .HasDefaultValueSql("'''disable'''")
+                .HasDefaultValueSql("'disable'")
                 .HasColumnType("enum('disable','allow','deny')")
                 .HasColumnName("macfilter");
             entity.Property(e => e.Maxassoc)
@@ -3513,7 +3550,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(6)")
                 .HasColumnName("maxassoc");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.Modified)
@@ -3524,14 +3560,14 @@ public partial class RdContext : DbContext
                 .HasColumnName("name");
             entity.Property(e => e.Nasid)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasid");
             entity.Property(e => e.PermanentUserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.SpecialKey)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("special_key");
         });
 
@@ -3539,7 +3575,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_exits");
+            entity
+                .ToTable("mesh_exits")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshId, "idx_mesh_exits_mesh_id");
 
@@ -3552,22 +3591,21 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Dns1)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns_1");
             entity.Property(e => e.Dns2)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns_2");
             entity.Property(e => e.Gateway)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("gateway");
             entity.Property(e => e.Ipaddr)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("ipaddr");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.Modified)
@@ -3578,22 +3616,19 @@ public partial class RdContext : DbContext
                 .HasColumnName("name");
             entity.Property(e => e.Netmask)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("netmask");
             entity.Property(e => e.OpenvpnServerId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("openvpn_server_id");
             entity.Property(e => e.Proto)
-                .HasDefaultValueSql("'''dhcp'''")
+                .HasDefaultValueSql("'dhcp'")
                 .HasColumnType("enum('static','dhcp','dhcpv6')")
                 .HasColumnName("proto");
             entity.Property(e => e.Type)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("enum('bridge','tagged_bridge','nat','captive_portal','openvpn_bridge','tagged_bridge_l3')")
                 .HasColumnName("type");
             entity.Property(e => e.Vlan)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(4)")
                 .HasColumnName("vlan");
         });
@@ -3602,7 +3637,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_exit_captive_portals");
+            entity
+                .ToTable("mesh_exit_captive_portals")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshExitId, "idx_mesh_exit_captive_portals_mesh_exit_id");
 
@@ -3611,18 +3649,18 @@ public partial class RdContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.CoovaOptional)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("coova_optional");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Dns1)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns1");
             entity.Property(e => e.Dns2)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dns2");
             entity.Property(e => e.DnsManual).HasColumnName("dns_manual");
             entity.Property(e => e.Dnsdesk).HasColumnName("dnsdesk");
@@ -3632,7 +3670,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_exit_id");
             entity.Property(e => e.MeshExitUpstreamId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_exit_upstream_id");
             entity.Property(e => e.Modified)
@@ -3640,16 +3677,16 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.ProxyAuthPassword)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("proxy_auth_password");
             entity.Property(e => e.ProxyAuthUsername)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("proxy_auth_username");
             entity.Property(e => e.ProxyEnable).HasColumnName("proxy_enable");
             entity.Property(e => e.ProxyIp)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("proxy_ip");
             entity.Property(e => e.ProxyPort)
                 .HasDefaultValueSql("'3128'")
@@ -3660,7 +3697,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("radius_1");
             entity.Property(e => e.Radius2)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("radius_2");
             entity.Property(e => e.RadiusNasid)
                 .HasMaxLength(128)
@@ -3686,7 +3723,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_exit_mesh_entries");
+            entity
+                .ToTable("mesh_exit_mesh_entries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshEntryId, "idx_mesh_exit_mesh_entries_mesh_entry_id");
 
@@ -3713,7 +3753,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_exit_settings");
+            entity
+                .ToTable("mesh_exit_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -3739,7 +3782,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_settings");
+            entity
+                .ToTable("mesh_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshId, "idx_mesh_settings_mesh_id");
 
@@ -3754,7 +3800,7 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Bonding).HasColumnName("bonding");
             entity.Property(e => e.BridgeLoopAvoidance).HasColumnName("bridge_loop_avoidance");
             entity.Property(e => e.Connectivity)
-                .HasDefaultValueSql("'''mesh_point'''")
+                .HasDefaultValueSql("'mesh_point'")
                 .HasColumnType("enum('IBSS','mesh_point')")
                 .HasColumnName("connectivity");
             entity.Property(e => e.Created)
@@ -3767,7 +3813,7 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Encryption).HasColumnName("encryption");
             entity.Property(e => e.EncryptionKey)
                 .HasMaxLength(63)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("encryption_key");
             entity.Property(e => e.Fragmentation)
                 .IsRequired()
@@ -3778,7 +3824,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(10)")
                 .HasColumnName("gw_sel_class");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.Modified)
@@ -3794,7 +3839,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("mesh_specifics");
+            entity
+                .ToTable("mesh_specifics")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshId, "idx_mesh_specifics_mesh_id");
 
@@ -3822,7 +3870,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("nas");
+            entity
+                .ToTable("nas")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Nasname, "nasname");
 
@@ -3830,15 +3881,13 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(10)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Community)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("community");
             entity.Property(e => e.ConnectionType)
-                .HasDefaultValueSql("'''direct'''")
+                .HasDefaultValueSql("'direct'")
                 .HasColumnType("enum('direct','openvpn','pptp','dynamic')")
                 .HasColumnName("connection_type");
             entity.Property(e => e.Created)
@@ -3846,15 +3895,15 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Description)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("'''RADIUS Client'''")
+                .HasDefaultValueSql("'RADIUS Client'")
                 .HasColumnName("description");
             entity.Property(e => e.DynamicAttribute)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dynamic_attribute");
             entity.Property(e => e.DynamicValue)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("dynamic_value");
             entity.Property(e => e.HeartbeatDeadAfter)
                 .HasDefaultValueSql("'600'")
@@ -3862,25 +3911,20 @@ public partial class RdContext : DbContext
                 .HasColumnName("heartbeat_dead_after");
             entity.Property(e => e.IgnoreAcct).HasColumnName("ignore_acct");
             entity.Property(e => e.LastContact)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact");
-            entity.Property(e => e.Lat)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lat");
-            entity.Property(e => e.Lon)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lon");
+            entity.Property(e => e.Lat).HasColumnName("lat");
+            entity.Property(e => e.Lon).HasColumnName("lon");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Monitor)
-                .HasDefaultValueSql("'''off'''")
+                .HasDefaultValueSql("'off'")
                 .HasColumnType("enum('off','ping','heartbeat')")
                 .HasColumnName("monitor");
             entity.Property(e => e.Nasidentifier)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasidentifier");
             entity.Property(e => e.Nasname)
                 .HasMaxLength(128)
@@ -3888,24 +3932,22 @@ public partial class RdContext : DbContext
             entity.Property(e => e.OnPublicMaps).HasColumnName("on_public_maps");
             entity.Property(e => e.PhotoFileName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''logo.png'''")
+                .HasDefaultValueSql("'logo.png'")
                 .HasColumnName("photo_file_name");
             entity.Property(e => e.PingInterval)
                 .HasDefaultValueSql("'600'")
                 .HasColumnType("int(5)")
                 .HasColumnName("ping_interval");
             entity.Property(e => e.Ports)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(5)")
                 .HasColumnName("ports");
             entity.Property(e => e.RecordAuth).HasColumnName("record_auth");
             entity.Property(e => e.Secret)
                 .HasMaxLength(60)
-                .HasDefaultValueSql("'''secret'''")
+                .HasDefaultValueSql("'secret'")
                 .HasColumnName("secret");
             entity.Property(e => e.Server)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("server");
             entity.Property(e => e.SessionAutoClose).HasColumnName("session_auto_close");
             entity.Property(e => e.SessionDeadTime)
@@ -3914,15 +3956,14 @@ public partial class RdContext : DbContext
                 .HasColumnName("session_dead_time");
             entity.Property(e => e.Shortname)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("shortname");
             entity.Property(e => e.Timezone)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("timezone");
             entity.Property(e => e.Type)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("'''other'''")
+                .HasDefaultValueSql("'other'")
                 .HasColumnName("type");
         });
 
@@ -3930,7 +3971,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("na_realms");
+            entity
+                .ToTable("na_realms")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -3953,7 +3997,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("na_settings");
+            entity
+                .ToTable("na_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -3979,7 +4026,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("na_states");
+            entity
+                .ToTable("na_states")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -3998,7 +4048,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("networks");
+            entity
+                .ToTable("networks")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -4008,11 +4061,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Lat)
                 .HasPrecision(11, 8)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("lat");
             entity.Property(e => e.Lng)
                 .HasPrecision(11, 8)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("lng");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -4021,7 +4072,6 @@ public partial class RdContext : DbContext
                 .HasMaxLength(64)
                 .HasColumnName("name");
             entity.Property(e => e.SiteId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("site_id");
         });
@@ -4030,14 +4080,17 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Mac).HasName("PRIMARY");
 
-            entity.ToTable("new_accountings");
+            entity
+                .ToTable("new_accountings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Mac)
                 .HasMaxLength(17)
                 .HasColumnName("mac");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -4045,7 +4098,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("nodes");
+            entity
+                .ToTable("nodes")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.LastContact, "idx_nodes_last_contact");
 
@@ -4064,7 +4120,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("bootcycle");
             entity.Property(e => e.ConfigFetched)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("config_fetched");
             entity.Property(e => e.Created)
@@ -4083,53 +4138,46 @@ public partial class RdContext : DbContext
                 .HasColumnName("enable_overviews");
             entity.Property(e => e.EnableSchedules).HasColumnName("enable_schedules");
             entity.Property(e => e.Gateway)
-                .HasDefaultValueSql("'''none'''")
+                .HasDefaultValueSql("'none'")
                 .HasColumnType("enum('none','lan','3g','wifi','wifi_static','wifi_ppp','wifi_pppoe','wan_static','wan_ppp','wan_pppoe')")
                 .HasColumnName("gateway");
             entity.Property(e => e.Hardware)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("hardware");
             entity.Property(e => e.Ip)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("ip");
             entity.Property(e => e.LanGw)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("lan_gw");
             entity.Property(e => e.LanIp)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("lan_ip");
             entity.Property(e => e.LanProto)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("lan_proto");
             entity.Property(e => e.LastContact)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact");
             entity.Property(e => e.LastContactFromIp)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("last_contact_from_ip");
-            entity.Property(e => e.Lat)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lat");
-            entity.Property(e => e.Lon)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lon");
+            entity.Property(e => e.Lat).HasColumnName("lat");
+            entity.Property(e => e.Lon).HasColumnName("lon");
             entity.Property(e => e.Mac).HasColumnName("mac");
             entity.Property(e => e.Mesh0)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mesh0");
             entity.Property(e => e.Mesh0Channel)
                 .HasColumnType("int(3)")
                 .HasColumnName("mesh0_channel");
             entity.Property(e => e.Mesh0FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("mesh0_frequency_band");
             entity.Property(e => e.Mesh0Txpower)
@@ -4137,13 +4185,13 @@ public partial class RdContext : DbContext
                 .HasColumnName("mesh0_txpower");
             entity.Property(e => e.Mesh1)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mesh1");
             entity.Property(e => e.Mesh1Channel)
                 .HasColumnType("int(3)")
                 .HasColumnName("mesh1_channel");
             entity.Property(e => e.Mesh1FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("mesh1_frequency_band");
             entity.Property(e => e.Mesh1Txpower)
@@ -4151,20 +4199,19 @@ public partial class RdContext : DbContext
                 .HasColumnName("mesh1_txpower");
             entity.Property(e => e.Mesh2)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mesh2");
             entity.Property(e => e.Mesh2Channel)
                 .HasColumnType("int(3)")
                 .HasColumnName("mesh2_channel");
             entity.Property(e => e.Mesh2FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("mesh2_frequency_band");
             entity.Property(e => e.Mesh2Txpower)
                 .HasColumnType("int(3)")
                 .HasColumnName("mesh2_txpower");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.Modified)
@@ -4173,7 +4220,6 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.RebootFlag).HasColumnName("reboot_flag");
             entity.Property(e => e.ScheduleId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("schedule_id");
         });
@@ -4182,7 +4228,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_actions");
+            entity
+                .ToTable("node_actions")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Modified, "idx_node_actions_modified");
 
@@ -4192,12 +4241,12 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(10)")
                 .HasColumnName("id");
             entity.Property(e => e.Action)
-                .HasDefaultValueSql("'''execute'''")
+                .HasDefaultValueSql("'execute'")
                 .HasColumnType("enum('execute','execute_and_reply')")
                 .HasColumnName("action");
             entity.Property(e => e.Command)
                 .HasMaxLength(500)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("command");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
@@ -4209,11 +4258,10 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(10)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Reply)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("reply");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'''awaiting'''")
+                .HasDefaultValueSql("'awaiting'")
                 .HasColumnType("enum('awaiting','fetched','replied')")
                 .HasColumnName("status");
         });
@@ -4222,7 +4270,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_connection_settings");
+            entity
+                .ToTable("node_connection_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -4232,22 +4283,18 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Grouping)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("grouping");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Value)
                 .HasMaxLength(40)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("value");
         });
 
@@ -4255,7 +4302,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_ibss_connections");
+            entity
+                .ToTable("node_ibss_connections")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.NodeId, "idx_node_ibss_connections_node_id");
 
@@ -4276,7 +4326,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("frequency_band");
             entity.Property(e => e.IfMac)
@@ -4293,7 +4343,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Preamble)
@@ -4318,7 +4367,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("signal_now");
             entity.Property(e => e.StationNodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("station_node_id");
             entity.Property(e => e.TdlsPeer)
@@ -4349,22 +4397,25 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_ibss_connections_dailies");
+            entity
+                .ToTable("node_ibss_connections_dailies")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("frequency_band");
             entity.Property(e => e.IfMac)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("if_mac");
             entity.Property(e => e.Mac)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mac");
             entity.Property(e => e.MeshId)
                 .HasColumnType("int(11)")
@@ -4388,7 +4439,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("station_node_id");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("timestamp");
             entity.Property(e => e.TxBitrate)
@@ -4403,7 +4454,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_loads");
+            entity
+                .ToTable("node_loads")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Modified, "idx_node_loads_modified");
 
@@ -4425,18 +4479,15 @@ public partial class RdContext : DbContext
                 .HasColumnType("float(2,2)")
                 .HasColumnName("load_3");
             entity.Property(e => e.MemFree)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mem_free");
             entity.Property(e => e.MemTotal)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mem_total");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.SystemTime)
@@ -4444,7 +4495,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("system_time");
             entity.Property(e => e.Uptime)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("uptime");
         });
 
@@ -4452,7 +4502,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_mesh_entries");
+            entity
+                .ToTable("node_mesh_entries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshEntryId, "idx_node_mesh_entries_mesh_entry_id");
 
@@ -4479,7 +4532,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_mesh_exits");
+            entity
+                .ToTable("node_mesh_exits")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshExitId, "idx_node_mesh_exits_mesh_exit_id");
 
@@ -4506,7 +4562,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_mp_settings");
+            entity
+                .ToTable("node_mp_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.NodeId, "idx_node_mp_settings_node_id");
 
@@ -4521,10 +4580,8 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Value)
@@ -4536,7 +4593,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_neighbors");
+            entity
+                .ToTable("node_neighbors")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Gateway, "idx_node_neighbors_gateway");
 
@@ -4553,12 +4613,12 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Gateway)
-                .HasDefaultValueSql("'''no'''")
+                .HasDefaultValueSql("'no'")
                 .HasColumnType("enum('yes','no')")
                 .HasColumnName("gateway");
             entity.Property(e => e.Hwmode)
                 .HasMaxLength(5)
-                .HasDefaultValueSql("'''11g'''")
+                .HasDefaultValueSql("'11g'")
                 .IsFixedLength()
                 .HasColumnName("hwmode");
             entity.Property(e => e.Metric)
@@ -4568,11 +4628,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NeighborId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("neighbor_id");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
         });
@@ -4581,13 +4639,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_scans");
+            entity
+                .ToTable("node_scans")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.Created)
@@ -4597,11 +4657,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.ScanData)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("scan_data");
         });
@@ -4610,7 +4668,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_settings");
+            entity
+                .ToTable("node_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshId, "idx_node_settings_mesh_id");
 
@@ -4625,11 +4686,11 @@ public partial class RdContext : DbContext
                 .HasColumnName("all_power");
             entity.Property(e => e.ClientKey)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'''radiusdesk'''")
+                .HasDefaultValueSql("'radiusdesk'")
                 .HasColumnName("client_key");
             entity.Property(e => e.Country)
                 .HasMaxLength(5)
-                .HasDefaultValueSql("'''US'''")
+                .HasDefaultValueSql("'US'")
                 .HasColumnName("country");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
@@ -4672,7 +4733,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(5)")
                 .HasColumnName("heartbeat_interval");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.Modified)
@@ -4683,7 +4743,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("password");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("password_hash");
             entity.Property(e => e.Power)
                 .HasDefaultValueSql("'100'")
@@ -4702,7 +4762,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(5)")
                 .HasColumnName("report_adv_light");
             entity.Property(e => e.ReportAdvProto)
-                .HasDefaultValueSql("'''http'''")
+                .HasDefaultValueSql("'http'")
                 .HasColumnType("enum('https','http')")
                 .HasColumnName("report_adv_proto");
             entity.Property(e => e.ReportAdvSampling)
@@ -4710,32 +4770,31 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(5)")
                 .HasColumnName("report_adv_sampling");
             entity.Property(e => e.ScheduleId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("schedule_id");
             entity.Property(e => e.Syslog1Ip)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("syslog1_ip");
             entity.Property(e => e.Syslog1Port)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("'''514'''")
+                .HasDefaultValueSql("'514'")
                 .HasColumnName("syslog1_port");
             entity.Property(e => e.Syslog2Ip)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("syslog2_ip");
             entity.Property(e => e.Syslog2Port)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("'''514'''")
+                .HasDefaultValueSql("'514'")
                 .HasColumnName("syslog2_port");
             entity.Property(e => e.Syslog3Ip)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("syslog3_ip");
             entity.Property(e => e.Syslog3Port)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("'''514'''")
+                .HasDefaultValueSql("'514'")
                 .HasColumnName("syslog3_port");
             entity.Property(e => e.TwoChan)
                 .HasDefaultValueSql("'6'")
@@ -4743,11 +4802,11 @@ public partial class RdContext : DbContext
                 .HasColumnName("two_chan");
             entity.Property(e => e.TzName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''America/New York'''")
+                .HasDefaultValueSql("'America/New York'")
                 .HasColumnName("tz_name");
             entity.Property(e => e.TzValue)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''EST5EDT,M3.2.0,M11.1.0'''")
+                .HasDefaultValueSql("'EST5EDT,M3.2.0,M11.1.0'")
                 .HasColumnName("tz_value");
             entity.Property(e => e.VlanEnable).HasColumnName("vlan_enable");
             entity.Property(e => e.VlanEnd)
@@ -4756,10 +4815,10 @@ public partial class RdContext : DbContext
                 .HasColumnName("vlan_end");
             entity.Property(e => e.VlanList)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'''100'''")
+                .HasDefaultValueSql("'100'")
                 .HasColumnName("vlan_list");
             entity.Property(e => e.VlanRangeOrList)
-                .HasDefaultValueSql("'''range'''")
+                .HasDefaultValueSql("'range'")
                 .HasColumnType("enum('range','list')")
                 .HasColumnName("vlan_range_or_list");
             entity.Property(e => e.VlanStart)
@@ -4772,7 +4831,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_stations");
+            entity
+                .ToTable("node_stations")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshEntryId, "idx_node_stations_mesh_entry_id");
 
@@ -4795,14 +4857,13 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("frequency_band");
             entity.Property(e => e.Mac)
                 .HasMaxLength(17)
                 .HasColumnName("mac");
             entity.Property(e => e.MeshEntryId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_entry_id");
             entity.Property(e => e.Mfp)
@@ -4813,7 +4874,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Preamble)
@@ -4865,18 +4925,21 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_stations_dailies");
+            entity
+                .ToTable("node_stations_dailies")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.FrequencyBand)
-                .HasDefaultValueSql("'''two'''")
+                .HasDefaultValueSql("'two'")
                 .HasColumnType("enum('two','five_lower','five_upper')")
                 .HasColumnName("frequency_band");
             entity.Property(e => e.Mac)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("mac");
             entity.Property(e => e.MeshEntryId)
                 .HasColumnType("int(11)")
@@ -4903,7 +4966,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(6)")
                 .HasColumnName("signal_avg");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("timestamp");
             entity.Property(e => e.TxBitrate)
@@ -4918,7 +4981,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_systems");
+            entity
+                .ToTable("node_systems")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Modified, "idx_node_systems_modified");
 
@@ -4940,7 +5006,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Value)
@@ -4952,7 +5017,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_uptm_histories");
+            entity
+                .ToTable("node_uptm_histories")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Modified, "idx_node_uptm_histories_modified");
 
@@ -4970,7 +5038,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.NodeState).HasColumnName("node_state");
@@ -4986,7 +5053,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("node_wifi_settings");
+            entity
+                .ToTable("node_wifi_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.NodeId, "idx_node_wifi_settings_node_id");
 
@@ -5001,15 +5071,12 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Value)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("value");
         });
 
@@ -5017,7 +5084,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("notifications");
+            entity
+                .ToTable("notifications")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.NotificationDatetime, "idx_notification_datetime");
 
@@ -5043,16 +5113,13 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Description)
                 .HasMaxLength(512)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("description");
             entity.Property(e => e.IsResolved).HasColumnName("is_resolved");
             entity.Property(e => e.ItemId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("item_id");
             entity.Property(e => e.ItemTable)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("item_table");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -5066,7 +5133,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("notification_datetime");
             entity.Property(e => e.NotificationType)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("'''network'''")
+                .HasDefaultValueSql("'network'")
                 .HasColumnName("notification_type");
             entity.Property(e => e.Severity)
                 .HasDefaultValueSql("'1'")
@@ -5074,7 +5141,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("severity");
             entity.Property(e => e.ShortDescription)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("short_description");
         });
 
@@ -5082,7 +5148,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("openvpn_clients");
+            entity
+                .ToTable("openvpn_clients")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -5094,23 +5163,18 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NaId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("na_id");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("password");
             entity.Property(e => e.Peer1)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(3)")
                 .HasColumnName("peer1");
             entity.Property(e => e.Peer2)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(3)")
                 .HasColumnName("peer2");
             entity.Property(e => e.Subnet)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(3)")
                 .HasColumnName("subnet");
             entity.Property(e => e.Username)
@@ -5122,7 +5186,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("openvpn_servers");
+            entity
+                .ToTable("openvpn_servers")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -5131,33 +5198,32 @@ public partial class RdContext : DbContext
                 .HasColumnType("text")
                 .HasColumnName("ca_crt");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.ConfigPreset)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("'''default'''")
+                .HasDefaultValueSql("'default'")
                 .HasColumnName("config_preset");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("description");
             entity.Property(e => e.ExtraName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_name");
             entity.Property(e => e.ExtraValue)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_value");
             entity.Property(e => e.IpAddress)
                 .HasMaxLength(40)
                 .HasColumnName("ip_address");
             entity.Property(e => e.LocalRemote)
-                .HasDefaultValueSql("'''local'''")
+                .HasDefaultValueSql("'local'")
                 .HasColumnType("enum('local','remote')")
                 .HasColumnName("local_remote");
             entity.Property(e => e.Modified)
@@ -5165,13 +5231,13 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.Port)
                 .HasColumnType("int(6)")
                 .HasColumnName("port");
             entity.Property(e => e.Protocol)
-                .HasDefaultValueSql("'''udp'''")
+                .HasDefaultValueSql("'udp'")
                 .HasColumnType("enum('udp','tcp')")
                 .HasColumnName("protocol");
             entity.Property(e => e.VpnBridgeStartAddress)
@@ -5189,21 +5255,21 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("openvpn_server_clients");
+            entity
+                .ToTable("openvpn_server_clients")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.ApProfileExitId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_exit_id");
             entity.Property(e => e.ApProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_id");
             entity.Property(e => e.Created)
@@ -5213,26 +5279,22 @@ public partial class RdContext : DbContext
                 .HasMaxLength(40)
                 .HasColumnName("ip_address");
             entity.Property(e => e.LastContactToServer)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact_to_server");
             entity.Property(e => e.MeshApProfile)
-                .HasDefaultValueSql("'''mesh'''")
+                .HasDefaultValueSql("'mesh'")
                 .HasColumnType("enum('mesh','ap_profile')")
                 .HasColumnName("mesh_ap_profile");
             entity.Property(e => e.MeshExitId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_exit_id");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.OpenvpnServerId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("openvpn_server_id");
             entity.Property(e => e.State).HasColumnName("state");
@@ -5247,6 +5309,7 @@ public partial class RdContext : DbContext
             entity.HasIndex(e => e.PlanId, "plan_id");
 
             entity.Property(e => e.ProfileId)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
             entity.Property(e => e.PlanId)
@@ -5276,18 +5339,15 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Approved).HasColumnName("approved");
             entity.Property(e => e.BankAccount)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("bank_account");
             entity.Property(e => e.BankName)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("bank_name");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DateTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("date_time");
             entity.Property(e => e.PermanentUserId)
@@ -5295,7 +5355,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.TrnsactionId)
                 .HasMaxLength(24)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("trnsaction_id");
             entity.Property(e => e.Value)
                 .HasPrecision(16)
@@ -5310,7 +5369,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("permanent_users");
+            entity
+                .ToTable("permanent_users")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -5321,29 +5383,25 @@ public partial class RdContext : DbContext
                 .HasColumnName("address");
             entity.Property(e => e.AuthType)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''sql'''")
+                .HasDefaultValueSql("'sql'")
                 .HasColumnName("auth_type");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.CountryId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("country_id");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DataCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_cap");
             entity.Property(e => e.DataCapType)
-                .HasDefaultValueSql("'''soft'''")
+                .HasDefaultValueSql("'soft'")
                 .HasColumnType("enum('hard','soft')")
                 .HasColumnName("data_cap_type");
             entity.Property(e => e.DataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_used");
             entity.Property(e => e.Email)
@@ -5351,38 +5409,31 @@ public partial class RdContext : DbContext
                 .HasColumnName("email");
             entity.Property(e => e.ExtraName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_name");
             entity.Property(e => e.ExtraValue)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_value");
             entity.Property(e => e.FromDate)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("from_date");
             entity.Property(e => e.LanguageId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("language_id");
             entity.Property(e => e.LastAcceptNas)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_accept_nas");
             entity.Property(e => e.LastAcceptTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_accept_time");
             entity.Property(e => e.LastRejectMessage)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_reject_message");
             entity.Property(e => e.LastRejectNas)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_reject_nas");
             entity.Property(e => e.LastRejectTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_reject_time");
             entity.Property(e => e.Modified)
@@ -5395,11 +5446,9 @@ public partial class RdContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("password");
             entity.Property(e => e.PercDataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(6)")
                 .HasColumnName("perc_data_used");
             entity.Property(e => e.PercTimeUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(6)")
                 .HasColumnName("perc_time_used");
             entity.Property(e => e.Phone)
@@ -5407,46 +5456,39 @@ public partial class RdContext : DbContext
                 .HasColumnName("phone");
             entity.Property(e => e.Profile)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("profile");
             entity.Property(e => e.ProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
             entity.Property(e => e.Realm)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("realm");
             entity.Property(e => e.RealmId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("realm_id");
             entity.Property(e => e.StaticIp)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("static_ip");
             entity.Property(e => e.Surname)
                 .HasMaxLength(50)
                 .HasColumnName("surname");
             entity.Property(e => e.TimeCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_cap");
             entity.Property(e => e.TimeCapType)
-                .HasDefaultValueSql("'''soft'''")
+                .HasDefaultValueSql("'soft'")
                 .HasColumnType("enum('hard','soft')")
                 .HasColumnName("time_cap_type");
             entity.Property(e => e.TimeUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_used");
             entity.Property(e => e.ToDate)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("to_date");
-            entity.Property(e => e.Token)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("token");
+            entity.Property(e => e.Token).HasColumnName("token");
             entity.Property(e => e.TrackAcct)
                 .IsRequired()
                 .HasDefaultValueSql("'1'")
@@ -5477,11 +5519,11 @@ public partial class RdContext : DbContext
                 .HasColumnType("text")
                 .HasColumnName("content");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.PermanentUserId)
@@ -5489,8 +5531,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("title");
+                .HasColumnName("title")
+                .UseCollation("utf8mb3_general_ci")
+                .HasCharSet("utf8mb3");
             entity.Property(e => e.Witer)
                 .HasColumnType("int(11)")
                 .HasColumnName("witer");
@@ -5508,7 +5551,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("permanent_user_notifications");
+            entity
+                .ToTable("permanent_user_notifications")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -5519,11 +5565,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("active");
             entity.Property(e => e.Address1)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("address_1");
             entity.Property(e => e.Address2)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("address_2");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
@@ -5533,22 +5577,19 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(3)")
                 .HasColumnName("increment");
             entity.Property(e => e.LastNotification)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_notification");
             entity.Property(e => e.LastValue)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(3)")
                 .HasColumnName("last_value");
             entity.Property(e => e.Method)
-                .HasDefaultValueSql("'''email'''")
+                .HasDefaultValueSql("'email'")
                 .HasColumnType("enum('whatsapp','email','sms')")
                 .HasColumnName("method");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.PermanentUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.Start)
@@ -5556,7 +5597,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(3)")
                 .HasColumnName("start");
             entity.Property(e => e.Type)
-                .HasDefaultValueSql("'''daily'''")
+                .HasDefaultValueSql("'daily'")
                 .HasColumnType("enum('daily','usage')")
                 .HasColumnName("type");
         });
@@ -5565,7 +5606,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("permanent_user_otps");
+            entity
+                .ToTable("permanent_user_otps")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -5580,7 +5624,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'''otp_awaiting'''")
+                .HasDefaultValueSql("'otp_awaiting'")
                 .HasColumnType("enum('otp_awaiting','otp_confirmed')")
                 .HasColumnName("status");
             entity.Property(e => e.Value)
@@ -5590,7 +5634,9 @@ public partial class RdContext : DbContext
 
         modelBuilder.Entity<PermanentUserPlan>(entity =>
         {
-            entity.HasKey(e => new { e.PermanentUserId, e.ValidTime }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.PermanentUserId, e.ValidTime })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
             entity.ToTable("permanent_user_plan");
 
@@ -5603,17 +5649,19 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("valid_time");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.OverridePrice)
                 .HasPrecision(16)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("override_price");
+            entity.Property(e => e.Periods)
+                .HasColumnType("int(11)")
+                .HasColumnName("periods");
             entity.Property(e => e.ProfileId)
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
@@ -5631,7 +5679,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("permanent_user_settings");
+            entity
+                .ToTable("permanent_user_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -5670,19 +5721,17 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("color");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Description)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("description");
             entity.Property(e => e.ImageFile)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("image_file");
             entity.Property(e => e.Modified)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Price)
@@ -5697,7 +5746,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("pptp_clients");
+            entity
+                .ToTable("pptp_clients")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -5707,18 +5759,15 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Ip)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("ip");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.NaId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("na_id");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("password");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
@@ -5729,22 +5778,24 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("predefined_commands");
+            entity
+                .ToTable("predefined_commands")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Action)
-                .HasDefaultValueSql("'''execute'''")
+                .HasDefaultValueSql("'execute'")
                 .HasColumnType("enum('execute','execute_and_reply')")
                 .HasColumnName("action");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Command)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("command");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
@@ -5754,7 +5805,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .IsFixedLength()
                 .HasColumnName("name");
         });
@@ -5763,13 +5813,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("profiles");
+            entity
+                .ToTable("profiles")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -5787,13 +5839,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("profile_components");
+            entity
+                .ToTable("profile_components")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -5811,37 +5865,37 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("profile_fup_components");
+            entity
+                .ToTable("profile_fup_components")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Action)
-                .HasDefaultValueSql("'''block'''")
+                .HasDefaultValueSql("'block'")
                 .HasColumnType("enum('increase_speed','decrease_speed','block')")
                 .HasColumnName("action");
             entity.Property(e => e.ActionAmount)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(10)")
                 .HasColumnName("action_amount");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DataAmount)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(10)")
                 .HasColumnName("data_amount");
             entity.Property(e => e.DataUnit)
-                .HasDefaultValueSql("'''mb'''")
+                .HasDefaultValueSql("'mb'")
                 .HasColumnType("enum('mb','gb')")
                 .HasColumnName("data_unit");
             entity.Property(e => e.IfCondition)
-                .HasDefaultValueSql("'''day_usage'''")
+                .HasDefaultValueSql("'day_usage'")
                 .HasColumnType("enum('day_usage','week_usage','month_usage','time_of_day')")
                 .HasColumnName("if_condition");
             entity.Property(e => e.IpPool)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("ip_pool");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -5854,11 +5908,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("profile_id");
             entity.Property(e => e.TimeEnd)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("time_end");
             entity.Property(e => e.TimeStart)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("time_start");
         });
 
@@ -5866,7 +5918,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Radacctid).HasName("PRIMARY");
 
-            entity.ToTable("radacct");
+            entity
+                .ToTable("radacct")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Acctinterval, "acctinterval");
 
@@ -5893,115 +5948,98 @@ public partial class RdContext : DbContext
                 .HasColumnName("radacctid");
             entity.Property(e => e.Acctauthentic)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("acctauthentic");
             entity.Property(e => e.Acctinputoctets)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("acctinputoctets");
             entity.Property(e => e.Acctinterval)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("acctinterval");
             entity.Property(e => e.Acctoutputoctets)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("acctoutputoctets");
             entity.Property(e => e.Acctsessionid)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("acctsessionid");
             entity.Property(e => e.Acctsessiontime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12) unsigned")
                 .HasColumnName("acctsessiontime");
             entity.Property(e => e.Acctstartdelay)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("acctstartdelay");
             entity.Property(e => e.Acctstarttime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("acctstarttime");
             entity.Property(e => e.Acctstopdelay)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("acctstopdelay");
             entity.Property(e => e.Acctstoptime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("acctstoptime");
             entity.Property(e => e.Acctterminatecause)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("acctterminatecause");
             entity.Property(e => e.Acctuniqueid)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("acctuniqueid");
             entity.Property(e => e.Acctupdatetime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("acctupdatetime");
             entity.Property(e => e.Calledstationid)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("calledstationid");
             entity.Property(e => e.Callingstationid)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("callingstationid");
             entity.Property(e => e.ConnectinfoStart)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("connectinfo_start");
             entity.Property(e => e.ConnectinfoStop)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("connectinfo_stop");
             entity.Property(e => e.Framedipaddress)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("framedipaddress");
             entity.Property(e => e.Framedprotocol)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("framedprotocol");
             entity.Property(e => e.Groupname)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("groupname");
             entity.Property(e => e.Nasidentifier)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasidentifier");
             entity.Property(e => e.Nasipaddress)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasipaddress");
             entity.Property(e => e.Nasportid)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("nasportid");
             entity.Property(e => e.Nasporttype)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("nasporttype");
             entity.Property(e => e.Realm)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("realm");
             entity.Property(e => e.Servicetype)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("servicetype");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
             entity.Property(e => e.Xascendsessionsvrkey)
                 .HasMaxLength(20)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("xascendsessionsvrkey");
         });
 
@@ -6009,31 +6047,32 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("radcheck");
+            entity
+                .ToTable("radcheck")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Username, "FK_radcheck_ref_vouchers");
-
-            entity.HasIndex(e => e.Username, "username");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11) unsigned")
                 .HasColumnName("id");
             entity.Property(e => e.Attribute)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("attribute");
             entity.Property(e => e.Op)
                 .HasMaxLength(2)
-                .HasDefaultValueSql("'''=='''")
+                .HasDefaultValueSql("'=='")
                 .IsFixedLength()
                 .HasColumnName("op");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
             entity.Property(e => e.Value)
                 .HasMaxLength(253)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("value");
         });
 
@@ -6041,39 +6080,42 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("radgroupcheck");
+            entity
+                .ToTable("radgroupcheck")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
-            entity.HasIndex(e => e.Groupname, "groupname");
+            entity.HasIndex(e => e.Groupname, "groupname").HasAnnotation("MySql:IndexPrefixLength", new[] { 32 });
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11) unsigned")
                 .HasColumnName("id");
             entity.Property(e => e.Attribute)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("attribute");
             entity.Property(e => e.Comment)
                 .HasMaxLength(253)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("comment");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Groupname)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("groupname");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Op)
                 .HasMaxLength(2)
-                .HasDefaultValueSql("'''=='''")
+                .HasDefaultValueSql("'=='")
                 .IsFixedLength()
                 .HasColumnName("op");
             entity.Property(e => e.Value)
                 .HasMaxLength(253)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("value");
         });
 
@@ -6081,39 +6123,42 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("radgroupreply");
+            entity
+                .ToTable("radgroupreply")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
-            entity.HasIndex(e => e.Groupname, "groupname");
+            entity.HasIndex(e => e.Groupname, "groupname").HasAnnotation("MySql:IndexPrefixLength", new[] { 32 });
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11) unsigned")
                 .HasColumnName("id");
             entity.Property(e => e.Attribute)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("attribute");
             entity.Property(e => e.Comment)
                 .HasMaxLength(253)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("comment");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Groupname)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("groupname");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Op)
                 .HasMaxLength(2)
-                .HasDefaultValueSql("'''='''")
+                .HasDefaultValueSql("'='")
                 .IsFixedLength()
                 .HasColumnName("op");
             entity.Property(e => e.Value)
                 .HasMaxLength(253)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("value");
         });
 
@@ -6121,7 +6166,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("radippool");
+            entity
+                .ToTable("radippool")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Framedipaddress, "framedipaddress");
 
@@ -6146,46 +6194,44 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.ExpiryTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("expiry_time");
             entity.Property(e => e.ExtraName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_name");
             entity.Property(e => e.ExtraValue)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_value");
             entity.Property(e => e.Framedipaddress)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("framedipaddress");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Nasidentifier)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasidentifier");
             entity.Property(e => e.Nasipaddress)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasipaddress");
             entity.Property(e => e.PermanentUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.PoolKey)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("pool_key");
             entity.Property(e => e.PoolName)
                 .HasMaxLength(30)
                 .HasColumnName("pool_name");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -6193,35 +6239,37 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("radpostauth");
+            entity
+                .ToTable("radpostauth")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Authdate)
                 .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("authdate");
             entity.Property(e => e.Nasname)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasname");
             entity.Property(e => e.Pass)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("pass");
             entity.Property(e => e.Realm)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("realm");
             entity.Property(e => e.Reply)
                 .HasMaxLength(32)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("reply");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -6229,31 +6277,32 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("radreply");
+            entity
+                .ToTable("radreply")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Username, "FK_radreply_ref_vouchers");
-
-            entity.HasIndex(e => e.Username, "username");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11) unsigned")
                 .HasColumnName("id");
             entity.Property(e => e.Attribute)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("attribute");
             entity.Property(e => e.Op)
                 .HasMaxLength(2)
-                .HasDefaultValueSql("'''='''")
+                .HasDefaultValueSql("'='")
                 .IsFixedLength()
                 .HasColumnName("op");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
             entity.Property(e => e.Value)
                 .HasMaxLength(253)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("value");
         });
 
@@ -6261,16 +6310,19 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("radusergroup");
+            entity
+                .ToTable("radusergroup")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
-            entity.HasIndex(e => e.Username, "username");
+            entity.HasIndex(e => e.Username, "username").HasAnnotation("MySql:IndexPrefixLength", new[] { 32 });
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Groupname)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("groupname");
             entity.Property(e => e.Priority)
                 .HasDefaultValueSql("'1'")
@@ -6278,7 +6330,7 @@ public partial class RdContext : DbContext
                 .HasColumnName("priority");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -6286,27 +6338,29 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("realms");
+            entity
+                .ToTable("realms")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Cell)
                 .HasMaxLength(14)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("cell");
             entity.Property(e => e.City)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("city");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Country)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("country");
             entity.Property(e => e.Created)
@@ -6314,54 +6368,50 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Email)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("email");
             entity.Property(e => e.Facebook)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("facebook");
             entity.Property(e => e.GooglePlus)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("google_plus");
             entity.Property(e => e.IconFileName)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'''logo.png'''")
+                .HasDefaultValueSql("'logo.png'")
                 .HasColumnName("icon_file_name");
-            entity.Property(e => e.Lat)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lat");
+            entity.Property(e => e.Lat).HasColumnName("lat");
             entity.Property(e => e.Linkedin)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("linkedin");
-            entity.Property(e => e.Lon)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("lon");
+            entity.Property(e => e.Lon).HasColumnName("lon");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.Phone)
                 .HasMaxLength(14)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("phone");
             entity.Property(e => e.Street)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("street");
             entity.Property(e => e.StreetNo)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("street_no");
             entity.Property(e => e.Suffix)
                 .HasMaxLength(200)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("suffix");
             entity.Property(e => e.SuffixDevices).HasColumnName("suffix_devices");
@@ -6372,24 +6422,24 @@ public partial class RdContext : DbContext
                 .HasColumnName("t_c_content");
             entity.Property(e => e.TCTitle)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("t_c_title");
             entity.Property(e => e.TownSuburb)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .IsFixedLength()
                 .HasColumnName("town_suburb");
             entity.Property(e => e.Twitter)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("twitter");
             entity.Property(e => e.Url)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("url");
             entity.Property(e => e.Youtube)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("youtube");
         });
 
@@ -6397,7 +6447,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("registration_requests");
+            entity
+                .ToTable("registration_requests")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -6409,28 +6462,21 @@ public partial class RdContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("email");
             entity.Property(e => e.EmailSent)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("email_sent");
             entity.Property(e => e.Expire)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("expire");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
-            entity.Property(e => e.RegistrationCode)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("registration_code");
+            entity.Property(e => e.RegistrationCode).HasColumnName("registration_code");
             entity.Property(e => e.State)
-                .HasDefaultValueSql("'''not_allocated'''")
+                .HasDefaultValueSql("'not_allocated'")
                 .HasColumnType("enum('not_allocated','allocated','email_sent','verified','registration_completed','expired')")
                 .HasColumnName("state");
-            entity.Property(e => e.TokenKey)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("token_key");
+            entity.Property(e => e.TokenKey).HasColumnName("token_key");
             entity.Property(e => e.UserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("user_id");
         });
@@ -6439,7 +6485,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("reverse_lookups");
+            entity
+                .ToTable("reverse_lookups")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -6462,22 +6511,24 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.MeshId).HasName("PRIMARY");
 
-            entity.ToTable("rolling_last_day");
+            entity
+                .ToTable("rolling_last_day")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshName, "idx_rolling_last_day_mesh_name");
 
             entity.HasIndex(e => e.TreeTagId, "idx_rolling_last_day_tree_tag_id");
 
             entity.Property(e => e.MeshId)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.DualRadios)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("dual_radios");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.NdwnBegRemoveSecs)
                 .HasDefaultValueSql("'0.00'")
                 .HasColumnType("float(14,2)")
@@ -6551,7 +6602,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("bigint(20)")
                 .HasColumnName("tot_tx_bytes");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -6560,22 +6610,24 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.MeshId).HasName("PRIMARY");
 
-            entity.ToTable("rolling_last_hour");
+            entity
+                .ToTable("rolling_last_hour")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshName, "idx_rolling_last_hour_tree_mesh_name");
 
             entity.HasIndex(e => e.TreeTagId, "idx_rolling_last_hour_tree_tag_id");
 
             entity.Property(e => e.MeshId)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.DualRadios)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("dual_radios");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.NdwnBegRemoveSecs)
                 .HasDefaultValueSql("'0.00'")
                 .HasColumnType("float(14,2)")
@@ -6649,7 +6701,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("bigint(20)")
                 .HasColumnName("tot_tx_bytes");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -6658,22 +6709,24 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.MeshId).HasName("PRIMARY");
 
-            entity.ToTable("rolling_last_ninety_days");
+            entity
+                .ToTable("rolling_last_ninety_days")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshName, "idx_rolling_last_ninety_days_mesh_name");
 
             entity.HasIndex(e => e.TreeTagId, "idx_rolling_last_ninety_days_tree_tag_id");
 
             entity.Property(e => e.MeshId)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.DualRadios)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("dual_radios");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.NdwnBegRemoveSecs)
                 .HasDefaultValueSql("'0.00'")
                 .HasColumnType("float(14,2)")
@@ -6747,7 +6800,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("bigint(20)")
                 .HasColumnName("tot_tx_bytes");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -6756,22 +6808,24 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.MeshId).HasName("PRIMARY");
 
-            entity.ToTable("rolling_last_seven_days");
+            entity
+                .ToTable("rolling_last_seven_days")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshName, "idx_rolling_last_seven_days_mesh_name");
 
             entity.HasIndex(e => e.TreeTagId, "idx_rolling_last_seven_days_tree_tag_id");
 
             entity.Property(e => e.MeshId)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.DualRadios)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("dual_radios");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.NdwnBegRemoveSecs)
                 .HasDefaultValueSql("'0.00'")
                 .HasColumnType("float(14,2)")
@@ -6845,7 +6899,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("bigint(20)")
                 .HasColumnName("tot_tx_bytes");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -6854,22 +6907,24 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.MeshId).HasName("PRIMARY");
 
-            entity.ToTable("rolling_last_sixty_days");
+            entity
+                .ToTable("rolling_last_sixty_days")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshName, "idx_rolling_last_sixty_days_mesh_name");
 
             entity.HasIndex(e => e.TreeTagId, "idx_rolling_last_sixty_days_tree_tag_id");
 
             entity.Property(e => e.MeshId)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.DualRadios)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("dual_radios");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.NdwnBegRemoveSecs)
                 .HasDefaultValueSql("'0.00'")
                 .HasColumnType("float(14,2)")
@@ -6943,7 +6998,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("bigint(20)")
                 .HasColumnName("tot_tx_bytes");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -6952,22 +7006,24 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.MeshId).HasName("PRIMARY");
 
-            entity.ToTable("rolling_last_thirty_days");
+            entity
+                .ToTable("rolling_last_thirty_days")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.MeshName, "idx_rolling_last_thirty_days_mesh_name");
 
             entity.HasIndex(e => e.TreeTagId, "idx_rolling_last_thirty_days_tree_tag_id");
 
             entity.Property(e => e.MeshId)
+                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.DualRadios)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("dual_radios");
-            entity.Property(e => e.MeshName)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("mesh_name");
+            entity.Property(e => e.MeshName).HasColumnName("mesh_name");
             entity.Property(e => e.NdwnBegRemoveSecs)
                 .HasDefaultValueSql("'0.00'")
                 .HasColumnType("float(14,2)")
@@ -7041,7 +7097,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("bigint(20)")
                 .HasColumnName("tot_tx_bytes");
             entity.Property(e => e.TreeTagId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("tree_tag_id");
         });
@@ -7050,13 +7105,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("schedules");
+            entity
+                .ToTable("schedules")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -7067,7 +7124,6 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .IsFixedLength()
                 .HasColumnName("name");
         });
@@ -7076,25 +7132,28 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("schedule_entries");
+            entity
+                .ToTable("schedule_entries")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Command)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("command");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("description");
             entity.Property(e => e.EventTime)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("event_time");
             entity.Property(e => e.Fr).HasColumnName("fr");
             entity.Property(e => e.Mo).HasColumnName("mo");
@@ -7102,19 +7161,17 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.PredefinedCommandId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("predefined_command_id");
             entity.Property(e => e.Sa).HasColumnName("sa");
             entity.Property(e => e.ScheduleId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("schedule_id");
             entity.Property(e => e.Su).HasColumnName("su");
             entity.Property(e => e.Th).HasColumnName("th");
             entity.Property(e => e.Tu).HasColumnName("tu");
             entity.Property(e => e.Type)
-                .HasDefaultValueSql("'''command'''")
+                .HasDefaultValueSql("'command'")
                 .HasColumnType("enum('predefined_command','command')")
                 .HasColumnName("type");
             entity.Property(e => e.We).HasColumnName("we");
@@ -7124,13 +7181,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("sites");
+            entity
+                .ToTable("sites")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
@@ -7138,11 +7197,9 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Lat)
                 .HasPrecision(11, 8)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("lat");
             entity.Property(e => e.Lng)
                 .HasPrecision(11, 8)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("lng");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -7156,7 +7213,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("sms_histories");
+            entity
+                .ToTable("sms_histories")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -7169,22 +7229,18 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.Message)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("message");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Reason)
                 .HasMaxLength(25)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("reason");
             entity.Property(e => e.Recipient)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("recipient");
             entity.Property(e => e.Reply)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("reply");
             entity.Property(e => e.SmsProvider)
                 .HasDefaultValueSql("'1'")
@@ -7196,7 +7252,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("social_login_users");
+            entity
+                .ToTable("social_login_users")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -7204,61 +7263,57 @@ public partial class RdContext : DbContext
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
-            entity.Property(e => e.DateOfBirth)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnType("date")
-                .HasColumnName("date_of_birth");
+            entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("email");
             entity.Property(e => e.ExtraName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_name");
             entity.Property(e => e.ExtraValue)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_value");
             entity.Property(e => e.FirstName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("first_name");
             entity.Property(e => e.Gender)
-                .HasDefaultValueSql("'''male'''")
+                .HasDefaultValueSql("'male'")
                 .HasColumnType("enum('male','female')")
                 .HasColumnName("gender");
             entity.Property(e => e.Image)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("image");
             entity.Property(e => e.LastConnectTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_connect_time");
             entity.Property(e => e.LastName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("last_name");
             entity.Property(e => e.Locale)
                 .HasMaxLength(5)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("locale");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.Provider)
-                .HasDefaultValueSql("'''Facebook'''")
+                .HasDefaultValueSql("'Facebook'")
                 .HasColumnType("enum('Facebook','Google','Twitter')")
                 .HasColumnName("provider");
             entity.Property(e => e.Timezone).HasColumnName("timezone");
             entity.Property(e => e.Uid)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("uid");
         });
 
@@ -7266,7 +7321,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("social_login_user_realms");
+            entity
+                .ToTable("social_login_user_realms")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -7278,11 +7336,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.RealmId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("realm_id");
             entity.Property(e => e.SocialLoginUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("social_login_user_id");
         });
@@ -7291,7 +7347,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("softflows");
+            entity
+                .ToTable("softflows")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -7301,62 +7360,48 @@ public partial class RdContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.DstIp)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("dst_ip");
             entity.Property(e => e.DstPort)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dst_port");
             entity.Property(e => e.DynamicClientId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("dynamic_client_id");
             entity.Property(e => e.Finish)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("finish");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.OctIn)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("oct_in");
             entity.Property(e => e.OctOut)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("oct_out");
             entity.Property(e => e.PcktIn)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("pckt_in");
             entity.Property(e => e.PcktOut)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("pckt_out");
             entity.Property(e => e.Proto)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("proto");
             entity.Property(e => e.SrcIp)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("src_ip");
             entity.Property(e => e.SrcMac)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("src_mac");
             entity.Property(e => e.SrcPort)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("src_port");
             entity.Property(e => e.Start)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("start");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("username");
         });
 
@@ -7364,17 +7409,18 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("temp_flow_logs");
+            entity
+                .ToTable("temp_flow_logs")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.ApId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_id");
             entity.Property(e => e.ApProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("ap_profile_id");
             entity.Property(e => e.DstIp)
@@ -7387,11 +7433,9 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("finish");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.OctIn)
@@ -7422,7 +7466,7 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("start");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("timestamp");
             entity.Property(e => e.Username)
@@ -7434,17 +7478,18 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("temp_proxy_logs");
+            entity
+                .ToTable("temp_proxy_logs")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.FullString)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("full_string");
             entity.Property(e => e.FullUrl)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("full_url");
             entity.Property(e => e.Host)
@@ -7454,18 +7499,16 @@ public partial class RdContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("mac");
             entity.Property(e => e.MeshId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("mesh_id");
             entity.Property(e => e.NodeId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.SourceIp)
                 .HasMaxLength(255)
                 .HasColumnName("source_ip");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("timestamp");
             entity.Property(e => e.Username)
@@ -7477,7 +7520,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("temp_reports");
+            entity
+                .ToTable("temp_reports")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -7495,11 +7541,10 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("node_id");
             entity.Property(e => e.Report)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("text")
                 .HasColumnName("report");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("timestamp");
         });
@@ -7508,7 +7553,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("timezones");
+            entity
+                .ToTable("timezones")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -7531,13 +7579,15 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("top_ups");
+            entity
+                .ToTable("top_ups")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Comment)
@@ -7547,26 +7597,22 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.Data)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(11)")
                 .HasColumnName("data");
             entity.Property(e => e.DaysToUse)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("days_to_use");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.PermanentUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.Time)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("time");
             entity.Property(e => e.Type)
-                .HasDefaultValueSql("'''data'''")
+                .HasDefaultValueSql("'data'")
                 .HasColumnType("enum('data','time','days_to_use')")
                 .HasColumnName("type");
         });
@@ -7575,13 +7621,16 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("top_up_transactions");
+            entity
+                .ToTable("top_up_transactions")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Action)
-                .HasDefaultValueSql("'''create'''")
+                .HasDefaultValueSql("'create'")
                 .HasColumnType("enum('create','update','delete')")
                 .HasColumnName("action");
             entity.Property(e => e.Created)
@@ -7592,34 +7641,28 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.NewValue)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("new_value");
             entity.Property(e => e.OldValue)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("old_value");
             entity.Property(e => e.PermanentUser)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("permanent_user");
             entity.Property(e => e.PermanentUserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
             entity.Property(e => e.RadiusAttribute)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("radius_attribute");
             entity.Property(e => e.TopUpId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("top_up_id");
             entity.Property(e => e.Type)
-                .HasDefaultValueSql("'''data'''")
+                .HasDefaultValueSql("'data'")
                 .HasColumnType("enum('data','time','days_to_use')")
                 .HasColumnName("type");
             entity.Property(e => e.UserId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("user_id");
         });
@@ -7628,7 +7671,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("unknown_dynamic_clients");
+            entity
+                .ToTable("unknown_dynamic_clients")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Calledstationid, "calledstationid").IsUnique();
 
@@ -7639,25 +7685,24 @@ public partial class RdContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Calledstationid)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("calledstationid");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.LastContact)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact");
             entity.Property(e => e.LastContactIp)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("last_contact_ip");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
             entity.Property(e => e.Nasidentifier)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasidentifier");
         });
 
@@ -7665,7 +7710,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("unknown_nodes");
+            entity
+                .ToTable("unknown_nodes")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11) unsigned")
@@ -7674,19 +7722,17 @@ public partial class RdContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.FirmwareKeyId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("firmware_key_id");
             entity.Property(e => e.FromIp)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("from_ip");
             entity.Property(e => e.Gateway)
                 .IsRequired()
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("gateway");
             entity.Property(e => e.LastContact)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_contact");
             entity.Property(e => e.Mac)
@@ -7697,31 +7743,28 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("name");
             entity.Property(e => e.NewMode)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("enum('ap','mesh')")
                 .HasColumnName("new_mode");
             entity.Property(e => e.NewModeStatus)
-                .HasDefaultValueSql("'''awaiting'''")
+                .HasDefaultValueSql("'awaiting'")
                 .HasColumnType("enum('awaiting','fetched','replied')")
                 .HasColumnName("new_mode_status");
             entity.Property(e => e.NewServer)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("new_server");
             entity.Property(e => e.NewServerProtocol)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("enum('https','http')")
                 .HasColumnName("new_server_protocol");
             entity.Property(e => e.NewServerStatus)
-                .HasDefaultValueSql("'''awaiting'''")
+                .HasDefaultValueSql("'awaiting'")
                 .HasColumnType("enum('awaiting','fetched','replied')")
                 .HasColumnName("new_server_status");
             entity.Property(e => e.Vendor)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("vendor");
         });
 
@@ -7729,7 +7772,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("users");
+            entity
+                .ToTable("users")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.GroupId, "idx_users_group_id");
 
@@ -7741,7 +7787,6 @@ public partial class RdContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("address");
             entity.Property(e => e.CountryId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("country_id");
             entity.Property(e => e.Created)
@@ -7754,7 +7799,6 @@ public partial class RdContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("group_id");
             entity.Property(e => e.LanguageId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("language_id");
             entity.Property(e => e.Modified)
@@ -7776,9 +7820,7 @@ public partial class RdContext : DbContext
                 .HasDefaultValueSql("'316'")
                 .HasColumnType("int(11)")
                 .HasColumnName("timezone_id");
-            entity.Property(e => e.Token)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("token");
+            entity.Property(e => e.Token).HasColumnName("token");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
                 .HasColumnName("username");
@@ -7788,7 +7830,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("user_settings");
+            entity
+                .ToTable("user_settings")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.UserId, "idx_user_settings_user_id");
 
@@ -7816,13 +7861,14 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("user_ssids");
+            entity
+                .ToTable("user_ssids")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Ssidname, "idx_user_ssids_ssidname");
 
             entity.HasIndex(e => e.Username, "idx_user_ssids_username");
-
-            entity.HasIndex(e => e.Username, "username");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -7833,11 +7879,11 @@ public partial class RdContext : DbContext
                 .HasColumnName("priority");
             entity.Property(e => e.Ssidname)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("ssidname");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -7845,7 +7891,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("user_stats");
+            entity
+                .ToTable("user_stats")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => new { e.Callingstationid, e.Timestamp }, "us_callingstationid_timestamp");
 
@@ -7866,34 +7915,34 @@ public partial class RdContext : DbContext
                 .HasColumnName("acctoutputoctets");
             entity.Property(e => e.Callingstationid)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("callingstationid");
             entity.Property(e => e.Framedipaddress)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("framedipaddress");
             entity.Property(e => e.Nasidentifier)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasidentifier");
             entity.Property(e => e.Nasipaddress)
                 .HasMaxLength(15)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasipaddress");
             entity.Property(e => e.RadacctId)
                 .HasColumnType("int(11)")
                 .HasColumnName("radacct_id");
             entity.Property(e => e.Realm)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("realm");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("timestamp");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
@@ -7901,7 +7950,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("user_stats_dailies");
+            entity
+                .ToTable("user_stats_dailies")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => new { e.Callingstationid, e.Timestamp }, "usd_callingstationid_timestamp");
 
@@ -7922,18 +7974,18 @@ public partial class RdContext : DbContext
                 .HasColumnName("acctoutputoctets");
             entity.Property(e => e.Callingstationid)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("callingstationid");
             entity.Property(e => e.Nasidentifier)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("nasidentifier");
             entity.Property(e => e.Realm)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("realm");
             entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("'current_timestamp()'")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("timestamp");
             entity.Property(e => e.UserStatId)
@@ -7941,13 +7993,15 @@ public partial class RdContext : DbContext
                 .HasColumnName("user_stat_id");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("username");
         });
 
         modelBuilder.Entity<UsersAccess>(entity =>
         {
-            entity.HasKey(e => new { e.UserId, e.EntityName }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.UserId, e.EntityName })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
             entity.ToTable("users_access");
 
@@ -7967,7 +8021,10 @@ public partial class RdContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("vouchers");
+            entity
+                .ToTable("vouchers")
+                .HasCharSet("utf8mb3")
+                .UseCollation("utf8mb3_general_ci");
 
             entity.HasIndex(e => e.Name, "ak_vouchers").IsUnique();
 
@@ -7976,53 +8033,44 @@ public partial class RdContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Batch)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("batch");
             entity.Property(e => e.CloudId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cloud_id");
             entity.Property(e => e.Created)
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DataCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_cap");
             entity.Property(e => e.DataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bigint(20)")
                 .HasColumnName("data_used");
             entity.Property(e => e.Expire)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("expire");
             entity.Property(e => e.ExtraName)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_name");
             entity.Property(e => e.ExtraValue)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("extra_value");
             entity.Property(e => e.LastAcceptNas)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_accept_nas");
             entity.Property(e => e.LastAcceptTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_accept_time");
             entity.Property(e => e.LastRejectMessage)
                 .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_reject_message");
             entity.Property(e => e.LastRejectNas)
                 .HasMaxLength(128)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("last_reject_nas");
             entity.Property(e => e.LastRejectTime)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime")
                 .HasColumnName("last_reject_time");
             entity.Property(e => e.Modified)
@@ -8030,51 +8078,44 @@ public partial class RdContext : DbContext
                 .HasColumnName("modified");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnName("name");
             entity.Property(e => e.Password)
                 .HasMaxLength(30)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("password");
             entity.Property(e => e.PercDataUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(6)")
                 .HasColumnName("perc_data_used");
             entity.Property(e => e.PercTimeUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(6)")
                 .HasColumnName("perc_time_used");
             entity.Property(e => e.Profile)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("profile");
             entity.Property(e => e.ProfileId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("profile_id");
             entity.Property(e => e.Realm)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("realm");
             entity.Property(e => e.RealmId)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")
                 .HasColumnName("realm_id");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'''new'''")
+                .HasDefaultValueSql("'new'")
                 .HasColumnType("enum('new','used','depleted','expired')")
                 .HasColumnName("status");
             entity.Property(e => e.TimeCap)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_cap");
             entity.Property(e => e.TimeUsed)
-                .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(12)")
                 .HasColumnName("time_used");
             entity.Property(e => e.TimeValid)
                 .HasMaxLength(10)
-                .HasDefaultValueSql("''''''")
+                .HasDefaultValueSql("''")
                 .HasColumnName("time_valid");
         });
 

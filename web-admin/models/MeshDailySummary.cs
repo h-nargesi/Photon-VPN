@@ -9,7 +9,7 @@ public partial class MeshDailySummary
 
     public int MeshId { get; set; }
 
-    public DateTime TheDate { get; set; }
+    public DateOnly TheDate { get; set; }
 
     public int? TreeTagId { get; set; }
 

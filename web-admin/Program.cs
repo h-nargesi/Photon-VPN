@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Photon.Service.VPN.App;
 using Serilog;
 using Serilog.Events;
