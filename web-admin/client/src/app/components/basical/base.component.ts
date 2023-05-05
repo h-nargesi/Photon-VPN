@@ -31,8 +31,8 @@ export abstract class BaseComponent {
   getTimeString = BaseComponent.getTimeString;
   getRemain = BaseComponent.getRemain;
 
-  static getDateTimeString(date: Date): string {
-    return date.toLocaleString().replace('T', ' ');
+  static getDateTimeString(date: Date | null): string {
+    return date?.toLocaleString().replace('T', ' ') ?? '';
   }
 
   static getDateString(date: Date | null): string | undefined {
@@ -43,7 +43,7 @@ export abstract class BaseComponent {
     return time?.toLocaleString().substring(11, 20);
   }
 
-  static getRemain(date: Date | null, details: boolean = false): string {
+  static getRemain(date: Date | null, past: boolean = true, details: boolean = false): string {
     if (date == null) return '';
 
     date = new Date(Date.parse(date.toString()));
@@ -54,7 +54,7 @@ export abstract class BaseComponent {
 
     if (diff < 0) {
       diff = -diff;
-      result.push('past');
+      if (past) result.push('past');
     }
 
     slash = Math.floor(diff / 86400000);
