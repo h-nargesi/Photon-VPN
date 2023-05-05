@@ -22,6 +22,18 @@ public class Users : Controller
     }
 
     [HttpPost]
+    public IActionResult Count([FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = db.PermanentUsers.AsNoTracking();
+
+        var filtered = filter.ApplyFilterCount(query);
+
+        return Ok(filtered.Count());
+    }
+
+    [HttpPost]
     public async Task<IActionResult> Options([FromBody] ListQuery filter)
     {
         using var db = new RdContext();

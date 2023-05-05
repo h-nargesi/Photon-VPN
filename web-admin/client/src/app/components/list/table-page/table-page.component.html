@@ -20,6 +20,7 @@
       </c-card-body>
       <c-card-body>
         <app-table-view #tableView
+          [filter]="filter"
           [service]="service"
           [columns-info]="columns_info"
           [data-projection]="data_projection"

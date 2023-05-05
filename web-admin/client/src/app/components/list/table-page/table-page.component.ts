@@ -13,6 +13,7 @@ import { CookieService } from '../../services/cookie-service';
 })
 export class TablePageComponent extends BaseComponent {
 
+  @Input("filter") filter: boolean = true;
   @Input("small") small: boolean = true;
   @Input("title") title: string | undefined;
   @Input("columns-info") columns_info: EntitySchema | undefined;

@@ -36,6 +36,19 @@ public class Plans : Controller
         return Ok(await filtered.ToDynamicListAsync());
     }
 
+    [HttpPost]
+    [Route("")]
+    [Route("/srv/[controller]/[action]")]
+    public IActionResult Count([FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = db.Plans.AsNoTracking();
+
+        var filtered = filter.ApplyFilterCount(query);
+
+        return Ok(filtered.Count());
+    }
 
     [HttpGet]
     [Route("{id:int}")]

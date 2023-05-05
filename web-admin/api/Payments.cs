@@ -26,6 +26,23 @@ public class Payments : Controller
         return Ok(await filtered.ToDynamicListAsync());
     }
 
+    [HttpPost]
+    public IActionResult Count([FromQuery] int? user_id, [FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = db.Payments.AsNoTracking();
+
+        if (user_id.HasValue)
+        {
+            query = query.Where(p => p.PermanentUserId == user_id);
+        }
+
+        var filtered = filter.ApplyFilterCount(query);
+
+        return Ok(filtered.Count());
+    }
+
     [HttpGet]
     [Route("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)

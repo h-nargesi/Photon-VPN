@@ -17,7 +17,6 @@ public class Servers : Controller
         return Ok(await query.ToListAsync());
     }
 
-
     [HttpGet]
     [Route("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)

@@ -6,7 +6,7 @@
   </button>
 </c-button-group>
 
-<div class="overflow-auto" style="max-height: 500px;">
+<div class="overflow-auto">
   <table cTable class="small" [striped]="true" [hover]="true">
     <thead cTableColor="dark">
       <tr>
@@ -25,7 +25,7 @@
       <tr *ngFor="let row of DataSource; let index = index" (click)="SelectRow(index)"
         cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
 
-        <td scope="row">{{ index + 1 }}</td>
+        <td scope="row">{{ GetStartOffset() + index + 1 }}</td>
         <td *ngFor="let col of DataColumns;">{{ row[col] }}</td>
       </tr>
     </tbody>
@@ -34,5 +34,15 @@
 
 <c-button-group *ngIf="filter" class="me-3 mt-3 mb-3">
   <button cButton variant="outline" size="sm"
-    *ngFor="let p of Pages;" [color]="p.color" (click)="GoPage(p.page)">{{ p.page }}</button>
+    *ngFor="let p of Pages;" [color]="p.color" (click)="GoPage(p.page)">{{ p.page }}</button><c-dropdown variant="btn-group">
+  <button cButton cDropdownToggle color="secondary" variant="outline" size="sm">
+    Size: {{ Query?.limit }}
+  </button>
+  <ul cDropdownMenu size="sm">
+    <li><button (click)="PageSize(5)" cDropdownItem size="sm">5</button></li>
+    <li><button (click)="PageSize(10)" cDropdownItem size="sm">10</button></li>
+    <li><button (click)="PageSize(50)" cDropdownItem size="sm">50</button></li>
+    <li><button (click)="PageSize(500)" cDropdownItem size="sm">500</button></li>
+  </ul>
+</c-dropdown>
 </c-button-group>

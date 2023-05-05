@@ -21,7 +21,7 @@ export class TableViewComponent extends ListViewComponent {
   @Output("filter-changed") filter_changed = new EventEmitter<ListQuery>();
 
   Query: ListQuery | null = null;
-  Pages : { page: number, color: string }[] = [];
+  Pages: { page: number, color: string }[] = [];
   private total_count: number = 0;
 
   constructor(router: Router) {
@@ -32,6 +32,11 @@ export class TableViewComponent extends ListViewComponent {
   ngOnInit(): void {
     this.LoadQuary();
     this.Relaod();
+  }
+
+  GetStartOffset(): number {
+    if (!this.Query) return 0;
+    else return this.Query.start;
   }
 
   Relaod() {
@@ -94,6 +99,13 @@ export class TableViewComponent extends ListViewComponent {
     if (!this.Query.limit) this.Query.limit = 5;
 
     this.Query.start = (page - 1) * this.Query.limit;
+    this.OnFilterCanged();
+  }
+
+  PageSize(size: number) {
+    if (!this.Query) return;
+    this.Query.start = 0;
+    this.Query.limit = size;
     this.OnFilterCanged();
   }
 
@@ -181,16 +193,29 @@ export class TableViewComponent extends ListViewComponent {
       else
         color = "secondary";
 
+      if (i == 0 && page_number != 0)
+        this.Pages.push({
+          page: 1,
+          color: "success",
+        });
+
       this.Pages.push({
         page: 1 + page_number,
         color: color,
       });
+
+      if (i + 1 == length && page_number + 1 < max_page)
+        this.Pages.push({
+          page: max_page,
+          color: "success",
+        });
     }
   }
 
   private OnFilterCanged() {
     if (!this.Query) return;
 
+    console.log('query', this.Query);
     this.setCookie('query', this.Query);
     this.filter_changed.emit(this.Query);
     this.Relaod();

@@ -36,6 +36,20 @@ public class Profiles : Controller
     }
 
     [HttpPost]
+    [Route("")]
+    [Route("/srv/[controller]/[action]")]
+    public IActionResult Count([FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = db.Profiles.AsNoTracking();
+
+        var filtered = filter.ApplyFilterCount(query);
+
+        return Ok(filtered.Count());
+    }
+
+    [HttpPost]
     public async Task<IActionResult> Options([FromBody] ListQuery filter)
     {
         using var db = new RdContext();

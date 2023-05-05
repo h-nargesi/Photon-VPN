@@ -24,6 +24,20 @@ public class UserLogs : Controller
         return Ok(await filtered.ToDynamicListAsync());
     }
 
+    [HttpPost]
+    [Route("{user_id:int}")]
+    public IActionResult Count([FromRoute] int user_id, [FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = db.PermanentUserLogs.AsNoTracking()
+                                        .Where(c => c.PermanentUserId == user_id);
+
+        var filtered = filter.ApplyFilterCount(query);
+
+        return Ok(filtered.Count());
+    }
+
     [HttpGet]
     [Route("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id)
