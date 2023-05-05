@@ -6,11 +6,11 @@
       </c-card-header>
       <c-card-body>
         <app-list-buttons 
-          (reloadClick)="ngOnInit()"
+          (reloadClick)="tableView.Relaod()"
           (addClick)="onAddClick()"
           (editClick)="onEditClick()"
           (removeClick)="onDeleteClick()"
-          (undoClick)="onUndoClick()"
+          (undoClick)="tableView.ClearSelected()"
           [show-add]="show_add"
           [show-edit]="show_edit"
           [show-reload]="show_reload"
@@ -18,16 +18,13 @@
           [show-undo]="show_undo"></app-list-buttons>
         <ng-content></ng-content>
       </c-card-body>
-      <c-card-body class="overflow-auto">
-        <table cTable app-table-view #tableView
-          class="small"
+      <c-card-body>
+        <app-table-view #tableView
+          [service]="service"
           [columns-info]="columns_info"
           [data-projection]="data_projection"
-          [striped]="true" 
-          [hover]="true"
-          [small]="small"
           (double-click)="onDbClick($event)">
-        </table>
+        </app-table-view>
       </c-card-body>
     </c-card>
   </c-col>

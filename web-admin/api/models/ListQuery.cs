@@ -1,7 +1,6 @@
+using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using Photon.Service.VPN.App;
-using Photon.Service.VPN.Models;
-using System.Text;
 
 namespace Photon.Service.VPN.Handlers.Model;
 
@@ -19,47 +18,60 @@ public class ListQuery
 
     public string[]? Columns { get; set; }
 
-    public Task<List<T>> ApplyFilter<T>(IQueryable<T> query, RdContext db)
+    public IQueryable ApplyFilter(IQueryable query)
     {
-        if (!HasFiltering())
+        if (query == null) throw new ArgumentNullException(nameof(query));
+
+        query = ApplyWhere(query);
+        query = ApplyOrdering(query);
+        query = ApplyRecordLimits(query);
+        query = ApplySelection(query);
+        
+        // Serilog.Log.Information(query.ToQueryString());
+
+        return query;
+    }
+
+    private IQueryable ApplyWhere(IQueryable query)
+    {
+        if (Filters == null || Filters.Count < 1) return query;
+
+        var columns = new List<string>();
+        var parameters = new List<object>();
+
+        foreach (var filter in Filters)
         {
-            return ApplyRecordLimits(query).ToListAsync();
+            if (filter.Value == null) continue;
+            else if (filter.Value.Value == null)
+            {
+                columns.Add(filter.Key + " IS NULL");
+            }
+            else if (string.IsNullOrEmpty(filter.Value.Type))
+            {
+                columns.Add($"{FirstCharToUpper(filter.Key)}.Contains(@{parameters.Count})");
+                parameters.Add(filter.Value.Value);
+            }
+            else
+            {
+                columns.Add(FirstCharToUpper(filter.Key) + " == @" + parameters.Count);
+                parameters.Add(filter.Value.Convert());
+            }
         }
 
-        var query_string = new StringBuilder(query.ToQueryString());
-
-        ApplySelection(query_string);
-        ApplyWhere(query_string);
-        ApplyOrdering(query_string, typeof(T));
-        ApplyRecordLimits(query_string);
-
-        return db.ReadSql<T>(query_string.ToString(), Filters);
+        return query.Where(string.Join(" AND ", columns), parameters.ToArray());
     }
 
-    public async Task<int> ExecuteFilterCount<T>(IQueryable<T> query, RdContext db)
+    private IQueryable ApplyOrdering(IQueryable query)
     {
-        if (!HasFiltering())
-        {
-            return await ApplyRecordLimits(query).CountAsync();
-        }
+        if (Ordering == null) return query;
 
-        var query_string = new StringBuilder(query.ToQueryString());
+        var columns = Ordering.Where(o => !string.IsNullOrWhiteSpace(o.Key))
+                              .Select(o => FirstCharToUpper(o.Key) + (o.Value ? " asc" : " desc"));
 
-        ApplyCount(query_string);
-        ApplyWhere(query_string);
-        ApplyOrdering(query_string, typeof(T));
-
-        var result = await db.ReadSql<int>(query_string.ToString(), Filters);
-
-        return result.First();
+        return query.OrderBy(string.Join(", ", columns));
     }
 
-    private bool HasFiltering()
-    {
-        return !string.IsNullOrEmpty(Search) || Filters?.Count > 0 || Ordering?.Count > 0 || Columns?.Length > 0;
-    }
-
-    private IQueryable<T> ApplyRecordLimits<T>(IQueryable<T> query)
+    private IQueryable ApplyRecordLimits(IQueryable query)
     {
         if (Start > 0)
         {
@@ -74,79 +86,21 @@ public class ListQuery
         return query;
     }
 
-    private void ApplySelection(StringBuilder query)
+    private IQueryable ApplySelection(IQueryable qury)
     {
-        string selection;
-        if (Columns == null || Columns.Length < 1) selection = "*";
-        else selection = string.Join(",", Columns);
-
-        query.Insert(0, " FROM (\n").Insert(0, selection).Insert(0, "SELECT ").Append("\n) qs\n");
+        if (Columns == null || Columns.Length < 1) return qury;
+        else
+        {
+            var columns = Columns.Where(c => !string.IsNullOrWhiteSpace(c))
+                                 .Select(c => FirstCharToUpper(c));
+            return qury.Select($"new {{ {string.Join(", ", columns)} }}");
+        }
     }
 
-    private void ApplyCount(StringBuilder query)
+    private static string? FirstCharToUpper(string? input)
     {
-        query.Insert(0, "SELECT COUNT(1) FROM (\n").Append("\n) qs\n");
-    }
-
-    private void ApplyWhere(StringBuilder query)
-    {
-        if (Filters == null || Filters.Count < 1) return;
-
-        var columns = new List<string>();
-        var parameters = new Dictionary<string, DbObject>();
-
-        foreach (var filter in Filters)
-        {
-            if (filter.Value == null) continue;
-            else if (filter.Value.Value == null)
-            {
-                columns.Add(filter.Key + " IS NULL");
-            }
-            else
-            {
-                parameters[filter.Key] = filter.Value;
-                columns.Add(filter.Key + " = @" + filter.Key);
-            }
-        }
-
-        Filters = parameters;
-
-        query.Append("WHERE ").Append(string.Join(" AND ", columns)).Append('\n');
-    }
-
-    private void ApplyOrdering(StringBuilder query, Type type)
-    {
-        if (Ordering == null) return;
-
-        var ordering = Ordering.ToDictionary(k => k.Key.ToLower(), v => v.Value);
-
-        var properties = type.GetProperties()
-                             .Where(p => ordering.ContainsKey(p.Name.ToLower()));
-
-        if (!properties.Any()) return;
-
-        var columns = new List<string>();
-
-        foreach (var prop in properties)
-        {
-            if (ordering[prop.Name.ToLower()]) columns.Add(prop.Name);
-            else columns.Add(prop.Name + " desc");
-        }
-
-        query.Append("ORDER BY ").Append(string.Join(", ", columns)).Append('\n');
-    }
-
-    private void ApplyRecordLimits(StringBuilder query)
-    {
-        if (Limit > 0)
-        {
-            query.Append(" LIMIT ").Append(Limit);
-        }
-
-        if (Start > 0)
-        {
-            query.Append(" OFFSET ").Append(Start);
-        }
+        if (string.IsNullOrWhiteSpace(input)) return input;
+        else return string.Concat(input[0].ToString().ToUpper(), input.AsSpan(1));
     }
 
 }

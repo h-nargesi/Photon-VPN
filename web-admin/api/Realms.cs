@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
@@ -20,6 +21,8 @@ public class Realms : Controller
                         Title = rl.Name,
                     };
 
-        return Ok(await filter.ApplyFilter(query, db));
+        var filtered = filter.ApplyFilter(query);
+
+        return Ok(await filtered.ToDynamicListAsync());
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
@@ -29,7 +30,9 @@ public class Profiles : Controller
                         PlanId = pl.PlanId,
                     };
 
-        return Ok(await filter.ApplyFilter(query, db));
+        var filtered = filter.ApplyFilter(query);
+
+        return Ok(await filtered.ToDynamicListAsync());
     }
 
     [HttpPost]
@@ -44,7 +47,9 @@ public class Profiles : Controller
                         Title = pr.Name,
                     };
 
-        return Ok(await filter.ApplyFilter(query, db));
+        var filtered = filter.ApplyFilter(query);
+
+        return Ok(await filtered.ToDynamicListAsync());
     }
 
     [HttpGet]

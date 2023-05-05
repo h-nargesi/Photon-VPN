@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
@@ -13,16 +14,19 @@ public class Sessions : Controller
     {
         using var db = new RdContext();
 
-        var query = db.Radaccts.AsNoTracking();
+        var query = ListQuery(db, only_open, filter);
 
-        if (only_open ?? true)
-        {
-            query = query.Where(c => c.Acctstoptime == null);
-        }
+        return Ok(await query.ToDynamicListAsync());
+    }
 
-        var result = await filter.ApplyFilter(query, db);
+    [HttpPost]
+    public IActionResult Count([FromQuery] bool? only_open, [FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
 
-        return Ok(result);
+        var query = ListQuery(db, only_open, filter);
+
+        return Ok(query.Count());
     }
 
     [HttpPost]
@@ -38,4 +42,17 @@ public class Sessions : Controller
         throw new NotImplementedException();
     }
 
+    private IQueryable ListQuery(RdContext db, bool? only_open, ListQuery filter)
+    {
+        var query = db.Radaccts.AsNoTracking();
+
+        if (only_open ?? true)
+        {
+            query = query.Where(c => c.Acctstoptime == null);
+        }
+
+        var filtered = filter.ApplyFilter(query);
+
+        return filtered;
+    }
 }

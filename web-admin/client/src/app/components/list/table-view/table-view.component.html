@@ -1,18 +1,38 @@
-<thead cTableColor="dark">
-	<tr>
-		<th scope="col">#</th>
-		<th *ngFor="let column of DataColumns;">
-			<span>{{ titleOf(column) }}</span>
-			<hr *ngIf="filter" />
-			<input cFormControl *ngIf="filter" [value]="GetFilterColumn(column)" (change)="SetFilterColumn(column, val($event))" type="text" />
-		</th>
-	</tr>
-</thead>
-<tbody>
-	<tr *ngFor="let row of DataSource; let index = index" (click)="SelectRow(index)"
-		cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
 
-		<td scope="row">{{ index + 1 }}</td>
-		<td *ngFor="let col of DataColumns;">{{ row[col] }}</td>
-	</tr>
-</tbody>
+<c-button-group *ngIf="filter" class="me-3 mb-3">
+  <input cFormControl [value]="GetSearch()" (change)="SetSearch(val($event))" type="text"  placeholder="Seach" />
+  <button cButton variant="outline" color="secondary">
+    <svg cIcon (click)="ClearFilters()" name="cilFilterX" title="Clear Filters" size="2xl"></svg>
+  </button>
+</c-button-group>
+
+<div class="overflow-auto" style="height: 500px;">
+  <table cTable class="small" [striped]="true" [hover]="true">
+    <thead cTableColor="dark">
+      <tr>
+        <th scope="col">#</th>
+        <th *ngFor="let column of DataColumns;">
+          <span *ngIf="!filter">{{ titleOf(column) }}</span>
+          <span *ngIf="filter" (click)="ColumnSort(column)" style="cursor: pointer;">{{ titleOf(column) }}</span>
+          <hr *ngIf="filter" />
+          <input cFormControl *ngIf="filter" 
+            [value]="GetFilterColumn(column)" (change)="SetFilterColumn(column, val($event))" 
+            type="text" style="width: 100%;" />
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of DataSource; let index = index" (click)="SelectRow(index)"
+        cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
+
+        <td scope="row">{{ index + 1 }}</td>
+        <td *ngFor="let col of DataColumns;">{{ row[col] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<c-button-group *ngIf="filter" class="me-3 mt-3 mb-3">
+  <button cButton variant="outline" size="sm"
+    *ngFor="let p of Pages;" color="secondary" (click)="GoPage(p)">{{ p }}</button>
+</c-button-group>

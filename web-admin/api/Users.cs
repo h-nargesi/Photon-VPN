@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
@@ -15,7 +16,9 @@ public class Users : Controller
 
         var query = db.PermanentUsers.AsNoTracking();
 
-        return Ok(await filter.ApplyFilter(query, db));
+        var filtered = filter.ApplyFilter(query);
+
+        return Ok(await filtered.ToDynamicListAsync());
     }
 
     [HttpPost]
@@ -32,7 +35,9 @@ public class Users : Controller
                             (string.IsNullOrEmpty(ur.Surname) ? "" : " " + ur.Surname),
                     };
 
-        return Ok(await filter.ApplyFilter(query, db));
+        var filtered = filter.ApplyFilter(query);
+
+        return Ok(await filtered.ToDynamicListAsync());
     }
 
     [HttpGet]

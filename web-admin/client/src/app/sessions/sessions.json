@@ -13,108 +13,108 @@
       "show": false
     },
     "username": {
-      "title": "username",
+      "title": "Username",
       "show": true
     },
     "groupname": {
       "title": "groupname",
-      "show": true
+      "show": false
     },
     "realm": {
-      "title": "realm",
+      "title": "Realm",
       "show": true
     },
     "nasipaddress": {
-      "title": "nas ip address",
+      "title": "Nas IP Address",
       "show": true
     },
     "nasidentifier": {
-      "title": "nas identifier",
+      "title": "Nas Identifier",
       "show": true
     },
     "nasportid": {
-      "title": "nas port id",
+      "title": "Nas Port ID",
       "show": true
     },
     "nasporttype": {
       "title": "nas port type",
-      "show": true
+      "show": false
     },
     "acctstarttime": {
-      "title": "acct start time",
+      "title": "Start Time",
       "show": true
     },
     "acctupdatetime": {
-      "title": "acct up date time",
+      "title": "Up-date Time",
       "show": true
     },
     "acctstoptime": {
-      "title": "acct stop time",
+      "title": "Stop Time",
       "show": true
     },
     "acctinterval": {
-      "title": "acctinterval",
+      "title": "Interval",
       "show": true
     },
     "acctsessiontime": {
-      "title": "acctsessiontime",
+      "title": "Session Time",
       "show": true
     },
     "acctauthentic": {
       "title": "acctauthentic",
-      "show": true
+      "show": false
     },
     "connectinfoStart": {
       "title": "connectinfoStart",
-      "show": true
+      "show": false
     },
     "connectinfoStop": {
       "title": "connectinfoStop",
-      "show": true
+      "show": false
     },
     "acctinputoctets": {
-      "title": "acctinputoctets",
-      "show": true
+      "title": "acct input octets",
+      "show": false
     },
     "acctoutputoctets": {
-      "title": "acctoutputoctets",
-      "show": true
+      "title": "acct output octets",
+      "show": false
     },
     "calledstationid": {
       "title": "calledstationid",
-      "show": true
+      "show": false
     },
     "callingstationid": {
       "title": "callingstationid",
-      "show": true
+      "show": false
     },
     "acctterminatecause": {
       "title": "acctterminatecause",
-      "show": true
+      "show": false
     },
     "servicetype": {
       "title": "servicetype",
-      "show": true
+      "show": false
     },
     "framedprotocol": {
       "title": "framedprotocol",
-      "show": true
+      "show": false
     },
     "framedipaddress": {
-      "title": "framedipaddress",
+      "title": "Framed IP Address",
       "show": true
     },
     "acctstartdelay": {
       "title": "acctstartdelay",
-      "show": true
+      "show": false
     },
     "acctstopdelay": {
       "title": "acctstopdelay",
-      "show": true
+      "show": false
     },
     "xascendsessionsvrkey": {
       "title": "xascendsessionsvrkey",
-      "show": true
+      "show": false
     }
   }
 }

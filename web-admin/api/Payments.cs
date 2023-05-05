@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
@@ -20,9 +21,9 @@ public class Payments : Controller
             query = query.Where(p => p.PermanentUserId == user_id);
         }
 
-        var result = await filter.ApplyFilter(query, db);
+        var filtered = filter.ApplyFilter(query);
 
-        return Ok(result);
+        return Ok(await filtered.ToDynamicListAsync());
     }
 
     [HttpGet]

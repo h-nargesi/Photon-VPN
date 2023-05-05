@@ -29,11 +29,8 @@ export class TablePageComponent extends BaseComponent {
     super();
   }
 
-  ngOnInit(): void {
-    this.service?.List(null).subscribe({
-      next: (result: any[]) => this.table_view?.SetDataSource(result),
-      error: console.error
-    });
+  onReload() {
+    this.table_view?.Relaod();
   }
 
   onAddClick() {
@@ -61,7 +58,7 @@ export class TablePageComponent extends BaseComponent {
           const i = items.indexOf(element, 0);
           items.splice(i, 1);
           if (items.length < 1) {
-            this.ngOnInit();
+            this.table_view?.Relaod();
           }
         },
         error: console.error
