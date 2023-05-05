@@ -1,12 +1,12 @@
 
 <c-button-group *ngIf="filter" class="me-3 mb-3">
   <input cFormControl [value]="GetSearch()" (change)="SetSearch(val($event))" type="text"  placeholder="Seach" />
-  <button cButton variant="outline" color="secondary">
-    <svg cIcon (click)="ClearFilters()" name="cilFilterX" title="Clear Filters" size="2xl"></svg>
+  <button cButton (click)="ClearFilters()" variant="outline" color="secondary">
+    <svg cIcon name="cilFilterX" title="Clear Filters" size="2xl"></svg>
   </button>
 </c-button-group>
 
-<div class="overflow-auto" style="height: 500px;">
+<div class="overflow-auto" style="max-height: 500px;">
   <table cTable class="small" [striped]="true" [hover]="true">
     <thead cTableColor="dark">
       <tr>
@@ -34,5 +34,5 @@
 
 <c-button-group *ngIf="filter" class="me-3 mt-3 mb-3">
   <button cButton variant="outline" size="sm"
-    *ngFor="let p of Pages;" color="secondary" (click)="GoPage(p)">{{ p }}</button>
+    *ngFor="let p of Pages;" [color]="p.color" (click)="GoPage(p.page)">{{ p.page }}</button>
 </c-button-group>

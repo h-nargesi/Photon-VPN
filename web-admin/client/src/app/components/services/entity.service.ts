@@ -22,6 +22,11 @@ export abstract class EntityService<L, E> extends BaseService implements LGMDSer
     return this.http.post<L[]>(this.module_url + 'list' + this.query_string, filter);
   }
 
+  public Count(filter: ListQuery | null = null): Observable<number> {
+    if (filter == null) filter = {} as ListQuery;
+    return this.http.post<number>(this.module_url + 'count' + this.query_string, filter);
+  }
+
   public Get(id: number): Observable<E> {
     return this.http.get<E>(this.module_url + 'get/' + id);
   }

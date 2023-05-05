@@ -27,7 +27,18 @@ public class ListQuery
         query = ApplyRecordLimits(query);
         query = ApplySelection(query);
         
-        // Serilog.Log.Information(query.ToQueryString());
+        // Serilog.Log.Information("List Query: " + query.ToQueryString());
+
+        return query;
+    }
+
+    public IQueryable ApplyFilterCount(IQueryable query)
+    {
+        if (query == null) throw new ArgumentNullException(nameof(query));
+
+        query = ApplyWhere(query);
+        
+        // Serilog.Log.Information("Count Query: " + query.ToQueryString());
 
         return query;
     }

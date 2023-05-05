@@ -21,12 +21,8 @@ export class TableViewComponent extends ListViewComponent {
   @Output("filter-changed") filter_changed = new EventEmitter<ListQuery>();
 
   Query: ListQuery | null = null;
-  Pages: number[] = [];
-
-  private pagination = {
-    current_page: 0,
-    total_count: 0,
-  };
+  Pages : { page: number, color: string }[] = [];
+  private total_count: number = 0;
 
   constructor(router: Router) {
     super();
@@ -41,6 +37,10 @@ export class TableViewComponent extends ListViewComponent {
   Relaod() {
     this.service?.List(this.Query).subscribe({
       next: (result: any[]) => this.SetDataSource(result),
+      error: console.error
+    });
+    this.service?.Count(this.Query).subscribe({
+      next: (result: number) => this.TotalCount = result,
       error: console.error
     });
   }
@@ -81,6 +81,7 @@ export class TableViewComponent extends ListViewComponent {
   ClearFilters() {
     if (!this.Query) return;
 
+    this.Query.start = 0;
     this.Query.search = null;
     this.Query.filters = null;
     this.Query.ordering = null;
@@ -92,16 +93,16 @@ export class TableViewComponent extends ListViewComponent {
     if (!this.Query) return;
     if (!this.Query.limit) this.Query.limit = 5;
 
-    this.Query.start = page * this.Query.limit;
+    this.Query.start = (page - 1) * this.Query.limit;
     this.OnFilterCanged();
   }
 
   get TotalCount(): number {
-    return this.pagination.total_count;
+    return this.total_count;
   }
 
   set TotalCount(value: number) {
-    this.pagination.total_count = value;
+    this.total_count = value;
     this.CalculatePagination();
   }
 
@@ -117,8 +118,6 @@ export class TableViewComponent extends ListViewComponent {
       this.Query = null;
       return;
     }
-
-    console.log('path', this.path);
 
     this.Query = this.getCookie('query');
 
@@ -151,35 +150,49 @@ export class TableViewComponent extends ListViewComponent {
           this.columns_info[column].show = true;
       }
     }
-
-    console.log('query', this.Query);
   }
 
   private CalculatePagination() {
     this.Pages = [];
     if (!this.Query) return;
 
-    this.pagination.current_page = Math.floor(this.Query.start / this.Query.limit);
-    console.log('current_page', this.pagination.current_page);
+    const current_page = Math.floor(this.Query.start / this.Query.limit);
 
-    const max_page = this.TotalCount < 0 ? 0 : Math.ceil(this.pagination.total_count / this.Query.limit);
-    console.log('max_page', max_page);
+    const max_page = this.TotalCount < 0 ? 0 : Math.ceil(this.total_count / this.Query.limit);
 
-    let start = this.pagination.current_page < 1 ? 0 : this.pagination.current_page - 2;
-    console.log('start', start);
+    let start = current_page < 2 ? 0 : current_page - 2;
 
-    const length = start + 4 <= max_page ? 4 : max_page - start;
-    console.log('length', length);
+    let length = start + 5 <= max_page ? 5 : max_page - start;
 
-    for (let i = 0; i < length; i++) this.Pages.push(1 + i + start);
-    console.log('current_page', this.Pages);
+    if (length < 5 && start > 0) {
+      start -= 5 - length;
+      if (start < 0) start = 0;
+      length = start + 5 <= max_page ? 5 : max_page - start;
+    }
+
+    for (let i = 0; i < length; i++) {
+      const page_number = i + start;
+      let color: string;
+
+      if (current_page == page_number)
+        color = "primary";
+      else if (page_number == 0 || 1 + page_number == max_page)
+        color = "success";
+      else
+        color = "secondary";
+
+      this.Pages.push({
+        page: 1 + page_number,
+        color: color,
+      });
+    }
   }
 
   private OnFilterCanged() {
-    if (this.Query) {
-      this.setCookie('query', this.Query);
-      this.filter_changed.emit(this.Query);
-      this.Relaod();
-    }
+    if (!this.Query) return;
+
+    this.setCookie('query', this.Query);
+    this.filter_changed.emit(this.Query);
+    this.Relaod();
   }
 }

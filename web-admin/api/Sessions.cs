@@ -14,9 +14,16 @@ public class Sessions : Controller
     {
         using var db = new RdContext();
 
-        var query = ListQuery(db, only_open, filter);
+        var query = db.Radaccts.AsNoTracking();
 
-        return Ok(await query.ToDynamicListAsync());
+        if (only_open ?? true)
+        {
+            query = query.Where(c => c.Acctstoptime == null);
+        }
+
+        var filtered = filter.ApplyFilter(query);
+
+        return Ok(await filtered.ToDynamicListAsync());
     }
 
     [HttpPost]
@@ -24,9 +31,16 @@ public class Sessions : Controller
     {
         using var db = new RdContext();
 
-        var query = ListQuery(db, only_open, filter);
+        var query = db.Radaccts.AsNoTracking();
 
-        return Ok(query.Count());
+        if (only_open ?? true)
+        {
+            query = query.Where(c => c.Acctstoptime == null);
+        }
+
+        var filtered = filter.ApplyFilterCount(query);
+
+        return Ok(filtered.Count());
     }
 
     [HttpPost]
@@ -42,17 +56,4 @@ public class Sessions : Controller
         throw new NotImplementedException();
     }
 
-    private IQueryable ListQuery(RdContext db, bool? only_open, ListQuery filter)
-    {
-        var query = db.Radaccts.AsNoTracking();
-
-        if (only_open ?? true)
-        {
-            query = query.Where(c => c.Acctstoptime == null);
-        }
-
-        var filtered = filter.ApplyFilter(query);
-
-        return filtered;
-    }
 }
