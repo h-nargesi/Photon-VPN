@@ -215,7 +215,6 @@ export class TableViewComponent extends ListViewComponent {
   private OnFilterCanged() {
     if (!this.Query) return;
 
-    console.log('query', this.Query);
     this.setCookie('query', this.Query);
     this.filter_changed.emit(this.Query);
     this.Relaod();
