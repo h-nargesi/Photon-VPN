@@ -23,10 +23,10 @@ public class Servers : Controller
     {
         using var db = new RdContext();
 
-        var quuey = db.Nas.AsNoTracking()
+        var query = db.Nas.AsNoTracking()
                           .Where(c => c.Id == id);
 
-        return Ok(await quuey.FirstOrDefaultAsync());
+        return Ok(await query.FirstOrDefaultAsync());
     }
 
     [HttpPost]

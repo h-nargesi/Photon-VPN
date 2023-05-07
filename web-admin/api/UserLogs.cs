@@ -44,10 +44,10 @@ public class UserLogs : Controller
     {
         using var db = new RdContext();
 
-        var quuey = db.PermanentUserLogs.AsNoTracking()
+        var query = db.PermanentUserLogs.AsNoTracking()
                                         .Where(c => c.Id == id);
 
-        return Ok(await quuey.FirstOrDefaultAsync());
+        return Ok(await query.FirstOrDefaultAsync());
     }
 
     [HttpPost]

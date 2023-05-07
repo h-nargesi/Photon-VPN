@@ -57,10 +57,10 @@ public class Plans : Controller
     {
         using var db = new RdContext();
 
-        var quuey = db.Plans.AsNoTracking()
+        var query = db.Plans.AsNoTracking()
                             .Where(c => c.Id == id);
 
-        return Ok(await quuey.FirstOrDefaultAsync());
+        return Ok(await query.FirstOrDefaultAsync());
     }
 
     [HttpPost]

@@ -58,10 +58,10 @@ public class Users : Controller
     {
         using var db = new RdContext();
 
-        var quuey = db.PermanentUsers.AsNoTracking()
+        var query = db.PermanentUsers.AsNoTracking()
                                      .Where(c => c.Id == id);
 
-        return Ok(await quuey.FirstOrDefaultAsync());
+        return Ok(await query.FirstOrDefaultAsync());
     }
 
     [HttpPost]

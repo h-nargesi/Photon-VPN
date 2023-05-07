@@ -73,10 +73,10 @@ public class Profiles : Controller
     {
         using var db = new RdContext();
 
-        var quuey = db.Profiles.AsNoTracking()
+        var query = db.Profiles.AsNoTracking()
                                .Where(c => c.Id == id);
 
-        return Ok(await quuey.FirstOrDefaultAsync());
+        return Ok(await query.FirstOrDefaultAsync());
     }
 
     [HttpPost]
