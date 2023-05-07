@@ -21,7 +21,7 @@ public class Plans : Controller
                     {
                         pl.Id,
                         pl.Title,
-                        Active = pl != null ? pl.Active : false,
+                        Active = pl != null && pl.Active,
                         Price = pl != null ? pl.Price : (decimal?)null,
                         ImageFile = pl != null ? pl.ImageFile : null,
                         Color = pl != null ? pl.Color : 0,
@@ -58,9 +58,46 @@ public class Plans : Controller
         using var db = new RdContext();
 
         var query = db.Plans.AsNoTracking()
+                            .Include(p => p.Packages)
                             .Where(c => c.Id == id);
 
-        return Ok(await query.FirstOrDefaultAsync());
+        var result = await query.FirstOrDefaultAsync();
+
+        if (result == null) return Ok();
+
+        var profile_ids = result.Packages.Select(pk => pk.ProfileId);
+
+        if (profile_ids.Any())
+        {
+            var profiles = await db.Profiles.AsNoTracking()
+                                            .Where(p => profile_ids.Contains(p.Id))
+                                            .ToDictionaryAsync(k => k.Id);
+
+            foreach (var package in result.Packages)
+            {
+                result.Profiles.Add(profiles[package.ProfileId]);
+            }
+
+            var rad_checks = db.Radgroupchecks.AsNoTracking()
+                                              .Where(r => r.Groupname == PlanBusiness.SimpleAdd + profile_ids.First())
+                                              .ToListAsync();
+
+            var rad_replies = db.Radgroupreplies.AsNoTracking()
+                                                .Where(r => r.Groupname == PlanBusiness.SimpleAdd + profile_ids.First())
+                                                .ToListAsync();
+
+            foreach (var rad_check in await rad_checks)
+            {
+                result.Checks.Add(rad_check.Attribute, rad_check);
+            }
+
+            foreach (var rad_reply in await rad_replies)
+            {
+                result.Replies.Add(rad_reply.Attribute, rad_reply);
+            }
+        }
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -68,30 +105,11 @@ public class Plans : Controller
     {
         if (plan == null) return BadRequest();
 
-        using var db = new RdContext();
+        using var plan_business = new PlanBusiness();
 
-        var original = await db.Plans.AsNoTracking()
-                                     .Where(c => c.Id == plan.Id)
-                                     .FirstOrDefaultAsync();
+        plan = await plan_business.Save(plan);
 
-        if (original == null)
-        {
-            plan.Created = plan.Modified = DateTime.Now;
-
-            await db.Plans.AddAsync(plan);
-        }
-        else
-        {
-            plan.Modified = DateTime.Now;
-
-            db.Plans.Attach(original);
-            db.Entry(original).CurrentValues.SetValues(plan);
-            db.Entry(original).Property(x => x.Created).IsModified = false;
-        }
-
-        await db.SaveChangesAsync();
-
-        return Ok(Result.Success(data: original?.Id ?? plan.Id));
+        return Ok(Result.Success(data: plan.Id));
     }
 
     [HttpPost]

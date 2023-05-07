@@ -23,7 +23,7 @@ public class Membership : Controller
         var user_payments_task = user_payments_query.ToListAsync();
 
         var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
-                                where rad.Attribute == "Simultaneous-Use" &&
+                                where rad.Attribute == PlanBusiness.Simultaneous_Use &&
                                       rad.Value != null
                                 group rad by rad.Groupname into @group
                                 select new
@@ -36,7 +36,7 @@ public class Membership : Controller
                        join pk in db.Packages.AsNoTracking()
                                on pr.Id equals pk.ProfileId
                        join at in rad_group_replies
-                       on new { Groupname = "SimpleAdd_" + pr.Id } equals new { at.Groupname }
+                       on new { Groupname = PlanBusiness.SimpleAdd + pr.Id } equals new { at.Groupname }
 
                        select new
                        {
