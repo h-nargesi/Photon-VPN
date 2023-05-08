@@ -25,7 +25,7 @@
               {{ titleOf('name') }}
             </label>
             <c-col md="5">
-              <input cFormControl id="form_name" type="ip" [value]="Item.title" (change)="Item.title = val($event)" />
+              <input cFormControl id="form_name" type="text" [value]="Item.title" (change)="Item.title = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">

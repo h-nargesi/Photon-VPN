@@ -16,7 +16,7 @@
               {{ titleOf('nasname') }}
             </label>
             <c-col md="5">
-              <input cFormControl id="form_nasname" type="ip" [value]="Item.nasname"
+              <input cFormControl id="form_nasname" type="text" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" [value]="Item.nasname"
                 (change)="Item.nasname = val($event)" />
             </c-col>
           </c-row>

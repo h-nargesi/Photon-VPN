@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent, EntitySchema, Result, ResultStatus } from '../components';
 import { RealmsService } from '../global-services/realms.service';
-import { ProfilesService } from '../profiles/profiles.service';
+import { ProfilesService } from '../plans/profiles.service';
 import Titles from './info/users.json';
 import { User } from './info/users.model';
 import { UserLogsComponent } from './logs/log.component';
