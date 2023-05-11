@@ -1,5 +1,4 @@
 using System.Linq.Dynamic.Core;
-using Microsoft.EntityFrameworkCore;
 using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Handlers.Model;

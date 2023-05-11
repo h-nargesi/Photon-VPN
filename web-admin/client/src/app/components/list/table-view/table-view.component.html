@@ -26,7 +26,7 @@
         cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
 
         <td scope="row">{{ GetStartOffset() + index + 1 }}</td>
-        <td *ngFor="let col of DataColumns;">{{ row[col] }}</td>
+        <td *ngFor="let col of DataColumns;" style="white-space: nowrap;">{{ row[col] }}</td>
       </tr>
     </tbody>
   </table>

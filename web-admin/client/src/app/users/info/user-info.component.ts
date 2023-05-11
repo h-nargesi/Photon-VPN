@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { BaseComponent, EntitySchema, Result, ResultStatus } from '../../components';
 import { RealmsService } from '../../global-services/realms.service';
-import { ProfilesService } from '../../profiles/profiles.service';
+import { ProfilesService } from '../../plans/profiles.service';
 import { UsersService } from '../users.service';
 import Titles from './users.json';
 import { User } from './users.model';
