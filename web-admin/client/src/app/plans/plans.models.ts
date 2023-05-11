@@ -8,7 +8,7 @@ export interface Plan {
   imageFile: string | null,
   description: string | null,
   color: UIColors,
-  profiles: Profile[],
+  sessionCounts: number[],
   checks: { [attribute: string]: PlanAttribute },
   replies: { [attribute: string]: PlanAttribute },
   created: Date,

@@ -2,28 +2,38 @@
 
 namespace Photon.Service.VPN.Models;
 
-public class PlanBusiness : IDisposable
+public class PlanBusiness
 {
-    private readonly RdContext db;
-
-    public PlanBusiness()
-    {
-        db = new RdContext();
-    }
-
     public async Task<Plan> Save(Plan plan)
     {
         plan = await SavePlan(plan);
 
-        await SavePackages(plan);
+        var delete_profiles = new List<Profile>();
+
+        await SavePackages(plan, delete_profiles);
+        await SaveGroup(plan);
         await SaveCheckes(plan);
         await SaveReplies(plan);
+        await DeleteProfiles(delete_profiles);
 
         return plan;
     }
 
-    private async Task<Plan> SavePlan(Plan plan)
+    public async Task<Plan> Delete(Plan plan)
     {
+        // TODO: delete plan = await DeletePlan(plan);
+
+        var delete_profiles = new List<Profile>();
+
+        await DeleteProfiles(delete_profiles);
+
+        return plan;
+    }
+
+    private static async Task<Plan> SavePlan(Plan plan)
+    {
+        using var db = new RdContext();
+
         var original = await db.Plans.AsNoTracking()
                                      .Include(p => p.Packages)
                                      .Where(c => c.Id == plan.Id)
@@ -55,140 +65,286 @@ public class PlanBusiness : IDisposable
         return original;
     }
 
-    private async Task SavePackages(Plan plan)
+    private static async Task SavePackages(Plan plan, ICollection<Profile> delete)
     {
-        var current_profiles = await db.ProfilesWithSessionCounts()
-                                        .Where(p => p.PlanId == plan.Id)
-                                        .ToDictionaryAsync(k => k.SimultaneousUses);
+        using var db = new RdContext();
 
-        plan.Packages.Clear();
+        var temp = await db.ProfilesWithSessionCounts()
+                           .Where(p => p.PlanId == plan.Id)
+                           .ToListAsync();
 
-        if (plan.SessionCounts != null)
+        var current_profiles = temp.GroupBy(p => p.SimultaneousUses)
+                                   .ToDictionary(k => k.Key, v => v.ToList());
+
+        var new_profiles = new List<Profile>();
+        plan.Profiles = new List<Profile>();
+
+        if (plan.SessionCounts == null || !plan.SessionCounts.Any(c => c > 0))
         {
-            foreach (var count in plan.SessionCounts)
+            plan.SessionCounts = new int[] { 1 };
+        }
+
+        foreach (var count in plan.SessionCounts)
+        {
+            if (count <= 0) continue;
+
+            var name = plan.Title + "-" + count;
+
+            current_profiles.TryGetValue(count, out var originals);
+            Profile? original;
+            if (originals == null) original = null;
+            else
             {
-                current_profiles.TryGetValue(count, out var original);
-                var name = plan.Title + "-" + count;
+                original = originals.First();
+                originals.RemoveAt(0);
+                if (originals.Count == 0)
+                    current_profiles.Remove(count);
+            }
+
+            if (original == null)
+            {
+                original = new Profile
+                {
+                    Name = name,
+                    CloudId = ProfileViews.DefaultCloudId,
+                    Created = DateTime.Now,
+                    Modified = DateTime.Now,
+                };
+
+                new_profiles.Add(original);
+
+                await db.Profiles.AddAsync(original);
+            }
+            else if (name != original.Name)
+            {
+                db.Profiles.Attach(original);
+
+                original.Modified = DateTime.Now;
+                original.Name = name;
+
+                db.Entry(original).Property(x => x.Created).IsModified = false;
+            }
+
+            original.SimultaneousUses = count;
+            plan.Profiles.Add(original);
+        }
+
+        await db.SaveChangesAsync();
+
+        foreach (var pr in new_profiles)
+            await db.Packages.AddAsync(new Package { PlanId = plan.Id, ProfileId = pr.Id });
+        await db.SaveChangesAsync();
+
+        foreach (var profiles in current_profiles.Values)
+            foreach (var pr in profiles)
+                delete.Add(pr);
+    }
+
+    private static async Task SaveGroup(Plan plan)
+    {
+        if (!plan.Profiles.Any())
+        {
+            return;
+        }
+
+        using var db = new RdContext();
+
+        var groupnames = plan.Profiles.Select(p => ProfileViews.SimpleAdd + p.Id)
+                                      .ToArray();
+
+        var originals = await db.Radusergroups.AsNoTracking()
+                                .Where(c => groupnames.Contains(c.Groupname))
+                                .ToDictionaryAsync(k => k.Groupname);
+
+        var components = await db.ProfileComponents.AsNoTracking()
+                                .Where(c => groupnames.Contains(c.Name))
+                                .ToDictionaryAsync(k => k.Name);
+
+        foreach (var profile in plan.Profiles)
+        {
+            var groupname = ProfileViews.SimpleAdd + profile.Id;
+
+            originals.TryGetValue(groupname, out var original);
+            components.TryGetValue(groupname, out var component);
+
+            if (original == null)
+            {
+                original = new Radusergroup
+                {
+                    Username = profile.Name,
+                    Groupname = groupname,
+                    Priority = 5,
+                };
+
+                await db.Radusergroups.AddAsync(original);
+            }
+            else if (profile.Name != original.Username)
+            {
+                db.Radusergroups.Attach(original);
+
+                original.Username = profile.Name;
+            }
+
+            if (component == null)
+            {
+                component = new ProfileComponent
+                {
+                    Name= groupname,
+                    CloudId = 23,
+                    Created = DateTime.Now,
+                    Modified = DateTime.Now,
+                };
+
+                await db.ProfileComponents.AddAsync(component);
+            }
+        }
+
+        await db.SaveChangesAsync();
+    }
+
+    private static async Task SaveCheckes(Plan plan)
+    {
+        if (!plan.Profiles.Any())
+        {
+            return;
+        }
+
+        using var db = new RdContext();
+
+        if (!plan.Checks.TryGetValue(ProfileViews.Simultaneous_Use, out var check_sim))
+        {
+            plan.Checks.Add(ProfileViews.Simultaneous_Use, new Radgroupcheck
+            {
+                Attribute = ProfileViews.Simultaneous_Use,
+                Comment = "Auto",
+                Op = ":=",
+            });
+        }
+
+        foreach (var profile in plan.Profiles)
+        {
+            var groupname = ProfileViews.SimpleAdd + profile.Id;
+            var originals = await db.Radgroupchecks.AsNoTracking()
+                                    .Where(c => c.Groupname == groupname)
+                                    .ToDictionaryAsync(k => k.Attribute);
+
+            plan.Checks[ProfileViews.Simultaneous_Use].Value = profile.SimultaneousUses.ToString();
+
+            foreach (var check in plan.Checks.Values)
+            {
+                originals.TryGetValue(check.Attribute, out var original);
 
                 if (original == null)
                 {
-                    original = new Profile
+                    original = new Radgroupcheck
                     {
-                        Name = name,
-                        CloudId = ProfileViews.DefaultCloudId,
+                        Attribute = check.Attribute,
+                        Comment = check.Comment,
+                        Groupname = groupname,
+                        Op = check.Op,
+                        Value = check.Value,
                         Created = DateTime.Now,
                         Modified = DateTime.Now,
                     };
 
-                    await db.Profiles.AddAsync(original);
+                    await db.Radgroupchecks.AddAsync(original);
                 }
                 else
                 {
-                    current_profiles.Remove(count);
+                    originals.Remove(check.Attribute);
 
-                    if (name != original.Name)
-                    {
-                        db.Profiles.Attach(original);
-                        
-                        original.Modified = DateTime.Now;
-                        original.Name = name;
+                    original.Modified = DateTime.Now;
+                    original.Value = check.Value;
 
-                        db.Entry(original).Property(x => x.Created).IsModified = false;
-                    }
+                    db.Radgroupchecks.Attach(original);
                 }
             }
 
-        }
-
-        await db.SaveChangesAsync();
-
-        foreach (var pr in current_profiles.Values)
-        {
-            db.Packages.Remove(new Package { PlanId = plan.Id, ProfileId = pr.Id });
-            db.Profiles.Remove(pr);
+            foreach (var original in originals.Values)
+            {
+                db.Radgroupchecks.Remove(original);
+            }
         }
 
         await db.SaveChangesAsync();
     }
 
-    private async Task SaveCheckes(Plan plan)
+    private static async Task SaveReplies(Plan plan)
     {
-        if (!plan.Checks.Any())
+        if (!plan.Replies.Any() || !plan.Profiles.Any())
         {
             return;
         }
 
-        var ids = plan.Checks.Values.Select(c => c.Id);
+        using var db = new RdContext();
 
-        var originals = await db.Radgroupchecks.AsNoTracking()
-                                .Where(c => ids.Contains(c.Id))
-                                .ToDictionaryAsync(k => k.Id);
-
-        foreach (var check in plan.Checks.Values)
+        foreach (var profile in plan.Profiles)
         {
-            originals.TryGetValue(check.Id, out var original);
+            var groupname = ProfileViews.SimpleAdd + profile.Id;
+            var originals = await db.Radgroupreplies.AsNoTracking()
+                                    .Where(c => c.Groupname == groupname)
+                                    .ToDictionaryAsync(k => k.Attribute);
 
-            if (original == null)
+            foreach (var reply in plan.Replies.Values)
             {
-                original = check;
+                originals.TryGetValue(reply.Attribute, out var original);
 
-                check.Created = check.Modified = DateTime.Now;
+                if (original == null)
+                {
+                    original = new Radgroupreply
+                    {
+                        Attribute = reply.Attribute,
+                        Comment = reply.Comment,
+                        Groupname = groupname,
+                        Op = reply.Op,
+                        Value = reply.Value,
+                        Created = DateTime.Now,
+                        Modified = DateTime.Now,
+                    };
 
-                await db.Radgroupchecks.AddAsync(check);
+                    await db.Radgroupreplies.AddAsync(original);
+                }
+                else
+                {
+                    originals.Remove(reply.Attribute);
+
+                    original.Modified = DateTime.Now;
+                    original.Value = reply.Value;
+
+                    db.Radgroupreplies.Attach(original);
+                }
             }
-            else
-            {
-                check.Modified = DateTime.Now;
 
-                db.Radgroupchecks.Attach(original);
-                db.Entry(original).CurrentValues.SetValues(check);
-                db.Entry(original).Property(x => x.Created).IsModified = false;
+            foreach (var original in originals.Values)
+            {
+                db.Radgroupreplies.Remove(original);
             }
         }
 
         await db.SaveChangesAsync();
     }
 
-    private async Task SaveReplies(Plan plan)
+    private static async Task DeleteProfiles(ICollection<Profile> profiles)
     {
-        if (!plan.Replies.Any())
+        if (!profiles.Any())
         {
             return;
         }
 
-        var ids = plan.Replies.Values.Select(c => c.Id);
+        using var db = new RdContext();
 
-        var originals = await db.Radgroupreplies.AsNoTracking()
-                                .Where(c => ids.Contains(c.Id))
-                                .ToDictionaryAsync(k => k.Id);
-
-        foreach (var reply in plan.Replies.Values)
+        foreach (var profile in profiles)
         {
-            originals.TryGetValue(reply.Id, out var original);
+            var groupname = ProfileViews.SimpleAdd + profile.Id;
 
-            if (original == null)
-            {
-                original = reply;
-
-                reply.Created = reply.Modified = DateTime.Now;
-
-                await db.Radgroupreplies.AddAsync(reply);
-            }
-            else
-            {
-                reply.Modified = DateTime.Now;
-
-                db.Radgroupreplies.Attach(original);
-                db.Entry(original).CurrentValues.SetValues(reply);
-                db.Entry(original).Property(x => x.Created).IsModified = false;
-            }
+            db.Radusergroups.RemoveRange(db.Radusergroups.Where(g => g.Groupname == groupname));
+            db.Radgroupchecks.RemoveRange(db.Radgroupchecks.Where(g => g.Groupname == groupname));
+            db.Radgroupreplies.RemoveRange(db.Radgroupreplies.Where(g => g.Groupname == groupname));
+            
+            db.ProfileComponents.RemoveRange(db.ProfileComponents.Where(g => g.Name == groupname));
+            db.Profiles.Remove(profile);
         }
 
         await db.SaveChangesAsync();
-    }
-
-    public void Dispose()
-    {
-        db.Dispose();
     }
 }

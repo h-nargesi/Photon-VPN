@@ -12,7 +12,7 @@ import { BaseComponent, EntitySchema, Result, ResultStatus, UIColors } from '../
 export class PlanComponent extends BaseComponent {
 
   private sub: any;
-  private item: Plan = { title: '', active: true, created: new Date() } as Plan;
+  public Item: Plan = { title: '', active: true, created: new Date() } as Plan;
   public columns_info: EntitySchema = Titles.list;
 
   Colors = [
@@ -33,15 +33,11 @@ export class PlanComponent extends BaseComponent {
     super();
   }
 
-  get Item(): Plan {
-    return this.item;
-  }
-
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe({
-          next: (result: Plan) => this.item = result,
+          next: (result: Plan) => this.Item = result,
           error: console.error
         });
       }
@@ -53,14 +49,14 @@ export class PlanComponent extends BaseComponent {
   }
 
   Submit() {
-    console.log(this.item);
+    console.log(this.Item);
 
-    this.service.Modify(this.item).subscribe({
+    this.service.Modify(this.Item).subscribe({
       next: (result: Result) => {
         if (result.status >= ResultStatus.Invalid) console.error(result);
         else {
           console.info(result);
-          if (!this.item.id) this.item.id = Number(result.data);
+          if (!this.Item.id) this.Item.id = Number(result.data);
         }
       },
       error: console.error
@@ -68,14 +64,27 @@ export class PlanComponent extends BaseComponent {
   }
 
   Delete() {
-    if (!this.item.id) return;
+    if (!this.Item.id) return;
 
-    this.service.Delete(this.item.id).subscribe({
+    this.service.Delete(this.Item.id).subscribe({
       next: (result: Result) => {
         if (result.status >= ResultStatus.Invalid) console.error(result);
         else this.router.navigate(['plans']);
       },
       error: console.error
     });
+  }
+
+  get SessionCounts(): string {
+    if (!this.Item || !this.Item.sessionCounts) return '';
+    else return this.Item.sessionCounts.map(x => +x).sort(function (a, b) { return a - b }).toString();
+  }
+
+  set SessionCounts(value: string) {
+    if (!this.Item) return;
+    if (!value) this.Item.sessionCounts = [];
+    if (!value.startsWith('[')) value = '[' + value;
+    if (!value.endsWith(']')) value = value + ']';
+    this.Item.sessionCounts = JSON.parse(value);
   }
 }

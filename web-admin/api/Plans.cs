@@ -57,37 +57,37 @@ public class Plans : Controller
     {
         using var db = new RdContext();
 
-        var query = db.Plans.AsNoTracking()
-                            .Include(p => p.Packages)
-                            .Where(c => c.Id == id);
-
-        var result = await query.FirstOrDefaultAsync();
+        var result = await db.Plans.AsNoTracking()
+                             .Where(c => c.Id == id)
+                             .FirstOrDefaultAsync();
 
         if (result == null) return Ok();
 
-        var sample_profile_id = result.Packages.Select(pk => (int?)pk.ProfileId).FirstOrDefault();
+        result.SessionCounts = await db.ProfilesWithSessionCounts()
+                                       .Where(p => p.PlanId == id)
+                                       .Select(p => p.SimultaneousUses)
+                                       .ToListAsync();
+
+        var sample_profile_id = result.Packages.Where(pk => pk.PlanId == id)
+                                               .Select(pk => (int?)pk.ProfileId)
+                                               .FirstOrDefault();
 
         if (sample_profile_id.HasValue)
         {
-            result.SessionCounts = await db.ProfilesWithSessionCounts()
-                                           .Where(p => p.PlanId == id)
-                                           .Select(p => p.SimultaneousUses)
-                                           .ToListAsync();
-
             var rad_checks = db.Radgroupchecks.AsNoTracking()
                                               .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
-                                              .ToListAsync();
+                                              .ToList();
 
             var rad_replies = db.Radgroupreplies.AsNoTracking()
                                                 .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
-                                                .ToListAsync();
+                                                .ToList();
 
-            foreach (var rad_check in await rad_checks)
+            foreach (var rad_check in rad_checks)
             {
                 result.Checks.Add(rad_check.Attribute, rad_check);
             }
 
-            foreach (var rad_reply in await rad_replies)
+            foreach (var rad_reply in rad_replies)
             {
                 result.Replies.Add(rad_reply.Attribute, rad_reply);
             }
@@ -101,9 +101,7 @@ public class Plans : Controller
     {
         if (plan == null) return BadRequest();
 
-        using var plan_business = new PlanBusiness();
-
-        plan = await plan_business.Save(plan);
+        plan = await new PlanBusiness().Save(plan);
 
         return Ok(Result.Success(data: plan.Id));
     }

@@ -31,6 +31,18 @@
     "modified": {
       "title": "Modified On",
       "show": true
+    },
+    "sessionCounts": {
+      "title": "Max Session Counts",
+      "show": false
+    },
+    "checks": {
+      "title": "Checks",
+      "show": false
+    },
+    "replies": {
+      "title": "Replies",
+      "show": false
     }
   },
   "schema": {

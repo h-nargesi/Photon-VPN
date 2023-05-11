@@ -15,7 +15,7 @@
             <c-col sm="10" class="offset-md-2">
               <c-form-check>
                 <input cFormCheckInput id="form_active" name="form_active" type="checkbox" [checked]="Item.active"
-                  (change)="Item.active = val($event)" />
+                       (change)="Item.active = val($event)" />
                 <label cFormCheckLabel for="form_active">{{ titleOf('active') }}</label>
               </c-form-check>
             </c-col>
@@ -34,7 +34,16 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_price" type="number" [value]="Item.price"
-                (change)="Item.price = val($event)" />
+                     (change)="Item.price = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_sessionCounts">
+              {{ titleOf('sessionCounts') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="form_sessionCounts" type="text" [value]="SessionCounts"
+                     (change)="SessionCounts = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -43,7 +52,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_imageFile" type="text" [value]="Item.imageFile ?? ''"
-                (change)="Item.imageFile = val($event)" />
+                     (change)="Item.imageFile = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -52,7 +61,7 @@
             </label>
             <c-col lg="2" md="3">
               <select app-select cSelect aria-label="Pick a color" id="form_color" [value]="Item.color"
-                (change)="Item.color = val($event)" [options]="Colors">
+                      (change)="Item.color = val($event)" [options]="Colors">
               </select>
             </c-col>
           </c-row>
@@ -62,7 +71,7 @@
             </label>
             <c-col md="5">
               <textarea cFormControl id="form_description" rows="3" [value]="Item.description ?? ''"
-                (change)="Item.description = val($event)"></textarea>
+                        (change)="Item.description = val($event)"></textarea>
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -71,7 +80,7 @@
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_modified" type="text"
-                [value]="Item.modified ? getDateTimeString(Item.modified) : ''" />
+                     [value]="Item.modified ? getDateTimeString(Item.modified) : ''" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -80,7 +89,7 @@
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_created" type="text"
-                [value]="Item.created ? getDateTimeString(Item.created) : ''" />
+                     [value]="Item.created ? getDateTimeString(Item.created) : ''" />
             </c-col>
           </c-row>
           <app-form list-route="/plans" [is-new]="Item.id ? false: true" (submit)="Submit()" (delete)="Delete()">
