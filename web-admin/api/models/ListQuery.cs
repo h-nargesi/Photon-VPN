@@ -102,7 +102,10 @@ public class ListQuery
         else
         {
             var columns = Columns.Where(c => !string.IsNullOrWhiteSpace(c))
-                                 .Select(c => FirstCharToUpper(c));
+                                 .Select(c => FirstCharToUpper(c))
+                                 .Append("id")
+                                 .ToHashSet();
+
             return qury.Select($"new {{ {string.Join(", ", columns)} }}");
         }
     }
