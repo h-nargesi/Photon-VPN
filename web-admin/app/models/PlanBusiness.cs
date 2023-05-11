@@ -1,96 +1,194 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Photon.Service.VPN.Models
+namespace Photon.Service.VPN.Models;
+
+public class PlanBusiness : IDisposable
 {
-    public class PlanBusiness : IDisposable
+    private readonly RdContext db;
+
+    public PlanBusiness()
     {
-        public const string SimpleAdd = "SimpleAdd_";
+        db = new RdContext();
+    }
 
-        public const string Simultaneous_Use = "Simultaneous-Use";
+    public async Task<Plan> Save(Plan plan)
+    {
+        plan = await SavePlan(plan);
 
-        private readonly RdContext db;
+        await SavePackages(plan);
+        await SaveCheckes(plan);
+        await SaveReplies(plan);
 
-        public PlanBusiness()
+        return plan;
+    }
+
+    private async Task<Plan> SavePlan(Plan plan)
+    {
+        var original = await db.Plans.AsNoTracking()
+                                     .Include(p => p.Packages)
+                                     .Where(c => c.Id == plan.Id)
+                                     .FirstOrDefaultAsync();
+
+        if (original == null)
         {
-            db = new RdContext();
+            original = plan;
+
+            plan.Created = plan.Modified = DateTime.Now;
+
+            await db.Plans.AddAsync(plan);
+        }
+        else
+        {
+            plan.Modified = DateTime.Now;
+
+            db.Plans.Attach(original);
+            db.Entry(original).CurrentValues.SetValues(plan);
+            db.Entry(original).Property(x => x.Created).IsModified = false;
+
+            original.SessionCounts = plan.SessionCounts;
+            original.Checks = plan.Checks;
+            original.Replies = plan.Replies;
         }
 
-        public async Task<Plan> Save(Plan plan)
-        {
-            plan = await SavePlan(plan);
+        await db.SaveChangesAsync();
 
-            await SavePackages(plan);
-            await SaveCheckes(plan);
-            await SaveReplies(plan);
-            
-            return plan;
+        return original;
+    }
+
+    private async Task SavePackages(Plan plan)
+    {
+        var current_profiles = await db.ProfilesWithSessionCounts()
+                                        .Where(p => p.PlanId == plan.Id)
+                                        .ToDictionaryAsync(k => k.SimultaneousUses);
+
+        plan.Packages.Clear();
+
+        if (plan.SessionCounts != null)
+        {
+            foreach (var count in plan.SessionCounts)
+            {
+                current_profiles.TryGetValue(count, out var original);
+                var name = plan.Title + "-" + count;
+
+                if (original == null)
+                {
+                    original = new Profile
+                    {
+                        Name = name,
+                        CloudId = ProfileViews.DefaultCloudId,
+                        Created = DateTime.Now,
+                        Modified = DateTime.Now,
+                    };
+
+                    await db.Profiles.AddAsync(original);
+                }
+                else
+                {
+                    current_profiles.Remove(count);
+
+                    if (name != original.Name)
+                    {
+                        db.Profiles.Attach(original);
+                        
+                        original.Modified = DateTime.Now;
+                        original.Name = name;
+
+                        db.Entry(original).Property(x => x.Created).IsModified = false;
+                    }
+                }
+            }
+
         }
 
-        private async Task<Plan> SavePlan(Plan plan)
+        await db.SaveChangesAsync();
+
+        foreach (var pr in current_profiles.Values)
         {
-            var original = await db.Plans.AsNoTracking()
-                                         .Include(p => p.Packages)
-                                         .Where(c => c.Id == plan.Id)
-                                         .FirstOrDefaultAsync();
+            db.Packages.Remove(new Package { PlanId = plan.Id, ProfileId = pr.Id });
+            db.Profiles.Remove(pr);
+        }
+
+        await db.SaveChangesAsync();
+    }
+
+    private async Task SaveCheckes(Plan plan)
+    {
+        if (!plan.Checks.Any())
+        {
+            return;
+        }
+
+        var ids = plan.Checks.Values.Select(c => c.Id);
+
+        var originals = await db.Radgroupchecks.AsNoTracking()
+                                .Where(c => ids.Contains(c.Id))
+                                .ToDictionaryAsync(k => k.Id);
+
+        foreach (var check in plan.Checks.Values)
+        {
+            originals.TryGetValue(check.Id, out var original);
 
             if (original == null)
             {
-                original = plan;
+                original = check;
 
-                plan.Created = plan.Modified = DateTime.Now;
+                check.Created = check.Modified = DateTime.Now;
 
-                await db.Plans.AddAsync(plan);
+                await db.Radgroupchecks.AddAsync(check);
             }
             else
             {
-                plan.Modified = DateTime.Now;
+                check.Modified = DateTime.Now;
 
-                db.Plans.Attach(original);
-                db.Entry(original).CurrentValues.SetValues(plan);
+                db.Radgroupchecks.Attach(original);
+                db.Entry(original).CurrentValues.SetValues(check);
                 db.Entry(original).Property(x => x.Created).IsModified = false;
             }
-
-            await db.SaveChangesAsync();
-
-            return original;
         }
 
-        private Task SavePackages(Plan plan)
-        {
-            plan.Packages.Clear();
-            foreach (var pr in plan.Profiles)
-                plan.Packages.Add(new Package
-                {
-                    PlanId = plan.Id,
-                    ProfileId = pr.Id,
-                });
+        await db.SaveChangesAsync();
+    }
 
-            return db.SaveChangesAsync();
+    private async Task SaveReplies(Plan plan)
+    {
+        if (!plan.Replies.Any())
+        {
+            return;
         }
 
-        private Task SaveCheckes(Plan plan)
+        var ids = plan.Replies.Values.Select(c => c.Id);
+
+        var originals = await db.Radgroupreplies.AsNoTracking()
+                                .Where(c => ids.Contains(c.Id))
+                                .ToDictionaryAsync(k => k.Id);
+
+        foreach (var reply in plan.Replies.Values)
         {
-            foreach (var check in plan.Checks)
+            originals.TryGetValue(reply.Id, out var original);
+
+            if (original == null)
             {
-                // save check
+                original = reply;
+
+                reply.Created = reply.Modified = DateTime.Now;
+
+                await db.Radgroupreplies.AddAsync(reply);
             }
-
-            return Task.CompletedTask;
-        }
-
-        private Task SaveReplies(Plan plan)
-        {
-            foreach (var check in plan.Replies)
+            else
             {
-                // save replies
+                reply.Modified = DateTime.Now;
+
+                db.Radgroupreplies.Attach(original);
+                db.Entry(original).CurrentValues.SetValues(reply);
+                db.Entry(original).Property(x => x.Created).IsModified = false;
             }
-
-            return Task.CompletedTask;
         }
 
-        public void Dispose()
-        {
-            db.Dispose();
-        }
+        await db.SaveChangesAsync();
+    }
+
+    public void Dispose()
+    {
+        db.Dispose();
     }
 }

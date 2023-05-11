@@ -1,10 +1,16 @@
-﻿namespace Photon.Service.VPN.Models;
+﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Photon.Service.VPN.Models;
 
 public partial class Plan
 {
-    public ICollection<Profile> Profiles { get; } = new List<Profile>();
+    [NotMapped]
+    public ICollection<int> SessionCounts { get; internal set; } = new List<int>();
 
-    public IDictionary<string, Radgroupcheck> Checks { get; } = new Dictionary<string, Radgroupcheck>();
+    [NotMapped]
+    public IDictionary<string, Radgroupcheck> Checks { get; internal set; } = new Dictionary<string, Radgroupcheck>();
 
-    public IDictionary<string, Radgroupreply> Replies { get; } = new Dictionary<string, Radgroupreply>();
+    [NotMapped]
+    public IDictionary<string, Radgroupreply> Replies { get; internal set; } = new Dictionary<string, Radgroupreply>();
 }

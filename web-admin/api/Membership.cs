@@ -22,31 +22,26 @@ public class Membership : Controller
 
         var user_payments_task = user_payments_query.ToListAsync();
 
-        var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
-                                where rad.Attribute == PlanBusiness.Simultaneous_Use &&
-                                      rad.Value != null
-                                group rad by rad.Groupname into @group
-                                select new
-                                {
-                                    Groupname = @group.Key,
-                                    SimulateCount = int.Parse(@group.Max(c => c.Value) ?? "0"),
-                                };
+        // var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
+        //                         where rad.Attribute == ProfileViews.Simultaneous_Use &&
+        //                               rad.Value != null
+        //                         group rad by rad.Groupname into @group
+        //                         select new
+        //                         {
+        //                             Groupname = @group.Key,
+        //                             SimulateCount = int.Parse(@group.Max(c => c.Value) ?? "0"),
+        //                         };
 
-        var profiles = from pr in db.Profiles.AsNoTracking()
-                       join pk in db.Packages.AsNoTracking()
-                               on pr.Id equals pk.ProfileId
-                       join at in rad_group_replies
-                       on new { Groupname = PlanBusiness.SimpleAdd + pr.Id } equals new { at.Groupname }
-
+        var profiles = from pr in db.ProfilesWithSessionCounts()
                        select new
                        {
-                           pk.ProfileId,
-                           pk.PlanId,
+                           ProfileId = pr.Id,
+                           pr.PlanId,
                            pr.Name,
-                           at.SimulateCount,
-                           PriceFactor = at.SimulateCount <= 1 ? at.SimulateCount :
-                                         at.SimulateCount == 2 ? 1.9 :
-                                         at.SimulateCount == 3 ? 2.85 : (at.SimulateCount - 0.2),
+                           pr.SimultaneousUses,
+                           PriceFactor = pr.SimultaneousUses <= 1 ? pr.SimultaneousUses :
+                                         pr.SimultaneousUses == 2 ? 1.9 :
+                                         pr.SimultaneousUses == 3 ? 2.85 : (pr.SimultaneousUses - 0.2),
                        };
 
         var user_plan_query = from pr in profiles
@@ -63,7 +58,7 @@ public class Membership : Controller
                                   pr.PlanId,
                                   pr.ProfileId,
                                   pl.Title,
-                                  pr.SimulateCount,
+                                  pr.SimultaneousUses,
                                   up.ValidTime,
                                   Price = up.OverridePrice ?? (pl.Price * (decimal)pr.PriceFactor * up.Periods),
                                   pl.Color,

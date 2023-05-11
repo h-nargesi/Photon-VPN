@@ -65,25 +65,21 @@ public class Plans : Controller
 
         if (result == null) return Ok();
 
-        var profile_ids = result.Packages.Select(pk => pk.ProfileId);
+        var sample_profile_id = result.Packages.Select(pk => (int?)pk.ProfileId).FirstOrDefault();
 
-        if (profile_ids.Any())
+        if (sample_profile_id.HasValue)
         {
-            var profiles = await db.Profiles.AsNoTracking()
-                                            .Where(p => profile_ids.Contains(p.Id))
-                                            .ToDictionaryAsync(k => k.Id);
-
-            foreach (var package in result.Packages)
-            {
-                result.Profiles.Add(profiles[package.ProfileId]);
-            }
+            result.SessionCounts = await db.ProfilesWithSessionCounts()
+                                           .Where(p => p.PlanId == id)
+                                           .Select(p => p.SimultaneousUses)
+                                           .ToListAsync();
 
             var rad_checks = db.Radgroupchecks.AsNoTracking()
-                                              .Where(r => r.Groupname == PlanBusiness.SimpleAdd + profile_ids.First())
+                                              .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
                                               .ToListAsync();
 
             var rad_replies = db.Radgroupreplies.AsNoTracking()
-                                                .Where(r => r.Groupname == PlanBusiness.SimpleAdd + profile_ids.First())
+                                                .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
                                                 .ToListAsync();
 
             foreach (var rad_check in await rad_checks)

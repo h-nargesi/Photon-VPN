@@ -10,7 +10,8 @@ export interface Invoice {
 export interface Membership {
   planId: number,
   profileId: number,
-  name: string,
+  title: string,
+  simultaneousUses: number,
   validTime: Date,
   price: number,
   color: UIColors,
