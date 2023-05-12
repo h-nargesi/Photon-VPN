@@ -14,7 +14,7 @@
     },
     "nasidentifier": {
       "title": "NAS Identifier",
-      "show": false
+      "show": true
     },
     "type": {
       "title": "Connection Type",
