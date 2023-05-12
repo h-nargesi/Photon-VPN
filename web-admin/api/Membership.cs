@@ -121,7 +121,7 @@ public class Membership : Controller
             {
                 Balance = balance,
                 Plan = user_plan[plan_index],
-                Payments = new Payment[0],
+                Payments = Array.Empty<Payment>(),
             });
             plan_index++;
         }

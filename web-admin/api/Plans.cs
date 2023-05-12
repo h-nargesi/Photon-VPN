@@ -31,7 +31,8 @@ public class Plans : Controller
                         pl.Modified,
                     };
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.AddIdentityColumn()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }

@@ -19,7 +19,8 @@ public class UserLogs : Controller
                                         .Where(c => c.PermanentUserId == user_id)
                                         .OrderByDescending(c => c.Id);
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.AddIdentityColumn()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }

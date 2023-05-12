@@ -17,6 +17,24 @@ public class ListQuery
 
     public string[]? Columns { get; set; }
 
+    private HashSet<string>? ParimaryColumns = null;
+
+    public ListQuery AddIdentityColumn()
+    {
+        ParimaryColumns ??= new HashSet<string>();
+
+        ParimaryColumns.Add("id");
+        return this;
+    }
+
+    public ListQuery ClearColumns()
+    {
+        ParimaryColumns?.Clear();
+        ParimaryColumns = null;
+        Columns = null;
+        return this;
+    }
+
     public IQueryable ApplyFilter(IQueryable query)
     {
         if (query == null) throw new ArgumentNullException(nameof(query));
@@ -101,10 +119,12 @@ public class ListQuery
         if (Columns == null || Columns.Length < 1) return qury;
         else
         {
-            var columns = Columns.Where(c => !string.IsNullOrWhiteSpace(c))
-                                 .Select(c => FirstCharToUpper(c))
-                                 .Append("id")
-                                 .ToHashSet();
+            ParimaryColumns ??= new HashSet<string>();
+
+            var columns = ParimaryColumns.Union(Columns)
+                                         .Where(c => !string.IsNullOrWhiteSpace(c))
+                                         .Select(c => FirstCharToUpper(c))
+                                         .ToHashSet();
 
             return qury.Select($"new {{ {string.Join(", ", columns)} }}");
         }

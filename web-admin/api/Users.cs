@@ -16,7 +16,8 @@ public class Users : Controller
 
         var query = db.PermanentUsers.AsNoTracking();
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.AddIdentityColumn()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }
@@ -41,13 +42,14 @@ public class Users : Controller
         var query = from ur in db.PermanentUsers.AsNoTracking()
                     select new
                     {
-                        Id = ur.Id,
+                        ur.Id,
                         Title = ur.Username +
                             (string.IsNullOrEmpty(ur.Name) ? "" : " " + ur.Name) +
                             (string.IsNullOrEmpty(ur.Surname) ? "" : " " + ur.Surname),
                     };
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.ClearColumns()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }

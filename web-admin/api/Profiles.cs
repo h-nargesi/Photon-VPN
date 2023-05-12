@@ -20,7 +20,7 @@ public class Profiles : Controller
                     join pl in db.Packages.AsNoTracking()
                             on pr.Id equals pl.ProfileId into @join
                     from pl in @join.DefaultIfEmpty()
-                    select new
+                    select new Profile
                     {
                         Id = pr.Id,
                         Name = pr.Name,
@@ -30,7 +30,8 @@ public class Profiles : Controller
                         PlanId = pl.PlanId,
                     };
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.AddIdentityColumn()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }
@@ -61,7 +62,8 @@ public class Profiles : Controller
                         Title = pr.Name,
                     };
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.ClearColumns()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }

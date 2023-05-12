@@ -21,7 +21,8 @@ public class Payments : Controller
             query = query.Where(p => p.PermanentUserId == user_id);
         }
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.AddIdentityColumn()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }

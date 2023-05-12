@@ -21,7 +21,8 @@ public class Realms : Controller
                         Title = rl.Name,
                     };
 
-        var filtered = filter.ApplyFilter(query);
+        var filtered = filter.ClearColumns()
+                             .ApplyFilter(query);
 
         return Ok(await filtered.ToDynamicListAsync());
     }
