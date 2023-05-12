@@ -1,11 +1,10 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { EntitySchema } from '../../basical/base.models';
-import { TableViewComponent } from '../table-view/table-view.component';
-import { LGMDService } from '../../services/lgmd-service';
-import { ListQuery, Result, ResultStatus } from '../../services/list-query.model';
 import { BaseComponent } from '../../basical/base.component';
-import { CookieService } from '../../services/cookie-service';
+import { EntitySchema } from '../../basical/base.models';
+import { LGMDService } from '../../services/lgmd-service';
+import { Result, ResultStatus } from '../../services/list-query.model';
+import { TableViewComponent } from '../table-view/table-view.component';
 
 @Component({
   selector: 'app-table-page',
@@ -24,6 +23,7 @@ export class TablePageComponent extends BaseComponent {
   @Input('show-edit') show_edit: boolean = true;
   @Input('show-remove') show_remove: boolean = true;
   @Input('show-undo') show_undo: boolean = true;
+
   @ViewChild('tableView') private table_view: TableViewComponent | undefined;
 
   constructor(private readonly router: Router) {
