@@ -1,6 +1,7 @@
 
 <c-button-group *ngIf="filter" class="me-3 mb-3">
-  <input cFormControl [value]="GetSearch()" (change)="SetSearch(val($event))" type="text"  placeholder="Seach" />
+  <input cFormControl [value]="GetSearch()" (change)="SetSearch(val($event))" type="text" placeholder="Seach"
+         class="form-control" style="border-end-end-radius: 0; border-start-end-radius: 0;" />
   <button cButton (click)="ClearFilters()" variant="outline" color="secondary">
     <svg cIcon name="cilFilterX" title="Clear Filters" size="2xl"></svg>
   </button>
