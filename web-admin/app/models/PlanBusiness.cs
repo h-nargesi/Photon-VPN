@@ -4,30 +4,34 @@ namespace Photon.Service.VPN.Models;
 
 public class PlanBusiness
 {
-    public async Task<Plan> Save(Plan plan)
+    public static async Task<Plan> Save(Plan plan)
     {
         plan = await SavePlan(plan);
 
-        var delete_profiles = new List<Profile>();
+        var delete_profiles = new List<int>();
 
         await SavePackages(plan, delete_profiles);
         await SaveGroup(plan);
         await SaveCheckes(plan);
         await SaveReplies(plan);
-        await DeleteProfiles(delete_profiles);
+        await DeleteProfiles(delete_profiles.AsQueryable());
 
         return plan;
     }
 
-    public async Task<Plan> Delete(Plan plan)
+    public static async Task Delete(int id)
     {
-        // TODO: delete plan = await DeletePlan(plan);
+        using var db = new RdContext();
 
-        var delete_profiles = new List<Profile>();
+        var delete_profiles = await db.Packages.AsNoTracking()
+                                               .Where(pk => pk.PlanId == id)
+                                               .Select(pk => pk.ProfileId)
+                                               .ToArrayAsync();
 
         await DeleteProfiles(delete_profiles);
 
-        return plan;
+        db.Plans.Remove(new Plan { Id = id });
+        await db.SaveChangesAsync();
     }
 
     private static async Task<Plan> SavePlan(Plan plan)
@@ -65,7 +69,7 @@ public class PlanBusiness
         return original;
     }
 
-    private static async Task SavePackages(Plan plan, ICollection<Profile> delete)
+    private static async Task SavePackages(Plan plan, ICollection<int> delete)
     {
         using var db = new RdContext();
 
@@ -137,7 +141,7 @@ public class PlanBusiness
 
         foreach (var profiles in current_profiles.Values)
             foreach (var pr in profiles)
-                delete.Add(pr);
+                delete.Add(pr.Id);
     }
 
     private static async Task SaveGroup(Plan plan)
@@ -324,26 +328,24 @@ public class PlanBusiness
         await db.SaveChangesAsync();
     }
 
-    private static async Task DeleteProfiles(ICollection<Profile> profiles)
+    private static async Task DeleteProfiles(IEnumerable<int> profile_ids)
     {
-        if (!profiles.Any())
+        if (!profile_ids.Any())
         {
             return;
         }
 
+        var groupnames = profile_ids.Select(id => ProfileViews.SimpleAdd + id)
+                                    .ToArray();
+
         using var db = new RdContext();
 
-        foreach (var profile in profiles)
-        {
-            var groupname = ProfileViews.SimpleAdd + profile.Id;
+        db.Radusergroups.RemoveRange(db.Radusergroups.Where(g => groupnames.Contains(g.Groupname)));
+        db.Radgroupchecks.RemoveRange(db.Radgroupchecks.Where(g => groupnames.Contains(g.Groupname)));
+        db.Radgroupreplies.RemoveRange(db.Radgroupreplies.Where(g => groupnames.Contains(g.Groupname)));
 
-            db.Radusergroups.RemoveRange(db.Radusergroups.Where(g => g.Groupname == groupname));
-            db.Radgroupchecks.RemoveRange(db.Radgroupchecks.Where(g => g.Groupname == groupname));
-            db.Radgroupreplies.RemoveRange(db.Radgroupreplies.Where(g => g.Groupname == groupname));
-            
-            db.ProfileComponents.RemoveRange(db.ProfileComponents.Where(g => g.Name == groupname));
-            db.Profiles.Remove(profile);
-        }
+        db.ProfileComponents.RemoveRange(db.ProfileComponents.Where(g => groupnames.Contains(g.Name)));
+        db.Profiles.RemoveRange(db.Profiles.Where(p => profile_ids.Contains(p.Id)));
 
         await db.SaveChangesAsync();
     }

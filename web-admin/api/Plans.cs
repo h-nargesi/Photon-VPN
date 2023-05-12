@@ -101,7 +101,7 @@ public class Plans : Controller
     {
         if (plan == null) return BadRequest();
 
-        plan = await new PlanBusiness().Save(plan);
+        plan = await PlanBusiness.Save(plan);
 
         return Ok(Result.Success(data: plan.Id));
     }
@@ -137,10 +137,7 @@ public class Plans : Controller
     [HttpPost]
     public async Task<IActionResult> Delete([FromBody] int id)
     {
-        using var db = new RdContext();
-
-        db.Plans.Remove(new Plan { Id = id });
-        await db.SaveChangesAsync();
+        await PlanBusiness.Delete(id);
 
         return Ok(Result.Success());
     }
