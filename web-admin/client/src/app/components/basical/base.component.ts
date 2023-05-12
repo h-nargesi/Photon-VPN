@@ -13,10 +13,13 @@ export abstract class BaseComponent {
     return event.target.value;
   }
 
+  checkVal(event: any): boolean {
+    return event.target.checked;
+  }
+
   getCookie(name: string): any {
     let json = localStorage.getItem((this.path ?? '') + name);
     let obj = !json ? null : JSON.parse(json);
-    // console.log((this.path ?? '') + name, obj);
     return obj;
   }
 
