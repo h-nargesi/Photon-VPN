@@ -48,6 +48,15 @@
             </c-col>
           </c-row>
           <c-row class="mb-3">
+            <label cLabel class="col-md-2 col-form-label" for="form_nasidentifier">
+              {{ titleOf('nasidentifier') }}
+            </label>
+            <c-col md="5">
+              <input cFormControl id="form_nasidentifier" type="text" [value]="Item.nasidentifier ?? ''"
+                (change)="Item.nasidentifier = val($event)" />
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_modified">
               {{ titleOf('modified') }}
             </label>

@@ -44,12 +44,14 @@ public class Servers : Controller
         {
             na.Timezone = "262";
             na.Created = na.Modified = DateTime.Now;
+            na.CloudId = 23;
 
             await db.Nas.AddAsync(na);
         }
         else
         {
             na.Modified = DateTime.Now;
+            na.CloudId = 23;
 
             db.Nas.Attach(original);
             db.Entry(original).CurrentValues.SetValues(na);

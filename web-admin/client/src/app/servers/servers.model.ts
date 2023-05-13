@@ -2,7 +2,7 @@ export interface Server {
     id: number,
     nasname: string,
     shortname: string | null,
-    nasidentifier: string,
+    nasidentifier: string | null,
     type: string | null,
     ports: number | null,
     secret: string,
