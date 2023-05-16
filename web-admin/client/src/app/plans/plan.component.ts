@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plan } from './plans.models';
-import Titles from './plans.json';
-import { PlansService } from './plans.service';
 import { BaseComponent, EntitySchema, Result, ResultStatus, UIColors } from '../components';
+import Titles from './plans.json';
+import { Plan } from './plans.models';
+import { PlansService } from './plans.service';
 
 @Component({
   selector: 'app-plan',
@@ -53,13 +53,9 @@ export class PlanComponent extends BaseComponent {
 
     this.service.Modify(this.Item).subscribe({
       next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else {
-          console.info(result);
-          if (!this.Item.id) this.Item.id = Number(result.data);
-        }
-      },
-      error: console.error
+        if (result.status < ResultStatus.Info && !this.Item.id)
+          this.Item.id = Number(result.data);
+      }
     });
   }
 
@@ -68,10 +64,9 @@ export class PlanComponent extends BaseComponent {
 
     this.service.Delete(this.Item.id).subscribe({
       next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['plans']);
-      },
-      error: console.error
+        if (result.status < ResultStatus.Info)
+          this.router.navigate(['plans']);
+      }
     });
   }
 

@@ -54,8 +54,7 @@ export class UserComponent extends BaseComponent {
         this.Item = result;
         this.user_logs?.Reload(result);
         this.membership?.Reload(result);
-      },
-      error: console.error
+      }
     });
   }
 
@@ -64,10 +63,9 @@ export class UserComponent extends BaseComponent {
 
     this.service.Delete(this.Item.id).subscribe({
       next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['users']);
-      },
-      error: console.error
+        if (result.status < ResultStatus.Info)
+          this.router.navigate(['users']);
+      }
     });
   }
 }

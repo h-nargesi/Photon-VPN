@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, ObservableInput, tap } from 'rxjs';
+import { NotifyService } from '../basical/notify/notify.service';
 import { BaseWebService } from './base-web-service';
 import { LGMDService } from './lgmd-service';
 import { ListQuery, Result } from './list-query.model';
@@ -11,32 +11,50 @@ export abstract class EntityService<L, E> extends BaseWebService implements LGMD
 
   constructor(
     http: HttpClient,
-    @Inject('API_URL') api_url: string,
-    @Inject('BASE_URL') base_url: string,
-    entity_name: string) {
-    super(http, api_url, base_url, `api/${entity_name}/`);
+    notify_service: NotifyService,
+    api_url: string,
+    base_url: string,
+    protected override entity_name: string) {
+
+    super(http, notify_service, api_url, base_url, `api/${entity_name}/`);
   }
 
   public List(filter: ListQuery | null = null): Observable<L[]> {
     if (filter == null) filter = {} as ListQuery;
-    return this.http.post<L[]>(this.module_url + 'list' + this.query_string, filter);
+    return this.http
+      .post<L[]>(this.module_url + 'list' + this.query_string, filter)
+      .pipe<L[]>(catchError<L[], ObservableInput<any>>(this.handleError));
   }
 
   public Count(filter: ListQuery | null = null): Observable<number> {
     if (filter == null) filter = {} as ListQuery;
-    return this.http.post<number>(this.module_url + 'count' + this.query_string, filter);
+    return this.http
+      .post<number>(this.module_url + 'count' + this.query_string, filter)
+      .pipe<number>(catchError<number, ObservableInput<any>>(this.handleError));
   }
 
   public Get(id: number): Observable<E> {
-    return this.http.get<E>(this.module_url + 'get/' + id);
+    return this.http
+      .get<E>(this.module_url + 'get/' + id)
+      .pipe<E>(catchError<E, ObservableInput<any>>(this.handleError));
   }
 
   public Modify(entity: E): Observable<Result> {
-    return this.http.post<Result>(this.module_url + 'modify', entity);
+    return this.http
+      .post<Result>(this.module_url + 'modify', entity)
+      .pipe(
+        tap(result => this.handleResult(result)),
+        catchError<Result, ObservableInput<any>>(this.handleError)
+      );
   }
 
   public Delete(id: number): Observable<Result> {
-    return this.http.post<Result>(this.module_url + 'delete', id);
+    return this.http
+      .post<Result>(this.module_url + 'delete', id)
+      .pipe(
+        tap(result => this.handleResult(result)),
+        catchError<Result, ObservableInput<any>>(this.handleError)
+      );
   }
 
   protected SetQueryString(name: string, value: any): EntityService<L, E> {

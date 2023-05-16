@@ -1,11 +1,16 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { throwError } from "rxjs";
+import { NotifyService } from '../basical/notify/notify.service';
+import { Result, ResultStatus } from "./list-query.model";
 
 export abstract class BaseWebService {
   protected readonly base_url: string;
   protected readonly module_url: string;
+  protected readonly entity_name!: string;
 
   constructor(
     protected readonly http: HttpClient,
+    public readonly notify_service: NotifyService,
     api_url: string,
     base_url: string,
     module_url: string) {
@@ -27,5 +32,43 @@ export abstract class BaseWebService {
 
     this.base_url = api_url + base_url;
     this.module_url = this.base_url + module_url;
+  }
+
+  protected handleResult(result: Result) {
+    console.log(`fetched hero id=${result}`);
+    if (!result.message)
+      result.message = `The ${this.entity_name.substring(0, this.entity_name.length - 1)} successfully modified.`;
+
+    let color;
+    if (result.status >= ResultStatus.Error) color = 'dark';
+    else if (result.status >= ResultStatus.Invalid) color = 'dark';
+    else if (result.status >= ResultStatus.Info) color = 'info';
+    else if (result.status >= ResultStatus.Success) color = 'success';
+    else color = 'secondary';
+
+    this.notify_service.notify({
+      delay: 5000,
+      color: color,
+      title: this.entity_name,
+      description: result.message,
+    });
+  }
+
+  protected handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      console.error('An error occurred:', error.error);
+    } else {
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+    }
+
+    this.notify_service.notify({
+      delay: 10000,
+      color: "warning",
+      title: this.entity_name,
+      description: 'Something bad happened; please try again later.',
+    });
+
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 }

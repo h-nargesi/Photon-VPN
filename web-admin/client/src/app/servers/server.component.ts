@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, CookieService, EntitySchema, Result, ResultStatus } from '../components';
-import { ServersService } from './servers.service';
-import { Server } from './servers.model';
+import { BaseComponent, EntitySchema, Result, ResultStatus } from '../components';
 import Titles from './servers.json';
+import { Server } from './servers.model';
+import { ServersService } from './servers.service';
 
 @Component({
   selector: 'app-server',
@@ -27,7 +27,7 @@ export class ServerComponent extends BaseComponent {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     // protected override readonly cookies: CookieService
-    ) {
+  ) {
     super();
   }
 
@@ -57,13 +57,9 @@ export class ServerComponent extends BaseComponent {
 
     this.service.Modify(this.item).subscribe({
       next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else {
-          console.info(result);
-          if (!this.item.id) this.item.id = Number(result.data);
-        }
-      },
-      error: console.error
+        if (result.status < ResultStatus.Info && !this.item.id)
+          this.item.id = Number(result.data);
+      }
     });
   }
 
@@ -72,10 +68,9 @@ export class ServerComponent extends BaseComponent {
 
     this.service.Delete(this.item.id).subscribe({
       next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['servers']);
-      },
-      error: console.error
+        if (result.status < ResultStatus.Info)
+          this.router.navigate(['servers']);
+      }
     });
   }
 }

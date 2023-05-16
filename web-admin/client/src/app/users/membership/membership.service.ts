@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseWebService, Result } from '../../components';
+import { BaseWebService, NotifyService, Result } from '../../components';
 import { Invoice, Membership } from './membership.model';
 
 @Injectable({
@@ -11,9 +11,10 @@ export class MembershipService extends BaseWebService {
 
   constructor(
     http: HttpClient,
+    notify_service: NotifyService,
     @Inject('API_URL') api_url: string,
     @Inject('BASE_URL') base_url: string) {
-    super(http, api_url, base_url, 'api/membership/');
+    super(http, notify_service, api_url, base_url, 'api/membership/');
   }
 
   public Balance(user_id: number): Observable<Invoice[]> {

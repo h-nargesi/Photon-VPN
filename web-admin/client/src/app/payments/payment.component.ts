@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent, EntitySchema, Result, ResultStatus, SelectComponent } from '../components';
-import { PaymentsService } from './payments.service';
-import { Payment } from './payments.model';
-import Titles from './payments.json';
 import { UsersService } from '../users/users.service';
+import Titles from './payments.json';
+import { Payment } from './payments.model';
+import { PaymentsService } from './payments.service';
 
 @Component({
   selector: 'app-payment',
@@ -58,13 +58,9 @@ export class PaymentComponent extends BaseComponent {
 
     this.service.Modify(this.item).subscribe({
       next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else {
-          console.info(result);
-          if (!this.item.id) this.item.id = Number(result.data);
-        }
-      },
-      error: console.error,
+        if (result.status < ResultStatus.Info && !this.item.id)
+          this.item.id = Number(result.data);
+      }
     });
   }
 
@@ -73,10 +69,9 @@ export class PaymentComponent extends BaseComponent {
 
     this.service.Delete(this.item.id).subscribe({
       next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else this.router.navigate(['payments']);
-      },
-      error: console.error,
+        if (result.status < ResultStatus.Info)
+          this.router.navigate(['payments']);
+      }
     });
   }
 

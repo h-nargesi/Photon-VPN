@@ -1,21 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { Title } from '@angular/platform-browser';
+import { ToasterComponent } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
+import { NotifyService } from './components';
 import { iconSubset } from './icons/icon-subset';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
+  templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
   title = 'Photon - VPN';
 
+  @ViewChild('Toaster') toaster!: ToasterComponent;
+
   constructor(
     private router: Router,
-    private titleService: Title,
-    private iconSetService: IconSetService
+    private notify_service: NotifyService,
+    titleService: Title,
+    iconSetService: IconSetService
   ) {
     titleService.setTitle(this.title);
     // iconSet singleton
@@ -29,4 +34,9 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
+  ngAfterViewInit() {
+    this.notify_service.setToaster(this.toaster);
+  }
+
 }

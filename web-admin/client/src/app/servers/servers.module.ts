@@ -4,27 +4,27 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 // CoreUI Modules
 import {
-    AccordionModule,
-    BadgeModule,
-    BreadcrumbModule,
-    ButtonGroupModule,
-    ButtonModule,
-    CardModule,
-    CarouselModule,
-    CollapseModule,
-    DropdownModule,
-    FormModule,
-    GridModule,
-    ListGroupModule,
-    NavModule,
-    PaginationModule,
-    PlaceholderModule,
-    PopoverModule,
-    ProgressModule,
-    SharedModule,
-    SpinnerModule,
-    TableModule,
-    UtilitiesModule
+  AccordionModule,
+  BadgeModule,
+  BreadcrumbModule,
+  ButtonGroupModule,
+  ButtonModule,
+  CardModule,
+  CarouselModule,
+  CollapseModule,
+  DropdownModule,
+  FormModule,
+  GridModule,
+  ListGroupModule,
+  NavModule,
+  PaginationModule,
+  PlaceholderModule,
+  PopoverModule,
+  ProgressModule,
+  SharedModule,
+  SpinnerModule,
+  TableModule,
+  UtilitiesModule
 } from '@coreui/angular';
 
 import { IconModule } from '@coreui/icons-angular';
@@ -76,4 +76,4 @@ import { ServersRoutingModule } from './servers-routing.module';
     ComponentsModule,
   ],
 })
-export class ServersModule {}
+export class ServersModule { }

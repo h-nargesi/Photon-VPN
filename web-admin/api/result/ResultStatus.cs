@@ -2,5 +2,5 @@
 
 public enum ResultStatus
 {
-    Success = 200, Invalid = 400, Error = 500
+    Success = 200, Info = 300, Invalid = 400, Error = 500
 }

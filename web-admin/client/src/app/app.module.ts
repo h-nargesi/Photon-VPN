@@ -24,7 +24,7 @@ import {
 } from './containers';
 
 import {
-    AvatarModule,
+    AlertComponent, AvatarModule,
     BadgeModule,
     BreadcrumbModule,
     ButtonGroupModule,
@@ -35,17 +35,10 @@ import {
     FormModule,
     GridModule,
     HeaderModule,
-    ListGroupModule,
-    NavModule,
+    ListGroupModule, ModalModule, NavModule,
     ProgressModule,
     SharedModule,
-    SidebarModule,
-    TabsModule,
-    UtilitiesModule,
-    AlertComponent,
-    ModalModule, 
-    TableModule, 
-    WidgetModule,
+    SidebarModule, TableModule, TabsModule, ToastModule, UtilitiesModule, WidgetModule
 } from '@coreui/angular';
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
@@ -92,9 +85,10 @@ const APP_CONTAINERS = [
     CardModule,
     HttpClientModule,
     AlertComponent,
-    ModalModule, 
-    TableModule, 
+    ModalModule,
+    TableModule,
     WidgetModule,
+    ToastModule,
   ],
   providers: [
     {
@@ -106,7 +100,7 @@ const APP_CONTAINERS = [
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
     IconSetService,
-    Title
+    Title,
   ],
   bootstrap: [AppComponent],
 })

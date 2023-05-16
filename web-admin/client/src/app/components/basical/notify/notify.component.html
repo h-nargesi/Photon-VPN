@@ -1,0 +1,10 @@
+<ng-container>
+  <c-toast-header [closeButton]="closeButton">
+    <svg cIcon name="cilBell" title="Notification" size="2xl" class="me-2"></svg>
+    <strong>{{title}}</strong>
+  </c-toast-header>
+  <c-toast-body #toastBody [cToastClose]="toastBody.toast">
+    <p class="mb-1">{{description}}</p>
+    <ng-content></ng-content>
+  </c-toast-body>
+</ng-container>
