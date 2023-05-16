@@ -44,6 +44,7 @@ export class TableViewComponent extends ListViewComponent {
       next: (result: any[]) => this.SetDataSource(result),
       error: console.error
     });
+    if (!this.filter) return;
     this.service?.Count(this.Query).subscribe({
       next: (result: number) => this.TotalCount = result,
       error: console.error

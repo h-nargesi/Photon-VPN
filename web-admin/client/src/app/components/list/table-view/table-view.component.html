@@ -35,15 +35,16 @@
 
 <c-button-group *ngIf="filter" class="me-3 mt-3 mb-3">
   <button cButton variant="outline" size="sm"
-    *ngFor="let p of Pages;" [color]="p.color" (click)="GoPage(p.page)">{{ p.page }}</button><c-dropdown variant="btn-group">
-  <button cButton cDropdownToggle color="secondary" variant="outline" size="sm">
-    Size: {{ Query?.limit }}
-  </button>
-  <ul cDropdownMenu size="sm">
-    <li><button (click)="PageSize(5)" cDropdownItem size="sm">5</button></li>
-    <li><button (click)="PageSize(10)" cDropdownItem size="sm">10</button></li>
-    <li><button (click)="PageSize(50)" cDropdownItem size="sm">50</button></li>
-    <li><button (click)="PageSize(500)" cDropdownItem size="sm">500</button></li>
-  </ul>
-</c-dropdown>
+    *ngFor="let p of Pages;" [color]="p.color" (click)="GoPage(p.page)">{{ p.page }}</button>
+  <c-dropdown variant="btn-group">
+    <button cButton cDropdownToggle color="secondary" variant="outline" size="sm">
+      Size: {{ Query?.limit }}
+    </button>
+    <ul cDropdownMenu size="sm">
+      <li><button (click)="PageSize(5)" cDropdownItem size="sm">5</button></li>
+      <li><button (click)="PageSize(10)" cDropdownItem size="sm">10</button></li>
+      <li><button (click)="PageSize(50)" cDropdownItem size="sm">50</button></li>
+      <li><button (click)="PageSize(500)" cDropdownItem size="sm">500</button></li>
+    </ul>
+  </c-dropdown>
 </c-button-group>
