@@ -101,11 +101,13 @@ import {
   cilLinkBroken,
   cilX,
   cilMoney,
-  cibWhatsapp,
   cilEqualizer,
   cilArrowLeft,
   cilFilter,
   cilFilterX,
+  cilBadge,
+  cibWhatsapp,
+  cibTelegramPlane,
 } from '@coreui/icons';
 
 export const iconSubset = {
@@ -211,11 +213,13 @@ export const iconSubset = {
   cilLinkBroken,
   cilX,
   cilMoney,
-  cibWhatsapp,
   cilEqualizer,
   cilArrowLeft,
   cilFilter,
   cilFilterX,
+  cilBadge,
+  cibWhatsapp,
+  cibTelegramPlane,
 };
 
 export enum IconSubset {
@@ -321,9 +325,11 @@ export enum IconSubset {
   cilX = "cilX",
   cilChartLine = 'cilChartLine',
   cilMoney = "cilMoney",
-  cibWhatsapp = "cibWhatsapp",
   cilEqualizer = "cilEqualizer",
   cilArrowLeft = "cilArrowLeft",
-  cilFilterX = 'cilFilterX',
   cilFilter = 'cilFilter',
+  cilFilterX = 'cilFilterX',
+  cilBadge = 'cilBadge',
+  cibWhatsapp = "cibWhatsapp",
+  cibTelegramPlane = "cibTelegramPlane",
 }
