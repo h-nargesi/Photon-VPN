@@ -2,7 +2,7 @@ import { EntitySchema } from './base.models';
 
 export abstract class BaseComponent {
 
-  protected path: string | undefined;
+  protected path!: string;
   protected abstract get columns_info(): EntitySchema | undefined;
 
   titleOf(name: string) {

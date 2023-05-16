@@ -3,7 +3,7 @@ export * from './services/option-service';
 export * from './services/lgmd-service';
 export * from './services/cookie-service';
 export * from './services/list-query.model';
-export * from './services/entity.service';
+export * from './services/entity-service';
 export * from './basical/base.component';
 export * from './basical/base.models';
 export * from './list/table-view/table-view.component';
