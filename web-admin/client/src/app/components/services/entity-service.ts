@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseWebService } from './base-service';
+import { BaseWebService } from './base-web-service';
 import { LGMDService } from './lgmd-service';
 import { ListQuery, Result } from './list-query.model';
 

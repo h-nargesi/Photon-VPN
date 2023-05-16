@@ -1,4 +1,4 @@
-export * from './services/base-service';
+export * from './services/base-web-service';
 export * from './services/option-service';
 export * from './services/lgmd-service';
 export * from './services/cookie-service';
