@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ListViewComponent } from "../list-view.component";
-import { CookieService, EntitySchema, Filter, LGMDService, ListQuery } from "../../";
 import { Router } from "@angular/router";
+import { EntitySchema, Filter, LGMDService, ListQuery } from "../../";
+import { ListViewComponent } from "../list-view.component";
 
 @Component({
   selector: 'app-table-view',
@@ -69,7 +69,7 @@ export class TableViewComponent extends ListViewComponent {
 
     if (column in this.Query.ordering) {
       this.Query.ordering[column] = !this.Query.ordering[column];
-    } else this.Query.ordering[column] = false;
+    } else this.Query.ordering[column] = true;
 
     this.OnFilterCanged();
   }

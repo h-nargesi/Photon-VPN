@@ -11,13 +11,12 @@ export class SessionListComponent {
   title: string = 'Sessions';
   columns_info: EntitySchema = Titles.list;
 
-  constructor(public readonly service: SessionsService) {}
+  constructor(public readonly service: SessionsService) { }
 
   data_projection(data: any[]): any[] {
     for (var user of data) {
-      user.acctstoptime = BaseComponent.getDateTimeString(user.acctstoptime);
-      user.acctupdatetime = BaseComponent.getRemain(user.acctupdatetime, false);
-      user.acctstarttime = BaseComponent.getDateTimeString(user.acctstarttime);
+      if (user.acctstoptime) user.acctstoptime = BaseComponent.getDateTimeString(user.acctstoptime);
+      else user.acctstoptime = BaseComponent.getRemain(user.acctstarttime);
     }
 
     return data;

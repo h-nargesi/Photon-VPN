@@ -1,5 +1,16 @@
-export type EntitySchema = { [name: string]: { title: string; show: boolean; } }
-export type SelectOptions = { title: string; id: number; }
+export type EntitySchema = {
+  [name: string]: {
+    title: string;
+    show: boolean;
+    type: ShowType
+  }
+}
+
+export type SelectOptions = {
+  title: string;
+  id: number;
+}
+
 export enum UIColors {
     secondary = 0,
     primary = 1,
@@ -10,3 +21,10 @@ export enum UIColors {
     light = 6,
     dark = 7,
   }
+
+export enum ShowType {
+  datetime = "datetime",
+  date = "date",
+  time = "time",
+  duration = "duration",
+}

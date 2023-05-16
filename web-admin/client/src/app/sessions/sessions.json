@@ -42,15 +42,16 @@
     },
     "acctstarttime": {
       "title": "Start Time",
-      "show": true
+      "show": true,
+      "type": "datetime"
     },
     "acctupdatetime": {
       "title": "Up-date Time",
-      "show": true
+      "show": false
     },
     "acctstoptime": {
       "title": "Stop Time",
-      "show": true
+      "show": "highligh"
     },
     "acctinterval": {
       "title": "Interval",
@@ -85,8 +86,8 @@
       "show": false
     },
     "callingstationid": {
-      "title": "callingstationid",
-      "show": false
+      "title": "Calling Station",
+      "show": true
     },
     "acctterminatecause": {
       "title": "acctterminatecause",
@@ -102,7 +103,7 @@
     },
     "framedipaddress": {
       "title": "Framed IP Address",
-      "show": true
+      "show": false
     },
     "acctstartdelay": {
       "title": "acctstartdelay",

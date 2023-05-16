@@ -4,6 +4,10 @@
       "title": "Id",
       "show": false
     },
+    "active": {
+      "title": "Active",
+      "show": true
+    },
     "username": {
       "title": "Username",
       "show": true
@@ -48,21 +52,29 @@
       "title": "Auth Type",
       "show": false
     },
-    "active": {
-      "title": "Active",
-      "show": false
+    "fromDate": {
+      "title": "From Date",
+      "show": true,
+      "type": "date"
+    },
+    "toDate": {
+      "title": "To Date",
+      "show": true,
+      "type": "duration"
     },
     "lastAcceptTime": {
       "title": "Last Accept Time",
-      "show": true
+      "show": true,
+      "type": "duration"
     },
     "lastRejectTime": {
       "title": "Last Reject Time",
-      "show": true
+      "show": true,
+      "type": "duration"
     },
     "lastAcceptNas": {
       "title": "Last Accept Nas",
-      "show": false
+      "show": true
     },
     "lastRejectNas": {
       "title": "Last Reject Nas",
@@ -103,14 +115,6 @@
     "dataCap Type": {
       "title": "Data Cap Type",
       "show": false
-    },
-    "fromDate": {
-      "title": "From Date",
-      "show": true
-    },
-    "toDate": {
-      "title": "To Date",
-      "show": true
     },
     "trackAuth": {
       "title": "Track Auth",

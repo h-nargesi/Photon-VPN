@@ -1,5 +1,6 @@
 import { EventEmitter } from "@angular/core";
 import { BaseComponent } from "../basical/base.component";
+import { ShowType } from "../basical/base.models";
 
 export abstract class ListViewComponent extends BaseComponent {
 
@@ -59,20 +60,53 @@ export abstract class ListViewComponent extends BaseComponent {
   }
 
   SetDataSource(data: any[]) {
-    if (!this.data_projection) this.data_source = data;
-    else this.data_source = this.data_projection(data);
+    this.data_source = this.project(data);
 
     this.data_columns = [];
 
-    if (this.columns_info) {
-      for (const column in this.columns_info)
-        if (this.columns_info[column].show && this.data_source[0] && column in this.data_source[0])
-          this.data_columns.push(column);
+    if (this.data_source != null && this.data_source.length > 0) {
+      const sample = this.data_source[0];
+      if (this.columns_info) {
+        for (const column in this.columns_info)
+          if (this.columns_info[column].show && column in sample)
+            this.data_columns.push(column);
 
-    } else if (this.data_source != null && this.data_source.length > 0) {
-      for (const column in this.data_source[0])
-        this.data_columns.push(column);
+      } else {
+        for (const column in sample)
+          this.data_columns.push(column);
+      }
     }
+  }
+
+  private project(data: any[]): any[] {
+    if (this.data_projection)
+      data = this.data_projection(data);
+
+    console.log('columns_info', this.columns_info);
+
+    if (this.columns_info && data != null && data.length > 0) {
+      for (const column in this.columns_info) {
+        if (!this.columns_info[column].type || !(column in data[0]))
+          continue;
+        switch (this.columns_info[column].type) {
+          case ShowType.datetime:
+            for (var d of data) d[column] = BaseComponent.getDateTimeString(d[column]);
+            break;
+          case ShowType.date:
+            for (var d of data) d[column] = BaseComponent.getDateString(d[column]);
+            break;
+          case ShowType.time:
+            for (var d of data) d[column] = BaseComponent.getTimeString(d[column]);
+            break;
+          case ShowType.duration:
+            for (var d of data) d[column] = BaseComponent.getRemain(d[column]);
+            break;
+
+        }
+      }
+    }
+
+    return data;
   }
 
   private is_double_click(index: number): boolean {

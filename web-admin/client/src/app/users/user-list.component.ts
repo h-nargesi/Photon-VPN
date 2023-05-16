@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { BaseComponent, EntitySchema } from '../components';
-import { UsersService } from './users.service';
+import { EntitySchema } from '../components';
 import Titles from './info/users.json';
+import { UsersService } from './users.service';
 
 @Component({
   selector: 'app-user-list',
@@ -13,13 +13,4 @@ export class UserListComponent {
   columns_info: EntitySchema = Titles.list;
 
   constructor(public readonly service: UsersService) { }
-
-  data_projection(data: any[]): any[] {
-    for (var user of data) {
-      user.toDate = BaseComponent.getRemain(user.toDate);
-      user.fromDate = BaseComponent.getDateString(user.fromDate);
-    }
-
-    return data;
-  }
 }

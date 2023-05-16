@@ -35,7 +35,8 @@ export abstract class BaseComponent {
   getRemain = BaseComponent.getRemain;
 
   static getDateTimeString(date: Date | null): string {
-    return date?.toLocaleString().replace('T', ' ') ?? '';
+    if (!date) return '';
+    else return BaseComponent.getDateString(date) + ' ' + BaseComponent.getTimeString(date);
   }
 
   static getDateString(date: Date | null): string | undefined {
@@ -46,7 +47,7 @@ export abstract class BaseComponent {
     return time?.toLocaleString().substring(11, 20);
   }
 
-  static getRemain(date: Date | null, past: boolean = true, details: boolean = false): string {
+  static getRemain(date: Date | null, details: boolean = false): string {
     if (date == null) return '';
 
     date = new Date(Date.parse(date.toString()));
@@ -54,10 +55,11 @@ export abstract class BaseComponent {
     let result = [];
     let diff = date.getTime() - new Date().getTime();
     let slash;
+    let negative = '';
 
     if (diff < 0) {
       diff = -diff;
-      if (past) result.push('past');
+      negative = '-';
     }
 
     slash = Math.floor(diff / 86400000);
@@ -66,7 +68,7 @@ export abstract class BaseComponent {
       result.push(slash + ' days');
     }
 
-    if (slash > 0 && !details) return result.join(', ');
+    if (slash > 0 && !details) return negative + result.join(', ');
 
     slash = Math.floor(diff / 3600000);
     if (slash > 0) {
@@ -74,7 +76,7 @@ export abstract class BaseComponent {
       result.push(slash + ' hours');
     }
 
-    if (slash > 0 && !details) return result.join(', ');
+    if (slash > 0 && !details) return negative + result.join(', ');
 
     slash = Math.floor(diff / 60000);
     if (slash > 0) {
@@ -82,6 +84,6 @@ export abstract class BaseComponent {
       result.push(slash + ' minutes');
     }
 
-    return result.join(', ');
+    return negative + result.join(', ');
   }
 }
