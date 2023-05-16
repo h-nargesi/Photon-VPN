@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BaseService, ListQuery, OptionService, SelectOptions } from '../components';
+import { BaseWebService, ListQuery, OptionService, SelectOptions } from '../components';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RealmsService extends BaseService implements OptionService {
+export class RealmsService extends BaseWebService implements OptionService {
 
 	constructor(
 		http: HttpClient,

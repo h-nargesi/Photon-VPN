@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 
-export abstract class BaseService {
+export abstract class BaseWebService {
   protected readonly base_url: string;
   protected readonly module_url: string;
 

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseService, Result } from '../../components';
+import { BaseWebService, Result } from '../../components';
 import { Invoice, Membership } from './membership.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MembershipService extends BaseService {
+export class MembershipService extends BaseWebService {
 
   constructor(
     http: HttpClient,

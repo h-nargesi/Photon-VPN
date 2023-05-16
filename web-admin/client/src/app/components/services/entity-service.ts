@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseService } from './base-service';
+import { BaseWebService } from './base-service';
 import { LGMDService } from './lgmd-service';
 import { ListQuery, Result } from './list-query.model';
 
-export abstract class EntityService<L, E> extends BaseService implements LGMDService {
+export abstract class EntityService<L, E> extends BaseWebService implements LGMDService {
 
   private query_string: string = '';
 
