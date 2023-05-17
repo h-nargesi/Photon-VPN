@@ -22,10 +22,7 @@ export class MembershipComponent {
       throw 'user-id is not set';
     }
 
-    this.service.Balance(this.UserItem.id).subscribe({
-      next: (result: Invoice[]) => this.Invoices = result,
-      error: console.error
-    });
+    this.service.Balance(this.UserItem.id).subscribe((result: Invoice[]) => this.Invoices = result);
   }
 
   static InitalizeModel(): Membership {

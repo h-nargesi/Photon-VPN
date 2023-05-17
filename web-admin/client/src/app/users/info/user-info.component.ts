@@ -23,15 +23,12 @@ export class UserInfoComponent extends BaseComponent {
   }
 
   Submit() {
-    this.service.Modify(this.Item).subscribe({
-      next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else {
-          console.info(result);
-          if (!this.Item.id) this.Item.id = Number(result.data);
-        }
-      },
-      error: console.error
+    this.service.Modify(this.Item).subscribe((result: Result) => {
+      if (result.status >= ResultStatus.Invalid) console.error(result);
+      else {
+        console.info(result);
+        if (!this.Item.id) this.Item.id = Number(result.data);
+      }
     });
   }
 

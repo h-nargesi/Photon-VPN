@@ -39,10 +39,8 @@ export class UserLogsComponent extends BaseComponent {
       throw 'user-id is not set';
     }
 
-    this.service.SetUserId(this.UserItem.id).List().subscribe({
-      next: (result: any[]) => this.time_line_view?.SetDataSource(result),
-      error: console.error
-    });
+    this.service.SetUserId(this.UserItem.id).List().subscribe(
+      (result: any[]) => this.time_line_view?.SetDataSource(result));
   }
 
   Selected(userLog: UserLog) {
@@ -58,15 +56,12 @@ export class UserLogsComponent extends BaseComponent {
 
     console.log(this.Item);
 
-    this.service.Modify(this.Item).subscribe({
-      next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid) console.error(result);
-        else {
-          this.Item = UserLogsComponent.InitalizeModel();
-          this.Reload();
-        }
-      },
-      error: console.error
+    this.service.Modify(this.Item).subscribe((result: Result) => {
+      if (result.status >= ResultStatus.Invalid) console.error(result);
+      else {
+        this.Item = UserLogsComponent.InitalizeModel();
+        this.Reload();
+      }
     });
   }
 
@@ -75,15 +70,12 @@ export class UserLogsComponent extends BaseComponent {
   }
 
   Delete() {
-    this.service.Delete(this.Item.id).subscribe({
-      next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid)
-          console.error(result);
+    this.service.Delete(this.Item.id).subscribe((result: Result) => {
+      if (result.status >= ResultStatus.Invalid)
+        console.error(result);
 
-        this.Cancel();
-        this.Reload();
-      },
-      error: console.error
+      this.Cancel();
+      this.Reload();
     });
   }
 

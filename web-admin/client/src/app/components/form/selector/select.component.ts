@@ -20,10 +20,8 @@ export class SelectComponent {
   }
 
   Load() {
-    this.Service?.Options(null).subscribe({
-      next: (result: SelectOptions[]) => this.Options = result,
-      error: console.error
-    });
+    this.Service?.Options(null).subscribe(
+      (result: SelectOptions[]) => this.Options = result);
   }
 
 }

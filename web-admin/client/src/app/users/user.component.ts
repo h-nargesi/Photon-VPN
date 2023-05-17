@@ -49,23 +49,19 @@ export class UserComponent extends BaseComponent {
   }
 
   Reload() {
-    this.service.Get(this.Item.id).subscribe({
-      next: (result: User) => {
-        this.Item = result;
-        this.user_logs?.Reload(result);
-        this.membership?.Reload(result);
-      }
+    this.service.Get(this.Item.id).subscribe((result: User) => {
+      this.Item = result;
+      this.user_logs?.Reload(result);
+      this.membership?.Reload(result);
     });
   }
 
   Delete() {
     if (!this.Item.id) return;
 
-    this.service.Delete(this.Item.id).subscribe({
-      next: (result: Result) => {
-        if (result.status < ResultStatus.Info)
-          this.router.navigate(['users']);
-      }
+    this.service.Delete(this.Item.id).subscribe((result: Result) => {
+      if (result.status < ResultStatus.Info)
+        this.router.navigate(['users']);
     });
   }
 

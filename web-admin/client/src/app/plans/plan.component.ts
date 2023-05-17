@@ -36,10 +36,7 @@ export class PlanComponent extends BaseComponent {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
-        this.service.Get(+params['id']).subscribe({
-          next: (result: Plan) => this.Item = result,
-          error: console.error
-        });
+        this.service.Get(+params['id']).subscribe((result: Plan) => this.Item = result);
       }
     });
   }
@@ -51,22 +48,18 @@ export class PlanComponent extends BaseComponent {
   Submit() {
     console.log(this.Item);
 
-    this.service.Modify(this.Item).subscribe({
-      next: (result: Result) => {
-        if (result.status < ResultStatus.Info && !this.Item.id)
-          this.Item.id = Number(result.data);
-      }
+    this.service.Modify(this.Item).subscribe((result: Result) => {
+      if (result.status < ResultStatus.Info && !this.Item.id)
+        this.Item.id = Number(result.data);
     });
   }
 
   Delete() {
     if (!this.Item.id) return;
 
-    this.service.Delete(this.Item.id).subscribe({
-      next: (result: Result) => {
-        if (result.status < ResultStatus.Info)
-          this.router.navigate(['plans']);
-      }
+    this.service.Delete(this.Item.id).subscribe((result: Result) => {
+      if (result.status < ResultStatus.Info)
+        this.router.navigate(['plans']);
     });
   }
 

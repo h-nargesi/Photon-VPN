@@ -25,10 +25,7 @@ export class PlanListComponent extends BaseComponent {
   }
 
   ngOnInit(): void {
-    this.service.List().subscribe({
-      next: (result: any[]) => this.widget_view?.SetDataSource(result),
-      error: console.error
-    });
+    this.service.List().subscribe((result: any[]) => this.widget_view?.SetDataSource(result));
   }
 
   onAddClick() {
@@ -36,14 +33,11 @@ export class PlanListComponent extends BaseComponent {
   }
 
   onDeleteClick(item: PlanModel) {
-    this.service.Delete(item.id).subscribe({
-      next: (result: Result) => {
-        if (result.status >= ResultStatus.Invalid)
-          console.error(result);
+    this.service.Delete(item.id).subscribe((result: Result) => {
+      if (result.status >= ResultStatus.Invalid)
+        console.error(result);
 
-        this.ngOnInit();
-      },
-      error: console.error
+      this.ngOnInit();
     });
   }
 

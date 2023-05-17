@@ -38,10 +38,7 @@ export class PaymentComponent extends BaseComponent {
   ngOnInit() {
     this.sub = this.route.params.subscribe((params) => {
       if ('id' in params) {
-        this.service.Get(+params['id']).subscribe({
-          next: (result: Payment) => this.item = result,
-          error: console.error,
-        });
+        this.service.Get(+params['id']).subscribe((result: Payment) => this.item = result);
 
       } else if ('userid' in params) {
         this.userid = +params['userid'];
@@ -57,22 +54,18 @@ export class PaymentComponent extends BaseComponent {
   Submit() {
     console.log(this.item);
 
-    this.service.Modify(this.item).subscribe({
-      next: (result: Result) => {
-        if (result.status < ResultStatus.Info && !this.item.id)
-          this.item.id = Number(result.data);
-      }
+    this.service.Modify(this.item).subscribe((result: Result) => {
+      if (result.status < ResultStatus.Info && !this.item.id)
+        this.item.id = Number(result.data);
     });
   }
 
   SubmitNext() {
     console.log(this.item);
 
-    this.service.Modify(this.item).subscribe({
-      next: (result: Result) => {
-        if (result.status < ResultStatus.Info) {
-          this.item.value = 0;
-        }
+    this.service.Modify(this.item).subscribe((result: Result) => {
+      if (result.status < ResultStatus.Info) {
+        this.item.value = 0;
       }
     });
   }
@@ -80,11 +73,9 @@ export class PaymentComponent extends BaseComponent {
   Delete() {
     if (!this.item.id) return;
 
-    this.service.Delete(this.item.id).subscribe({
-      next: (result: Result) => {
-        if (result.status < ResultStatus.Info)
-          this.router.navigate(['payments']);
-      }
+    this.service.Delete(this.item.id).subscribe((result: Result) => {
+      if (result.status < ResultStatus.Info)
+        this.router.navigate(['payments']);
     });
   }
 
