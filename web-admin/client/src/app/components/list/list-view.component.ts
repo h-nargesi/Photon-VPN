@@ -82,8 +82,6 @@ export abstract class ListViewComponent extends BaseComponent {
     if (this.data_projection)
       data = this.data_projection(data);
 
-    console.log('columns_info', this.columns_info);
-
     if (this.columns_info && data != null && data.length > 0) {
       for (const column in this.columns_info) {
         if (!this.columns_info[column].type || !(column in data[0]))
