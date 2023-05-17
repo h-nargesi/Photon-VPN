@@ -75,6 +75,10 @@ export abstract class ListViewComponent extends BaseComponent {
         for (const column in sample)
           this.data_columns.push(column);
       }
+    } else if (this.columns_info) {
+      for (const column in this.columns_info)
+        if (this.columns_info[column].show)
+          this.data_columns.push(column);
     }
   }
 
