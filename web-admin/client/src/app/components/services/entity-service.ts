@@ -23,20 +23,20 @@ export abstract class EntityService<L, E> extends BaseWebService implements LGMD
     if (filter == null) filter = {} as ListQuery;
     return this.http
       .post<L[]>(this.module_url + 'list' + this.query_string, filter)
-      .pipe<L[]>(catchError<L[], ObservableInput<any>>(this.handleError));
+      .pipe<L[]>(catchError<L[], ObservableInput<any>>(this.handleError.bind(this)));
   }
 
   public Count(filter: ListQuery | null = null): Observable<number> {
     if (filter == null) filter = {} as ListQuery;
     return this.http
       .post<number>(this.module_url + 'count' + this.query_string, filter)
-      .pipe<number>(catchError<number, ObservableInput<any>>(this.handleError));
+      .pipe<number>(catchError<number, ObservableInput<any>>(this.handleError.bind(this)));
   }
 
   public Get(id: number): Observable<E> {
     return this.http
       .get<E>(this.module_url + 'get/' + id)
-      .pipe<E>(catchError<E, ObservableInput<any>>(this.handleError));
+      .pipe<E>(catchError<E, ObservableInput<any>>(this.handleError.bind(this)));
   }
 
   public Modify(entity: E): Observable<Result> {
@@ -44,7 +44,7 @@ export abstract class EntityService<L, E> extends BaseWebService implements LGMD
       .post<Result>(this.module_url + 'modify', entity)
       .pipe(
         tap(result => this.handleResult(result)),
-        catchError<Result, ObservableInput<any>>(this.handleError)
+        catchError<Result, ObservableInput<any>>(this.handleError.bind(this))
       );
   }
 
@@ -53,7 +53,7 @@ export abstract class EntityService<L, E> extends BaseWebService implements LGMD
       .post<Result>(this.module_url + 'delete', id)
       .pipe(
         tap(result => this.handleResult(result)),
-        catchError<Result, ObservableInput<any>>(this.handleError)
+        catchError<Result, ObservableInput<any>>(this.handleError.bind(this))
       );
   }
 

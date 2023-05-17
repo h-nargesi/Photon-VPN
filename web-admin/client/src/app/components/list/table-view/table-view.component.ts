@@ -12,13 +12,14 @@ export class TableViewComponent extends ListViewComponent {
 
   @Input("filter") filter: boolean = true;
   @Input("selectable") selectable: boolean = true;
-  @Input("columns-info") columns_info: EntitySchema | undefined;
-  @Input("data-projection") data_projection: ((data: any[]) => any[]) | undefined;
-  @Input("service") service: LGMDService | undefined;
+  @Input("columns-info") columns_info!: EntitySchema;
+  @Input("data-projection") data_projection!: ((data: any[]) => any[]);
+  @Input("service") service!: LGMDService;
 
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
   @Output("double-click") double_click = new EventEmitter<any>();
   @Output("filter-changed") filter_changed = new EventEmitter<ListQuery>();
+  @Output('reloading') reloading = new EventEmitter<ListQuery | null>();
 
   Query: ListQuery | null = null;
   Pages: { page: number, color: string }[] = [];
@@ -40,15 +41,12 @@ export class TableViewComponent extends ListViewComponent {
   }
 
   Relaod() {
-    this.service?.List(this.Query).subscribe({
-      next: (result: any[]) => this.SetDataSource(result),
-      error: console.error
+    this.service?.List(this.Query).subscribe((result: any[]) => {
+      this.SetDataSource(result)
     });
-    if (!this.filter) return;
-    this.service?.Count(this.Query).subscribe({
-      next: (result: number) => this.TotalCount = result,
-      error: console.error
-    });
+    if (this.filter)
+      this.service?.Count(this.Query).subscribe((result: number) => this.TotalCount = result);
+    this.reloading.emit(this.Query);
   }
 
   SetFilterColumn(column: string, value: string) {

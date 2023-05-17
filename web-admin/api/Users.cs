@@ -35,6 +35,27 @@ public class Users : Controller
     }
 
     [HttpPost]
+    public async Task<IActionResult> ActiveCount([FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = from user in db.PermanentUsers.AsNoTracking()
+                    join profile in db.ProfilesWithSessionCounts()
+                                 on user.ProfileId equals profile.Id
+                    where user.ProfileId != null && user.Active &&
+                          (user.FromDate == null || user.FromDate <= DateTime.Now) &&
+                          (user.ToDate == null || user.ToDate >= DateTime.Now) &&
+                          (user.PercTimeUsed == null || user.PercTimeUsed < 100) &&
+                          (user.PercDataUsed == null || user.PercDataUsed < 100)
+                    select profile.SimultaneousUses;
+
+        var list = await filter.ApplyFilterCount(query)
+                               .ToDynamicArrayAsync();
+
+        return Ok(list.Sum(x => (int)x));
+    }
+
+    [HttpPost]
     public async Task<IActionResult> Options([FromBody] ListQuery filter)
     {
         using var db = new RdContext();

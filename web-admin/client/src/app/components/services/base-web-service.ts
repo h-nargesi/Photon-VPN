@@ -55,19 +55,19 @@ export abstract class BaseWebService {
   }
 
   protected handleError(error: HttpErrorResponse) {
+    this.notify_service?.notify({
+      delay: 10000,
+      color: "warning",
+      title: this.entity_name,
+      description: 'Something bad happened; please try again later.',
+    });
+
     if (error.status === 0) {
       console.error('An error occurred:', error.error);
     } else {
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
     }
-
-    this.notify_service.notify({
-      delay: 10000,
-      color: "warning",
-      title: this.entity_name,
-      description: 'Something bad happened; please try again later.',
-    });
 
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }

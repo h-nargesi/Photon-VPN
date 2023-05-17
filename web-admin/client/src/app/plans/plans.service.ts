@@ -21,6 +21,6 @@ export class PlansService extends EntityService<PlanModel, Plan> implements Opti
     if (filter == null) filter = {} as ListQuery;
     return this.http
       .post<PlanModel[]>(this.module_url + 'list', filter)
-      .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError));
+      .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError.bind(this)));
   }
 }

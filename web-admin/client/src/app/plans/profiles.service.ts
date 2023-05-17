@@ -20,7 +20,7 @@ export class ProfilesService extends BaseWebService implements OptionService {
     if (filter == null) filter = {} as ListQuery;
     return this.http
       .post<SelectOptions[]>(this.module_url + 'options', filter)
-      .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError));
+      .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError.bind(this)));
   }
 
 }

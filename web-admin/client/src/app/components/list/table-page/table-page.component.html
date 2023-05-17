@@ -24,7 +24,8 @@
           [service]="service"
           [columns-info]="columns_info"
           [data-projection]="data_projection"
-          (double-click)="onDbClick($event)">
+          (double-click)="onDbClick($event)"
+          (reloading)="reloading.emit($event)">
         </app-table-view>
       </c-card-body>
     </c-card>

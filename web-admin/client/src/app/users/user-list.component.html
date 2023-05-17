@@ -1,7 +1,8 @@
-<app-table-page 
+<app-table-page
   [title]="title"
   [columns-info]="columns_info"
-  [service]="service">
+  [service]="service"
+  (reloading)="LoadActiveCount($event)">
   <c-button-group>
     <button cButton variant="outline" color="primary">
       <svg cIcon name="cilChart" title="Data Usage" size="2xl"></svg>
@@ -13,4 +14,5 @@
       <svg cIcon name="cilMoney" title="Payment" size="2xl"></svg>
     </button>
   </c-button-group>
+  <span class="ms-4">Available Simultaneous Uses: {{ active_count }}</span>
 </app-table-page>

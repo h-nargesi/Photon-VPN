@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EntitySchema } from '../components';
+import { EntitySchema, ListQuery } from '../components';
 import Titles from './info/users.json';
 import { UsersService } from './users.service';
 
@@ -11,6 +11,11 @@ export class UserListComponent {
 
   title: string = "Users";
   columns_info: EntitySchema = Titles.list;
+  active_count!: number;
 
   constructor(public readonly service: UsersService) { }
+
+  LoadActiveCount(query: ListQuery | null) {
+    this.service.ActiveCount(query).subscribe((result) => this.active_count = result);
+  }
 }

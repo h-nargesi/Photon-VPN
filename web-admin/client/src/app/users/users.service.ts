@@ -21,7 +21,14 @@ export class UsersService extends EntityService<User, User> implements OptionSer
     if (filter == null) filter = {} as ListQuery;
     return this.http
       .post<SelectOptions[]>(this.module_url + 'options', filter)
-      .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError));
+      .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError.bind(this)));
+  }
+
+  public ActiveCount(filter: ListQuery | null): Observable<number> {
+    if (filter == null) filter = {} as ListQuery;
+    return this.http
+      .post<number>(this.module_url + 'activecount', filter)
+      .pipe<number>(catchError<number, ObservableInput<any>>(this.handleError.bind(this)));
   }
 
 }
