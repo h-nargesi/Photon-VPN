@@ -17,12 +17,6 @@
   </button>
 </c-button-group>
 
-<c-button-group class="me-3">
-  <button cButton *ngIf="show_setting" (click)="setting.emit()" variant="outline" color="light">
-    <svg cIcon name="cilSettings" title="Column Settings" size="2xl"></svg>
-  </button>
-</c-button-group>
-
 <c-modal #ConfirmDelete alignment="center" id="ConfirmDelete">
   <c-modal-header>
     <h5 cModalTitle>Delete Confirm</h5>

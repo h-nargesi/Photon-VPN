@@ -2,6 +2,9 @@
 <c-button-group *ngIf="filter" class="me-3 mb-3">
   <input cFormControl [value]="GetSearch()" (change)="SetSearch(val($event))" type="text" placeholder="Seach"
          class="form-control" style="border-end-end-radius: 0; border-start-end-radius: 0;" />
+  <button cButton variant="outline" color="secondary">
+    <svg cIcon name="cilSettings" title="Column Settings" size="2xl"></svg>
+  </button>
   <button cButton (click)="ClearFilters()" variant="outline" color="secondary">
     <svg cIcon name="cilFilterX" title="Clear Filters" size="2xl"></svg>
   </button>
@@ -16,15 +19,15 @@
           <span *ngIf="!filter">{{ titleOf(column) }}</span>
           <span *ngIf="filter" (click)="ColumnSort(column)" style="cursor: pointer;">{{ titleOf(column) }}</span>
           <hr *ngIf="filter" />
-          <input cFormControl *ngIf="filter" 
-            [value]="GetFilterColumn(column)" (change)="SetFilterColumn(column, val($event))" 
-            type="text" style="width: 100%;" />
+          <input cFormControl *ngIf="filter"
+                 [value]="GetFilterColumn(column)" (change)="SetFilterColumn(column, val($event))"
+                 type="text" style="width: 100%;" />
         </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of DataSource; let index = index" (click)="SelectRow(index)"
-        cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
+          cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
 
         <td scope="row">{{ GetStartOffset() + index + 1 }}</td>
         <td *ngFor="let col of DataColumns;" style="white-space: nowrap;">{{ row[col] }}</td>
@@ -35,7 +38,9 @@
 
 <c-button-group *ngIf="filter" class="me-3 mt-3 mb-3">
   <button cButton variant="outline" size="sm"
-    *ngFor="let p of Pages;" [color]="p.color" (click)="GoPage(p.page)">{{ p.page }}</button>
+          *ngFor="let p of Pages;" [color]="p.color" (click)="GoPage(p.page)">
+    {{ p.page }}
+  </button>
   <c-dropdown variant="btn-group">
     <button cButton cDropdownToggle color="secondary" variant="outline" size="sm">
       Size: {{ Query?.limit }}

@@ -20,9 +20,8 @@ public class Users : Controller
         var result = await filter.AddIdentityColumn()
                                  .ApplyFilter(query)
                                  .ToDynamicListAsync();
-        result.SyncTimeList();
 
-        return Ok(result);
+        return Ok(result.SyncTimeList());
     }
 
     [HttpPost]

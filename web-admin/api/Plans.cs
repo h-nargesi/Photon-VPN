@@ -36,9 +36,7 @@ public class Plans : Controller
                                  .ApplyFilter(query)
                                  .ToDynamicListAsync();
 
-        result.SyncTimeList();
-
-        return Ok(result);
+        return Ok(result.SyncTimeList());
     }
 
     [HttpPost]

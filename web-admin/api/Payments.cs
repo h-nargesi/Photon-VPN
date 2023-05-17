@@ -26,9 +26,7 @@ public class Payments : Controller
                                  .ApplyFilter(query)
                                  .ToDynamicArrayAsync();
 
-        result.SyncTimeList();
-
-        return Ok(result);
+        return Ok(result.SyncTimeList());
     }
 
     [HttpPost]

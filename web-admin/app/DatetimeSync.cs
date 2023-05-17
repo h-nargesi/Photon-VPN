@@ -75,12 +75,12 @@ public static class DatetimeSync
         var type = output.First().GetType();
         var properties = (PropertyInfo[])type.GetProperties();
 
+        properties = properties.Where(p => p.GetIndexParameters().Length == 0)
+                               .ToArray();
+
         if (!properties.Any(x => x.PropertyType == typeof(DateTime) ||
                                 x.PropertyType == typeof(DateTime?)))
             return output;
-
-        properties = properties.Where(p => p.PropertyType.IsPrimitive)
-                               .ToArray();
 
         var result = new List<RouteValueDictionary>();
         foreach (var item in output)
@@ -99,10 +99,15 @@ public static class DatetimeSync
                     value = ((DateTime)value).SyncTime(timeZone);
                 }
 
-                record[p.Name] = value;
+                record[p.Name.ToLowerFirst()] = value;
             }
         }
 
         return result;
+    }
+
+    private static string ToLowerFirst(this string text)
+    {
+        return text[0..1].ToLower() + text[1..];
     }
 }

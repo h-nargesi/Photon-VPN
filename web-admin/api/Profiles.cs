@@ -35,9 +35,7 @@ public class Profiles : Controller
                                  .ApplyFilter(query)
                                  .ToDynamicListAsync();
 
-        result.SyncTimeList();
-
-        return Ok(result);
+        return Ok(result.SyncTimeList());
     }
 
     [HttpPost]

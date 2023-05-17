@@ -23,9 +23,8 @@ public class UserLogs : Controller
         var result = await filter.AddIdentityColumn()
                                  .ApplyFilter(query)
                                  .ToDynamicListAsync();
-        result.SyncTimeList();
 
-        return Ok(result);
+        return Ok(result.SyncTimeList());
     }
 
     [HttpPost]

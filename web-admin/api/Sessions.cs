@@ -24,9 +24,8 @@ public class Sessions : Controller
 
         var result = await filter.ApplyFilter(query)
                                  .ToDynamicListAsync();
-        result.SyncTimeList();
 
-        return Ok(result);
+        return Ok(result.SyncTimeList());
     }
 
     [HttpPost]
