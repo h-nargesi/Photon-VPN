@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
+using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -21,20 +22,23 @@ public class Plans : Controller
                     {
                         pl.Id,
                         pl.Title,
-                        Active = pl != null && pl.Active,
-                        Price = pl != null ? pl.Price : (decimal?)null,
-                        ImageFile = pl != null ? pl.ImageFile : null,
-                        Color = pl != null ? pl.Color : 0,
+                        pl.Active,
+                        pl.Price,
+                        pl.ImageFile,
+                        pl.Color,
                         Speed = string.Empty,
                         Traffic = string.Empty,
                         pl.Created,
                         pl.Modified,
                     };
 
-        var filtered = filter.AddIdentityColumn()
-                             .ApplyFilter(query);
+        var result = await filter.AddIdentityColumn()
+                                 .ApplyFilter(query)
+                                 .ToDynamicListAsync();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        result.SyncTimeList();
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -64,6 +68,8 @@ public class Plans : Controller
 
         if (result == null) return Ok();
 
+        result.SyncTimeObject();
+
         result.SessionCounts = await db.ProfilesWithSessionCounts()
                                        .Where(p => p.PlanId == id)
                                        .Select(p => p.SimultaneousUses)
@@ -76,22 +82,26 @@ public class Plans : Controller
         if (sample_profile_id.HasValue)
         {
             var rad_checks = db.Radgroupchecks.AsNoTracking()
-                                              .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
-                                              .ToList();
+                               .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
+                               .ToListAsync();
 
             var rad_replies = db.Radgroupreplies.AsNoTracking()
-                                                .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
-                                                .ToList();
+                                .Where(r => r.Groupname == ProfileViews.SimpleAdd + sample_profile_id.Value)
+                                .ToListAsync();
 
-            foreach (var rad_check in rad_checks)
+            foreach (var rad_check in await rad_checks)
             {
                 result.Checks.Add(rad_check.Attribute, rad_check);
             }
 
-            foreach (var rad_reply in rad_replies)
+            result.Checks.SyncTimeList();
+
+            foreach (var rad_reply in await rad_replies)
             {
                 result.Replies.Add(rad_reply.Attribute, rad_reply);
             }
+
+            result.Replies.SyncTimeList();
         }
 
         return Ok(result);
@@ -101,6 +111,8 @@ public class Plans : Controller
     public async Task<IActionResult> Modify([FromBody] Plan plan)
     {
         if (plan == null) return BadRequest();
+
+        plan.SyncTimeToUTC();
 
         plan = await PlanBusiness.Save(plan);
 
@@ -114,9 +126,8 @@ public class Plans : Controller
 
         using var db = new RdContext();
 
-        var current_packages = await db.Packages.AsNoTracking()
-                                                .Where(p => p.PlanId == plan_id)
-                                                .ToArrayAsync();
+        var current_packages = db.Packages.AsNoTracking()
+                                          .Where(p => p.PlanId == plan_id);
 
         db.Packages.RemoveRange(current_packages);
         await db.SaveChangesAsync();

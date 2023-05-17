@@ -47,13 +47,13 @@ public class PlanBusiness
         {
             original = plan;
 
-            plan.Created = plan.Modified = DateTime.Now;
+            plan.Created = plan.Modified = DateTime.UtcNow;
 
             await db.Plans.AddAsync(plan);
         }
         else
         {
-            plan.Modified = DateTime.Now;
+            plan.Modified = DateTime.UtcNow;
 
             db.Plans.Attach(original);
             db.Entry(original).CurrentValues.SetValues(plan);
@@ -111,8 +111,8 @@ public class PlanBusiness
                 {
                     Name = name,
                     CloudId = ProfileViews.DefaultCloudId,
-                    Created = DateTime.Now,
-                    Modified = DateTime.Now,
+                    Created = DateTime.UtcNow,
+                    Modified = DateTime.UtcNow,
                 };
 
                 new_profiles.Add(original);
@@ -123,7 +123,7 @@ public class PlanBusiness
             {
                 db.Profiles.Attach(original);
 
-                original.Modified = DateTime.Now;
+                original.Modified = DateTime.UtcNow;
                 original.Name = name;
 
                 db.Entry(original).Property(x => x.Created).IsModified = false;
@@ -195,8 +195,8 @@ public class PlanBusiness
                 {
                     Name= groupname,
                     CloudId = 23,
-                    Created = DateTime.Now,
-                    Modified = DateTime.Now,
+                    Created = DateTime.UtcNow,
+                    Modified = DateTime.UtcNow,
                 };
 
                 await db.ProfileComponents.AddAsync(component);
@@ -247,8 +247,8 @@ public class PlanBusiness
                         Groupname = groupname,
                         Op = check.Op,
                         Value = check.Value,
-                        Created = DateTime.Now,
-                        Modified = DateTime.Now,
+                        Created = DateTime.UtcNow,
+                        Modified = DateTime.UtcNow,
                     };
 
                     await db.Radgroupchecks.AddAsync(original);
@@ -257,7 +257,7 @@ public class PlanBusiness
                 {
                     originals.Remove(check.Attribute);
 
-                    original.Modified = DateTime.Now;
+                    original.Modified = DateTime.UtcNow;
                     original.Value = check.Value;
 
                     db.Radgroupchecks.Attach(original);
@@ -302,8 +302,8 @@ public class PlanBusiness
                         Groupname = groupname,
                         Op = reply.Op,
                         Value = reply.Value,
-                        Created = DateTime.Now,
-                        Modified = DateTime.Now,
+                        Created = DateTime.UtcNow,
+                        Modified = DateTime.UtcNow,
                     };
 
                     await db.Radgroupreplies.AddAsync(original);
@@ -312,7 +312,7 @@ public class PlanBusiness
                 {
                     originals.Remove(reply.Attribute);
 
-                    original.Modified = DateTime.Now;
+                    original.Modified = DateTime.UtcNow;
                     original.Value = reply.Value;
 
                     db.Radgroupreplies.Attach(original);

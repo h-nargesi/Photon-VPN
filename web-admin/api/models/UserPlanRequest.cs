@@ -1,6 +1,6 @@
 ﻿namespace Photon.Service.VPN.Handlers.Model;
 
-public class UserPlan
+public class UserPlanRequest
 {
     public int UserId { get; set; }
 

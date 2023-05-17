@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
+using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -16,10 +17,12 @@ public class Users : Controller
 
         var query = db.PermanentUsers.AsNoTracking();
 
-        var filtered = filter.AddIdentityColumn()
-                             .ApplyFilter(query);
+        var result = await filter.AddIdentityColumn()
+                                 .ApplyFilter(query)
+                                 .ToDynamicListAsync();
+        result.SyncTimeList();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        return Ok(result);
     }
 
     [HttpPost]
@@ -35,7 +38,7 @@ public class Users : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> ActiveCount([FromBody] ListQuery filter)
+    public async Task<IActionResult> ActiveCount()
     {
         using var db = new RdContext();
 
@@ -43,16 +46,15 @@ public class Users : Controller
                     join profile in db.ProfilesWithSessionCounts()
                                  on user.ProfileId equals profile.Id
                     where user.ProfileId != null && user.Active &&
-                          (user.FromDate == null || user.FromDate <= DateTime.Now) &&
-                          (user.ToDate == null || user.ToDate >= DateTime.Now) &&
+                          (user.FromDate == null || user.FromDate <= DateTime.UtcNow) &&
+                          (user.ToDate == null || user.ToDate >= DateTime.UtcNow) &&
                           (user.PercTimeUsed == null || user.PercTimeUsed < 100) &&
                           (user.PercDataUsed == null || user.PercDataUsed < 100)
                     select profile.SimultaneousUses;
 
-        var list = await filter.ApplyFilterCount(query)
-                               .ToDynamicArrayAsync();
+        var list = await query.ToListAsync();
 
-        return Ok(list.Sum(x => (int)x));
+        return Ok(list.Sum());
     }
 
     [HttpPost]
@@ -81,16 +83,20 @@ public class Users : Controller
     {
         using var db = new RdContext();
 
-        var query = db.PermanentUsers.AsNoTracking()
-                                     .Where(c => c.Id == id);
+        var result = await db.PermanentUsers.AsNoTracking()
+                             .Where(c => c.Id == id)
+                             .FirstOrDefaultAsync();
+        result.SyncTimeObject();
 
-        return Ok(await query.FirstOrDefaultAsync());
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Modify([FromBody] PermanentUser user)
     {
         if (user == null) return BadRequest();
+
+        user.SyncTimeToUTC();
 
         using var db = new RdContext();
 
@@ -101,8 +107,11 @@ public class Users : Controller
         if (original == null) await db.PermanentUsers.AddAsync(user);
         else
         {
+            user.Modified = DateTime.UtcNow;
+
             db.PermanentUsers.Attach(original);
             db.Entry(original).CurrentValues.SetValues(user);
+            db.Entry(original).Property(x => x.Created).IsModified = false;
         }
 
         await db.SaveChangesAsync();

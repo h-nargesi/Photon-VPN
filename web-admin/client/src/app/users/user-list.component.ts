@@ -15,7 +15,7 @@ export class UserListComponent {
 
   constructor(public readonly service: UsersService) { }
 
-  LoadActiveCount(query: ListQuery | null) {
-    this.service.ActiveCount(query).subscribe((result) => this.active_count = result);
+  LoadActiveCount() {
+    this.service.ActiveCount(null).subscribe((result) => this.active_count = result);
   }
 }

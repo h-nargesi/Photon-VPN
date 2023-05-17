@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
+using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -30,10 +31,13 @@ public class Profiles : Controller
                         PlanId = pl.PlanId,
                     };
 
-        var filtered = filter.AddIdentityColumn()
-                             .ApplyFilter(query);
+        var result = await filter.AddIdentityColumn()
+                                 .ApplyFilter(query)
+                                 .ToDynamicListAsync();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        result.SyncTimeList();
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -75,16 +79,20 @@ public class Profiles : Controller
     {
         using var db = new RdContext();
 
-        var query = db.Profiles.AsNoTracking()
-                               .Where(c => c.Id == id);
+        var result = await db.Profiles.AsNoTracking()
+                                      .Where(c => c.Id == id)
+                                      .FirstOrDefaultAsync();
+        result.SyncTimeObject();
 
-        return Ok(await query.FirstOrDefaultAsync());
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Modify([FromBody] Profile profile)
     {
         if (profile == null) return BadRequest();
+
+        profile.SyncTimeToUTC();
 
         using var db = new RdContext();
 

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
+using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -21,10 +22,13 @@ public class Payments : Controller
             query = query.Where(p => p.PermanentUserId == user_id);
         }
 
-        var filtered = filter.AddIdentityColumn()
-                             .ApplyFilter(query);
+        var result = await filter.AddIdentityColumn()
+                                 .ApplyFilter(query)
+                                 .ToDynamicArrayAsync();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        result.SyncTimeList();
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -54,6 +58,8 @@ public class Payments : Controller
                                      .Where(c => c.Id == id)
                                      .FirstOrDefaultAsync();
 
+        model?.SyncTimeObject();
+
         return Ok(model);
     }
 
@@ -63,6 +69,8 @@ public class Payments : Controller
     public async Task<IActionResult> Add([FromBody] Payment payment)
     {
         if (payment == null) return BadRequest();
+
+        payment.SyncTimeToUTC();
 
         payment.Approved = false;
 
@@ -134,6 +142,8 @@ public class Payments : Controller
                                          c.BankAccount
                                      })
                                      .FirstOrDefaultAsync();
+
+        model?.SyncTimeObject();
 
         return Ok(model);
     }

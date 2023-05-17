@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
+using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -19,10 +20,12 @@ public class UserLogs : Controller
                                         .Where(c => c.PermanentUserId == user_id)
                                         .OrderByDescending(c => c.Id);
 
-        var filtered = filter.AddIdentityColumn()
-                             .ApplyFilter(query);
+        var result = await filter.AddIdentityColumn()
+                                 .ApplyFilter(query)
+                                 .ToDynamicListAsync();
+        result.SyncTimeList();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        return Ok(result);
     }
 
     [HttpPost]
@@ -45,16 +48,20 @@ public class UserLogs : Controller
     {
         using var db = new RdContext();
 
-        var query = db.PermanentUserLogs.AsNoTracking()
-                                        .Where(c => c.Id == id);
+        var result = await db.PermanentUserLogs.AsNoTracking()
+                             .Where(c => c.Id == id)
+                             .FirstOrDefaultAsync();
+        result.SyncTimeObject();
 
-        return Ok(await query.FirstOrDefaultAsync());
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Modify([FromBody] PermanentUserLog user)
     {
         if (user == null) return BadRequest();
+
+        user.SyncTimeToUTC();
 
         using var db = new RdContext();
 

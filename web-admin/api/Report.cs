@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using Photon.Service.VPN.App;
 using Photon.Service.VPN.Models;
 
 namespace Photon.Service.VPN.Handlers;
@@ -18,6 +19,8 @@ public class Report : Controller
         [FromQuery] DateTime? start)
     {
         using var db = new RdContext();
+
+        start = start?.ToUniversalTime();
 
         var query = db.Radaccts.AsNoTracking();
 
@@ -45,7 +48,10 @@ public class Report : Controller
             query = query.Where(a => a.Acctstarttime >= start.Value);
         }
 
-        return Ok(await query.ToListAsync());
+        var result = await query.ToListAsync();
+        result.SyncTimeList();
+
+        return Ok(result);
     }
 
     [HttpGet]
@@ -59,6 +65,8 @@ public class Report : Controller
         using var db = new RdContext();
 
         var query = db.Payments.AsNoTracking();
+
+        start = start?.ToUniversalTime();
 
         if (profile.HasValue)
         {
@@ -88,7 +96,10 @@ public class Report : Controller
             query = query.Where(a => a.DateTime >= start.Value);
         }
 
-        return Ok(await query.ToListAsync());
+        var result = await query.ToListAsync();
+        result.SyncTimeList();
+
+        return Ok(result);
     }
 
 }

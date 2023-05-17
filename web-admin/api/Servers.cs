@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Photon.Service.VPN.App;
 using Photon.Service.VPN.Models;
 
 namespace Photon.Service.VPN.Handlers;
@@ -12,9 +13,11 @@ public class Servers : Controller
     {
         using var db = new RdContext();
 
-        var query = db.Nas.AsNoTracking();
+        var result = await db.Nas.AsNoTracking()
+                                 .ToListAsync();
+        result.SyncTimeList();
 
-        return Ok(await query.ToListAsync());
+        return Ok(result);
     }
 
     [HttpGet]
@@ -23,16 +26,20 @@ public class Servers : Controller
     {
         using var db = new RdContext();
 
-        var query = db.Nas.AsNoTracking()
-                          .Where(c => c.Id == id);
+        var result = await db.Nas.AsNoTracking()
+                                 .Where(c => c.Id == id)
+                                 .FirstOrDefaultAsync();
+        result.SyncTimeObject();
 
-        return Ok(await query.FirstOrDefaultAsync());
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Modify([FromBody] Na na)
     {
         if (na == null) return BadRequest();
+
+        na.SyncTimeToUTC();
 
         using var db = new RdContext();
 
@@ -43,14 +50,14 @@ public class Servers : Controller
         if (original == null)
         {
             na.Timezone = "262";
-            na.Created = na.Modified = DateTime.Now;
+            na.Created = na.Modified = DateTime.UtcNow;
             na.CloudId = 23;
 
             await db.Nas.AddAsync(na);
         }
         else
         {
-            na.Modified = DateTime.Now;
+            na.Modified = DateTime.UtcNow;
             na.CloudId = 23;
 
             db.Nas.Attach(original);

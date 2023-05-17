@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Photon.Service.VPN.App;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
 
@@ -20,7 +21,8 @@ public class Membership : Controller
                                   orderby py.DateTime descending, py.Created descending
                                   select py;
 
-        var user_payments_task = user_payments_query.ToListAsync();
+        var user_payments = await user_payments_query.ToListAsync();
+        user_payments.SyncTimeList();
 
         // var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
         //                         where rad.Attribute == ProfileViews.Simultaneous_Use &&
@@ -53,23 +55,21 @@ public class Membership : Controller
                               where up.PermanentUserId == user_id
 
                               orderby up.ValidTime descending, up.Created descending
-                              select new
+                              select new UserPlan
                               {
-                                  pr.PlanId,
-                                  pr.ProfileId,
-                                  pl.Title,
-                                  pr.SimultaneousUses,
-                                  up.ValidTime,
+                                  PlanId = pr.PlanId,
+                                  ProfileId = pr.ProfileId,
+                                  Title = pl.Title,
+                                  SimultaneousUses = pr.SimultaneousUses,
+                                  ValidTime = up.ValidTime,
                                   Price = up.OverridePrice ?? (pl.Price * (decimal)pr.PriceFactor * up.Periods),
-                                  pl.Color,
-                                  up.Created,
-                                  up.Modified,
+                                  Color = pl.Color,
+                                  Created = up.Created,
+                                  Modified = up.Modified,
                               };
 
-        var user_plan_task = user_plan_query.ToListAsync();
-
-        var user_payments = await user_payments_task;
-        var user_plan = await user_plan_task;
+        var user_plan = await user_plan_query.ToListAsync();
+        user_plan.SyncTimeList();
 
         var plan_index = 0;
         var balance = (decimal)0;
@@ -130,15 +130,17 @@ public class Membership : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] UserPlan user_plan)
+    public async Task<IActionResult> Add([FromBody] UserPlanRequest user_plan)
     {
         if (user_plan == null) return BadRequest();
+
+        user_plan.SyncTimeToUTC();
 
         using var db = new RdContext();
 
         var latest_valid_time = db.PermanentUserPlans.AsNoTracking()
-                                                     .Max(up => up.ValidTime)
-                                                     .Date;
+                                  .Max(up => up.ValidTime)
+                                  .Date;
 
         var now = DateTime.UtcNow.Date;
         if (now < latest_valid_time) latest_valid_time = now;
@@ -161,6 +163,8 @@ public class Membership : Controller
     public async Task<IActionResult> Delete([FromBody] UserTime user_time)
     {
         using var db = new RdContext();
+
+        user_time.SyncTimeToUTC();
 
         db.PermanentUserPlans.Remove(new PermanentUserPlan
         {

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Photon.Service.VPN.Handlers.Model;
 using Photon.Service.VPN.Models;
+using Photon.Service.VPN.App;
 
 namespace Photon.Service.VPN.Handlers;
 
@@ -21,9 +22,11 @@ public class Sessions : Controller
             query = query.Where(c => c.Acctstoptime == null);
         }
 
-        var filtered = filter.ApplyFilter(query);
+        var result = await filter.ApplyFilter(query)
+                                 .ToDynamicListAsync();
+        result.SyncTimeList();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        return Ok(result);
     }
 
     [HttpPost]
