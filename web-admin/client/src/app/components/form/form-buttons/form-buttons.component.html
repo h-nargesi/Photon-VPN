@@ -1,8 +1,11 @@
 <div class="d-grid gap-2 d-md-block">
   <button cButton (click)="submit.emit()" class="me-md-2" *ngIf="Mode(1)">Submit</button>
+  <ng-content></ng-content>
   <button cButton (click)="cancel.emit()" [routerLink]="list_route" class="me-md-2" color="secondary" variant="outline" *ngIf="Mode(2)">Cancel</button>
   <button cButton [cModalToggle]="ConfirmDelete.id" class="me-md-2" color="danger" variant="outline"
-    *ngIf="!is_new && Mode(3)">Delete</button>
+          *ngIf="!is_new && Mode(3)">
+    Delete
+  </button>
   <c-modal #ConfirmDelete alignment="center" id="ConfirmDelete">
     <c-modal-header>
       <h5 cModalTitle>Delete Confirm</h5>

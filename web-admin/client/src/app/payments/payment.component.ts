@@ -19,8 +19,9 @@ export class PaymentComponent extends BaseComponent {
     dateTime: new Date(),
     created: new Date(),
   } as Payment;
+  public userid!: number;
   public columns_info: EntitySchema = Titles.list;
-  @ViewChild('userSelector') private user_selector: SelectComponent | undefined;
+  @ViewChild('userSelector') private user_selector!: SelectComponent;
 
   constructor(
     private readonly service: PaymentsService,
@@ -43,8 +44,8 @@ export class PaymentComponent extends BaseComponent {
         });
 
       } else if ('userid' in params) {
-        this.item.permanentUserId = +params['id'];
-        this.LoadUsers();
+        this.userid = +params['userid'];
+        this.item.permanentUserId = this.userid;
       }
     });
   }
@@ -64,6 +65,18 @@ export class PaymentComponent extends BaseComponent {
     });
   }
 
+  SubmitNext() {
+    console.log(this.item);
+
+    this.service.Modify(this.item).subscribe({
+      next: (result: Result) => {
+        if (result.status < ResultStatus.Info) {
+          this.item.value = 0;
+        }
+      }
+    });
+  }
+
   Delete() {
     if (!this.item.id) return;
 
@@ -76,6 +89,8 @@ export class PaymentComponent extends BaseComponent {
   }
 
   LoadUsers() {
-    this.user_selector?.Load();
+    if (!this.user_selector || this.user_selector.Options) return;
+    this.user_selector.Load();
   }
+
 }

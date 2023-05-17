@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { OptionService } from '../../services/option-service';
 import { SelectOptions } from '../../basical/base.models';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: '[app-select]',
@@ -8,14 +9,14 @@ import { SelectOptions } from '../../basical/base.models';
 })
 export class SelectComponent {
 
-  constructor() { }
-
-  @Input('options') Options: SelectOptions[] | undefined;
-  @Input('service') Service: OptionService | undefined;
+  @Input('options') Options!: SelectOptions[];
+  @Input('service') Service!: OptionService;
   @Input('lazy-load') lazy_load: boolean = false;
+  @Input('default-id') default_id!: number;
+  @Output("loaded") loaded = new EventEmitter();
 
   ngOnInit() {
-    if (!this.lazy_load) this.Load();
+    if (!this.lazy_load || this.default_id) this.Load();
   }
 
   Load() {

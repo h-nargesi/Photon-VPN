@@ -17,9 +17,9 @@
             </label>
             <c-col md="5">
               <select app-select cSelect #userSelector aria-label="User" id="form_permanentUserId"
-                [attr.disabled]="Item.permanentUserId ? '' : null"
-                [value]="Item.permanentUserId" [lazy-load]="true" (focus)="LoadUsers()"
-                (change)="Item.permanentUserId = val($event)" [service]="users_srv">
+                      [attr.disabled]="userid ? '' : null" [default-id]="userid"
+                      (focus)="LoadUsers()" [lazy-load]="true" [service]="users_srv"
+                      [value]="Item.permanentUserId" (change)="Item.permanentUserId = val($event)">
               </select>
             </c-col>
           </c-row>
@@ -29,7 +29,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_value" type="number" [value]="Item.value"
-                (change)="Item.value = val($event)" />
+                     (change)="Item.value = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -38,7 +38,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_trnsactionId" type="text" [value]="Item.trnsactionId"
-                (change)="Item.trnsactionId = val($event)" />
+                     (change)="Item.trnsactionId = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -47,7 +47,7 @@
             </label>
             <c-col lg="3" md="4">
               <input cFormControl id="form_auto_close" type="date" [value]="Item.dateTime | date:'yyyy-MM-dd'"
-                (change)="Item.dateTime = val($event)" />
+                     (change)="Item.dateTime = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -56,7 +56,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_bankName" type="text" [value]="Item.bankName ?? ''"
-                (change)="Item.bankName = val($event)" />
+                     (change)="Item.bankName = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -65,7 +65,7 @@
             </label>
             <c-col md="5">
               <input cFormControl id="form_bankAccount" type="text" [value]="Item.bankAccount ?? ''"
-                (change)="Item.bankAccount = val($event)" />
+                     (change)="Item.bankAccount = val($event)" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
@@ -74,19 +74,20 @@
             </label>
             <c-col md="5">
               <input cFormControl disabled id="form_created" type="text"
-                [value]="Item.created ? getDateTimeString(Item.created) : ''" />
+                     [value]="Item.created ? getDateTimeString(Item.created) : ''" />
             </c-col>
           </c-row>
           <c-row class="mb-3">
             <c-col sm="10" class="offset-md-2">
               <c-form-check>
                 <input cFormCheckInput id="form_approved" name="form_approved" type="checkbox"
-                  [checked]="Item.approved ? Item.approved : true" (change)="Item.approved = val($event)" />
+                       [checked]="Item.approved ? Item.approved : true" (change)="Item.approved = val($event)" />
                 <label cFormCheckLabel for="form_approved">{{ titleOf('approved') }}</label>
               </c-form-check>
             </c-col>
           </c-row>
           <app-form list-route="/payments" [is-new]="Item.id ? false: true" (submit)="Submit()" (delete)="Delete()">
+            <button cButton (click)="SubmitNext()" class="me-md-2" color="warning" *ngIf="!Item.id">Submit & Next</button>
           </app-form>
         </form>
       </c-card-body>

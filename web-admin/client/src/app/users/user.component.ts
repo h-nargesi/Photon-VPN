@@ -68,4 +68,8 @@ export class UserComponent extends BaseComponent {
       }
     });
   }
+
+  get PaymentLink(): any[] {
+    return ['/payments', 'edit', 'user', this.Item.id];
+  }
 }
