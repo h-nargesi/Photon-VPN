@@ -1,32 +1,38 @@
 
 <c-button-group class="me-3">
-    <button cButton *ngIf="show_reload" (click)="realod.emit()" variant="outline" color="secondary">
-        <svg cIcon name="cilReload" title="cilReload" size="2xl"></svg>
-    </button>
-    <button cButton *ngIf="show_add" (click)="add.emit()" variant="outline" color="success">
-        <svg cIcon name="cilPlus" title="cilPlus" size="2xl"></svg>
-    </button>
-    <button cButton *ngIf="show_edit" (click)="edit.emit()" variant="outline" color="secondary">
-        <svg cIcon name="cilPencil" title="cilPencil" size="2xl"></svg>
-    </button>
-    <button cButton *ngIf="show_undo" (click)="undo.emit()" variant="outline" color="secondary">
-        <svg cIcon name="cilActionUndo" title="cilActionUndo" size="2xl"></svg>
-    </button>
-    <button cButton *ngIf="show_remove" [cModalToggle]="ConfirmDelete.id" variant="outline" color="danger">
-        <svg cIcon name="cilTrash" title="cilTrash" size="2xl"></svg>
-    </button>
+  <button cButton *ngIf="show_reload" (click)="realod.emit()" variant="outline" color="secondary">
+    <svg cIcon name="cilReload" title="cilReload" size="2xl"></svg>
+  </button>
+  <button cButton *ngIf="show_add" (click)="add.emit()" variant="outline" color="success">
+    <svg cIcon name="cilPlus" title="cilPlus" size="2xl"></svg>
+  </button>
+  <button cButton *ngIf="show_edit" (click)="edit.emit()" variant="outline" color="secondary">
+    <svg cIcon name="cilPencil" title="cilPencil" size="2xl"></svg>
+  </button>
+  <button cButton *ngIf="show_undo" (click)="undo.emit()" variant="outline" color="secondary">
+    <svg cIcon name="cilActionUndo" title="cilActionUndo" size="2xl"></svg>
+  </button>
+  <button cButton *ngIf="show_remove" [cModalToggle]="ConfirmDelete.id" variant="outline" color="danger">
+    <svg cIcon name="cilTrash" title="cilTrash" size="2xl"></svg>
+  </button>
+</c-button-group>
+
+<c-button-group class="me-3">
+  <button cButton *ngIf="show_setting" (click)="setting.emit()" variant="outline" color="light">
+    <svg cIcon name="cilSettings" title="Column Settings" size="2xl"></svg>
+  </button>
 </c-button-group>
 
 <c-modal #ConfirmDelete alignment="center" id="ConfirmDelete">
-    <c-modal-header>
-      <h5 cModalTitle>Delete Confirm</h5>
-      <button [cModalToggle]="ConfirmDelete.id" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      Deleting Items
-    </c-modal-body>
-    <c-modal-footer>
-      <button cButton [cModalToggle]="ConfirmDelete.id" color="secondary">Close</button>
-      <button cButton [cModalToggle]="ConfirmDelete.id" color="danger" (click)="remove.emit()">Delete</button>
-    </c-modal-footer>
-  </c-modal>
+  <c-modal-header>
+    <h5 cModalTitle>Delete Confirm</h5>
+    <button [cModalToggle]="ConfirmDelete.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    Deleting Items
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton [cModalToggle]="ConfirmDelete.id" color="secondary">Close</button>
+    <button cButton [cModalToggle]="ConfirmDelete.id" color="danger" (click)="remove.emit()">Delete</button>
+  </c-modal-footer>
+</c-modal>

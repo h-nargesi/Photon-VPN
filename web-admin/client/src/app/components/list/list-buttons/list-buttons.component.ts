@@ -11,10 +11,12 @@ export class ListButtonsComponent {
   @Input('show-edit') show_edit: boolean = true;
   @Input('show-remove') show_remove: boolean = true;
   @Input('show-undo') show_undo: boolean = true;
+  @Input('show-setting') show_setting: boolean = true;
   
   @Output("reloadClick") realod = new EventEmitter<any>();
   @Output("addClick") add = new EventEmitter<any>();
   @Output("editClick") edit = new EventEmitter<any>();
   @Output("removeClick") remove = new EventEmitter<any>();
   @Output("undoClick") undo = new EventEmitter<any>();
+  @Output("settingClick") setting = new EventEmitter<any>();
 }
