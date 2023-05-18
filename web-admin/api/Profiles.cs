@@ -52,22 +52,23 @@ public class Profiles : Controller
         return Ok(filtered.Count());
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Options([FromBody] ListQuery filter)
+    [HttpGet]
+    public async Task<IActionResult> Options()
     {
         using var db = new RdContext();
 
-        var query = from pr in db.Profiles.AsNoTracking()
-                    select new
-                    {
-                        Id = pr.Name,
-                        Title = pr.Name,
-                    };
+        var result = await db.Profiles.AsNoTracking()
+                             .Select(pr => new OptionModel
+                             {
+                                 Id = pr.Name,
+                                 Title = pr.Name,
+                             })
+                             .OrderBy(ur => ur.Title)
+                             .ToListAsync();
 
-        var filtered = filter.ClearColumns()
-                             .ApplyFilter(query);
+        result.SyncTimeList();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        return Ok(result);
     }
 
     [HttpGet]

@@ -1,7 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import { OptionService } from '../../services/option-service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SelectOptions } from '../../basical/base.models';
-import { Subscription } from 'rxjs';
+import { OptionService } from '../../services/option-service';
 
 @Component({
   selector: '[app-select]',
@@ -20,7 +19,7 @@ export class SelectComponent {
   }
 
   Load() {
-    this.Service?.Options(null).subscribe(
+    this.Service?.Options().subscribe(
       (result: SelectOptions[]) => this.Options = result);
   }
 

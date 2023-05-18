@@ -56,24 +56,25 @@ public class Users : Controller
         return Ok(list.Sum());
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Options([FromBody] ListQuery filter)
+    [HttpGet]
+    public async Task<IActionResult> Options()
     {
         using var db = new RdContext();
 
-        var query = from ur in db.PermanentUsers.AsNoTracking()
-                    select new
-                    {
-                        ur.Id,
-                        Title = ur.Username +
-                            (string.IsNullOrEmpty(ur.Name) ? "" : " " + ur.Name) +
-                            (string.IsNullOrEmpty(ur.Surname) ? "" : " " + ur.Surname),
-                    };
+        var result = await db.PermanentUsers.AsNoTracking()
+                             .Select(ur => new OptionModel
+                             {
+                                 Id = ur.Id,
+                                 Title = ur.Username +
+                                     (string.IsNullOrEmpty(ur.Name) ? "" : " " + ur.Name) +
+                                     (string.IsNullOrEmpty(ur.Surname) ? "" : " " + ur.Surname),
+                             })
+                             .OrderBy(ur => ur.Title)
+                             .ToListAsync();
 
-        var filtered = filter.ClearColumns()
-                             .ApplyFilter(query);
+        result.SyncTimeList();
 
-        return Ok(await filtered.ToDynamicListAsync());
+        return Ok(result);
     }
 
     [HttpGet]
