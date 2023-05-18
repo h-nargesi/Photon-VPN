@@ -21,6 +21,8 @@ public partial class Payment
 
     public string? BankAccount { get; set; }
 
+    public DateTime Modified { get; set; }
+
     public DateTime Created { get; set; }
 
     public virtual PermanentUser PermanentUser { get; set; } = null!;

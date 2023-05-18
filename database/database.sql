@@ -20,6 +20,7 @@ create table payments (
 	bank_account		varchar(255)		null,
 
 	created				datetime		not null	default current_timestamp,
+	modified			datetime		not null	default current_timestamp,
 
 	primary key (id),
 	foreign key (permanent_user_id) references permanent_users (id) on delete cascade
@@ -56,6 +57,7 @@ create table permanent_user_plan (
 	periods				int				not null,
 	valid_time			datetime		not null,
 	override_price		decimal(16)			null,
+
 	created				datetime		not null	default current_timestamp,
 	modified			datetime		not null	default current_timestamp,
 	
@@ -71,6 +73,7 @@ create table permanent_user_logs (
 	title				nvarchar(50)		null,
 	color				int				not null	default 0,
 	content				text			not null,
+
 	created				datetime		not null	default current_timestamp,
 	modified			datetime		not null	default current_timestamp,
 

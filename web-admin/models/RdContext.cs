@@ -312,7 +312,7 @@ public partial class RdContext : DbContext
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("server=37.32.9.55;uid=photon;pwd=znf42CYfWhA3st7w;database=rd;Convert Zero Datetime=True", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
+        => optionsBuilder.UseMySql("name=ConnectionStrings:default", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -5350,6 +5350,10 @@ public partial class RdContext : DbContext
             entity.Property(e => e.DateTime)
                 .HasColumnType("datetime")
                 .HasColumnName("date_time");
+            entity.Property(e => e.Modified)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasColumnType("datetime")
+                .HasColumnName("modified");
             entity.Property(e => e.PermanentUserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("permanent_user_id");
