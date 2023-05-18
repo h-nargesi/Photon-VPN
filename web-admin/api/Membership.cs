@@ -147,7 +147,7 @@ public class Membership : Controller
 
         var up = new PermanentUserPlan
         {
-            PermanentUserId = user_plan.UserId,
+            PermanentUserId = user_plan.PermanentUserId,
             ProfileId = user_plan.ProfileId,
             OverridePrice = user_plan.OverridePrice,
             ValidTime = latest_valid_time.AddMonths(user_plan.Months).Date,
@@ -168,7 +168,7 @@ public class Membership : Controller
 
         db.PermanentUserPlans.Remove(new PermanentUserPlan
         {
-            PermanentUserId = user_time.UserId,
+            PermanentUserId = user_time.PermanentUserId,
             ValidTime = user_time.Date.Date,
         });
         await db.SaveChangesAsync();

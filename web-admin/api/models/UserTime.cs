@@ -2,7 +2,7 @@
 
 public class UserTime
 {
-    public int UserId { get; set; }
+    public int PermanentUserId { get; set; }
 
     public DateTime Date { get; set; }
 }

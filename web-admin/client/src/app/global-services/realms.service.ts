@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, ObservableInput } from 'rxjs';
 import { BaseWebService, ListQuery, NotifyService, OptionService, SelectOptions } from '../components';
 
 @Injectable({
@@ -16,8 +16,9 @@ export class RealmsService extends BaseWebService implements OptionService {
     super(http, notify_service, api_url, base_url, 'api/realms/');
   }
 
-  public Options(filter: ListQuery | null): Observable<SelectOptions[]> {
-    if (filter == null) filter = {} as ListQuery;
-    return this.http.post<SelectOptions[]>(this.module_url + 'options', filter);
+  public Options(): Observable<SelectOptions[]> {
+    return this.http
+      .get<SelectOptions[]>(this.module_url + 'options')
+      .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError.bind(this)));
   }
 }

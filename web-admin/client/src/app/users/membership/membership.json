@@ -1,0 +1,20 @@
+{
+  "list": {
+    "permanentUserId": {
+      "title": "User Id",
+      "show": false
+    },
+    "profileId": {
+      "title": "Profile",
+      "show": true
+    },
+    "months": {
+      "title": "Months",
+      "show": true
+    },
+    "overridePrice": {
+      "title": "Override Price",
+      "show": true
+    }
+  }
+}

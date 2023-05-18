@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, ObservableInput, tap } from 'rxjs';
 import { BaseWebService, NotifyService, Result } from '../../components';
-import { Invoice, Membership } from './membership.model';
+import { Invoice, Membership, UserPlanRequest } from './membership.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +21,21 @@ export class MembershipService extends BaseWebService {
     return this.http.get<Invoice[]>(this.module_url + 'balance/' + user_id);
   }
 
-  public Add(entity: Membership): Observable<Result> {
-    return this.http.post<Result>(this.module_url + 'add', entity);
+  public Add(entity: UserPlanRequest): Observable<Result> {
+    return this.http
+      .post<Result>(this.module_url + 'add', entity)
+      .pipe(
+        tap(result => this.handleResult(result)),
+        catchError<Result, ObservableInput<any>>(this.handleError.bind(this))
+      );
   }
 
   public Delete(id: number): Observable<Result> {
-    return this.http.post<Result>(this.module_url + 'delete', id);
+    return this.http
+      .post<Result>(this.module_url + 'delete', id)
+      .pipe(
+        tap(result => this.handleResult(result)),
+        catchError<Result, ObservableInput<any>>(this.handleError.bind(this))
+      );
   }
 }

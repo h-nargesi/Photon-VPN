@@ -17,10 +17,9 @@ export class PlansService extends EntityService<PlanModel, Plan> implements Opti
     super(http, notify_service, api_url, base_url, 'plans');
   }
 
-  public Options(filter: ListQuery | null): Observable<SelectOptions[]> {
-    if (filter == null) filter = {} as ListQuery;
+  public Options(): Observable<SelectOptions[]> {
     return this.http
-      .post<PlanModel[]>(this.module_url + 'list', filter)
+      .get<PlanModel[]>(this.module_url + 'list')
       .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError.bind(this)));
   }
 }

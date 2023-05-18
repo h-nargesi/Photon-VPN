@@ -18,3 +18,10 @@ export interface Membership {
   created: Date,
   modified: Date,
 }
+
+export interface UserPlanRequest {
+  permanentUserId: number;
+  profileId: number;
+  months: number;
+  overridePrice: number | null;
+}

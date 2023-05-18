@@ -1,3 +1,35 @@
+<form class="mb-3">
+  <c-row class="mb-3">
+    <label cLabel class="col-md-2 col-form-label" for="form_profile">
+      {{ titleOf('profileId') }}
+    </label>
+    <c-col md="6">
+      <select app-select cSelect aria-label="Profile" id="form_profile" [value]="Item.profileId"
+              (change)="Item.profileId = val($event)" [service]="profile_srv">
+      </select>
+    </c-col>
+  </c-row>
+  <c-row class="mb-3">
+    <label cLabel class="col-md-2 col-form-label" for="form_months">
+      {{ titleOf('months') }}
+    </label>
+    <c-col md="6">
+      <input cFormControl id="form_months" type="number" [value]="Item.months"
+             (change)="Item.months = val($event)" />
+    </c-col>
+  </c-row>
+  <c-row class="mb-3">
+    <label cLabel class="col-md-2 col-form-label" for="form_overridePrice">
+      {{ titleOf('overridePrice') }}
+    </label>
+    <c-col md="6">
+      <input cFormControl id="form_overridePrice" type="number" [value]="Item.overridePrice"
+             (change)="Item.overridePrice = val($event)" />
+    </c-col>
+  </c-row>
+  <app-form [is-new]="false" (submit)="Submit()" (delete)="Delete()" [show-mode]="5">
+  </app-form>
+</form>
 <c-alert *ngFor="let row of Invoices;" color="secondary">
   {{ row }}
 </c-alert>

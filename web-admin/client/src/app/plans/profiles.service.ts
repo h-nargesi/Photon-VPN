@@ -16,10 +16,9 @@ export class ProfilesService extends BaseWebService implements OptionService {
     super(http, notify_service, api_url, base_url, 'api/profiles/');
   }
 
-  public Options(filter: ListQuery | null): Observable<SelectOptions[]> {
-    if (filter == null) filter = {} as ListQuery;
+  public Options(): Observable<SelectOptions[]> {
     return this.http
-      .post<SelectOptions[]>(this.module_url + 'options', filter)
+      .get<SelectOptions[]>(this.module_url + 'options')
       .pipe<SelectOptions[]>(catchError<SelectOptions[], ObservableInput<any>>(this.handleError.bind(this)));
   }
 

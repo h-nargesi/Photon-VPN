@@ -2,7 +2,7 @@
 
 public class UserPlanRequest
 {
-    public int UserId { get; set; }
+    public int PermanentUserId { get; set; }
 
     public int ProfileId { get; set; }
 
