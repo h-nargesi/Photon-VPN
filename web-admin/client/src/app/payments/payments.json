@@ -17,7 +17,7 @@
       "show": true
     },
     "trnsactionId": {
-      "title": "Trnsaction Id",
+      "title": "Transaction",
       "show": false
     },
     "dateTime": {

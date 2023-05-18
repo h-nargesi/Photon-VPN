@@ -4,6 +4,7 @@ import { User } from '../info/users.model';
 import { Invoice, Membership, UserPlanRequest } from './membership.model';
 import { MembershipService } from './membership.service';
 import Titles from './membership.json';
+import PaymentTitles from '../../payments/payments.json';
 import { ProfilesService } from '../../plans/profiles.service';
 
 @Component({
@@ -13,6 +14,7 @@ import { ProfilesService } from '../../plans/profiles.service';
 export class MembershipComponent extends BaseComponent {
 
   columns_info: EntitySchema = Titles.list;
+  payment_columns_info: EntitySchema = PaymentTitles.list;
   UserItem: User = {} as User;
   Invoices: Invoice[] = [];
   Item: UserPlanRequest = MembershipComponent.InitalizeModel();
@@ -51,10 +53,10 @@ export class MembershipComponent extends BaseComponent {
     });
   }
 
-  Delete() {
-    //this.service.Delete(this.Item.id).subscribe((result: Result) => {
+  Delete(datetime: Date | undefined) {
+    if (!datetime) return;
+    //this.service.Delete({  }).subscribe((result: Result) => {
     //  if (result.status < ResultStatus.Invalid) {
-    //    this.Cancel();
     //    this.Reload();
     //  }
     //});

@@ -4,6 +4,10 @@
       "title": "User Id",
       "show": false
     },
+    "title": {
+      "title": "Plan Title",
+      "show": true
+    },
     "profileId": {
       "title": "Profile",
       "show": true
@@ -14,6 +18,18 @@
     },
     "overridePrice": {
       "title": "Override Price",
+      "show": true
+    },
+    "simultaneousUses": {
+      "title": "Simultaneous Uses",
+      "show": true
+    },
+    "validTime": {
+      "title": "Valid Time",
+      "show": true
+    },
+    "price": {
+      "title": "Price",
       "show": true
     }
   }

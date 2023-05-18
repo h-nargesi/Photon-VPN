@@ -62,15 +62,28 @@ public class Payments : Controller
     }
 
     [HttpPost]
-    [Route("")]
     [Route("/srv/[controller]/[action]")]
     public async Task<IActionResult> Add([FromBody] Payment payment)
     {
         if (payment == null) return BadRequest();
 
         payment.SyncTimeToUTC();
-
         payment.Approved = false;
+
+        using var db = new RdContext();
+
+        await db.Payments.AddAsync(payment);
+        await db.SaveChangesAsync();
+
+        return Ok(Result.Success(data: payment.Id));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Modify([FromBody] Payment payment)
+    {
+        if (payment == null) return BadRequest();
+
+        payment.SyncTimeToUTC();
 
         using var db = new RdContext();
 
@@ -81,8 +94,11 @@ public class Payments : Controller
         if (original == null) await db.Payments.AddAsync(payment);
         else
         {
+            payment.Modified = DateTime.UtcNow;
+
             db.Payments.Attach(original);
             db.Entry(original).CurrentValues.SetValues(payment);
+            db.Entry(original).Property(x => x.Created).IsModified = false;
         }
 
         await db.SaveChangesAsync();
@@ -145,4 +161,5 @@ public class Payments : Controller
 
         return Ok(model);
     }
+
 }

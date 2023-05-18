@@ -31,12 +31,13 @@ public static class ProfileViews
                                on new { Groupname = SimpleAdd + pr.Id } equals new { at.Groupname }
                                into atjoin
                        from at in atjoin.DefaultIfEmpty()
+                       let SafeSimultaneousUses = at.SimultaneousUses ?? "0"
                        select new Profile
                        {
                            Id = pr.Id,
                            Name = pr.Name,
                            PlanId = pk.PlanId,
-                           SimultaneousUses = int.Parse(at.SimultaneousUses ?? "0"),
+                           SimultaneousUses = int.Parse(SafeSimultaneousUses),
                            CloudId = pr.CloudId,
                            Created = pr.Created,
                            Modified = pr.Modified,

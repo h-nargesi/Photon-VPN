@@ -24,26 +24,17 @@ public class Membership : Controller
         var user_payments = await user_payments_query.ToListAsync();
         user_payments.SyncTimeList();
 
-        // var rad_group_replies = from rad in db.Radgroupreplies.AsNoTracking()
-        //                         where rad.Attribute == ProfileViews.Simultaneous_Use &&
-        //                               rad.Value != null
-        //                         group rad by rad.Groupname into @group
-        //                         select new
-        //                         {
-        //                             Groupname = @group.Key,
-        //                             SimulateCount = int.Parse(@group.Max(c => c.Value) ?? "0"),
-        //                         };
-
         var profiles = from pr in db.ProfilesWithSessionCounts()
+                       let PriceFactor = pr.SimultaneousUses <= 1 ? pr.SimultaneousUses :
+                                         pr.SimultaneousUses == 2 ? 1.8 :
+                                         pr.SimultaneousUses == 3 ? 2.7 : (pr.SimultaneousUses - 0.4)
                        select new
                        {
                            ProfileId = pr.Id,
                            pr.PlanId,
                            pr.Name,
                            pr.SimultaneousUses,
-                           PriceFactor = pr.SimultaneousUses <= 1 ? pr.SimultaneousUses :
-                                         pr.SimultaneousUses == 2 ? 1.9 :
-                                         pr.SimultaneousUses == 3 ? 2.85 : (pr.SimultaneousUses - 0.2),
+                           PriceFactor = (decimal)PriceFactor,
                        };
 
         var user_plan_query = from pr in profiles
@@ -54,6 +45,9 @@ public class Membership : Controller
 
                               where up.PermanentUserId == user_id
 
+                              let CurrentPrice = up.OverridePrice ?? pl.Price
+                              let Periods = up.Periods <= 0 ? 1 : up.Periods
+
                               orderby up.ValidTime descending, up.Created descending
                               select new UserPlan
                               {
@@ -62,7 +56,7 @@ public class Membership : Controller
                                   Title = pl.Title,
                                   SimultaneousUses = pr.SimultaneousUses,
                                   ValidTime = up.ValidTime,
-                                  Price = up.OverridePrice ?? (pl.Price * (decimal)pr.PriceFactor * up.Periods),
+                                  Price = pr.PriceFactor * Periods * CurrentPrice,
                                   Color = pl.Color,
                                   Created = up.Created,
                                   Modified = up.Modified,
@@ -84,7 +78,7 @@ public class Membership : Controller
             {
                 balance -= user_plan[plan_index].Price;
 
-                invoices.Add(new
+                invoices.Insert(0, new
                 {
                     Balance = balance,
                     Plan = user_plan[plan_index],
@@ -106,7 +100,7 @@ public class Membership : Controller
                 plan_index++;
             }
 
-            invoices.Add(new
+            invoices.Insert(0, new
             {
                 Balance = balance,
                 Plan = plan,
@@ -117,7 +111,7 @@ public class Membership : Controller
         while (user_plan.Count > plan_index)
         {
             balance -= user_plan[plan_index].Price;
-            invoices.Add(new
+            invoices.Insert(0, new
             {
                 Balance = balance,
                 Plan = user_plan[plan_index],
@@ -138,19 +132,21 @@ public class Membership : Controller
 
         using var db = new RdContext();
 
-        var latest_valid_time = db.PermanentUserPlans.AsNoTracking()
-                                  .Max(up => up.ValidTime)
-                                  .Date;
+        var latest_valid_time = await db.PermanentUserPlans.AsNoTracking()
+                                        .Where(up => up.PermanentUserId == user_plan.PermanentUserId)
+                                        .MaxAsync(up => (DateTime?)up.ValidTime);
 
-        var now = DateTime.UtcNow.Date;
-        if (now < latest_valid_time) latest_valid_time = now;
+        var now = DateTime.UtcNow;
+        if (latest_valid_time == null || now < latest_valid_time) 
+            latest_valid_time = now;
 
         var up = new PermanentUserPlan
         {
             PermanentUserId = user_plan.PermanentUserId,
             ProfileId = user_plan.ProfileId,
             OverridePrice = user_plan.OverridePrice,
-            ValidTime = latest_valid_time.AddMonths(user_plan.Months).Date,
+            Periods = user_plan.Months,
+            ValidTime = latest_valid_time.Value.Date.AddMonths(user_plan.Months).Date,
         };
 
         await db.PermanentUserPlans.AddAsync(up);

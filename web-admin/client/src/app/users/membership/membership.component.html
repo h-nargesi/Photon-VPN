@@ -5,7 +5,7 @@
     </label>
     <c-col md="6">
       <select app-select cSelect aria-label="Profile" id="form_profile" [value]="Item.profileId"
-              (change)="Item.profileId = val($event)" [service]="profile_srv">
+              (change)="Item.profileId = num($event)" [service]="profile_srv">
       </select>
     </c-col>
   </c-row>
@@ -15,7 +15,7 @@
     </label>
     <c-col md="6">
       <input cFormControl id="form_months" type="number" [value]="Item.months"
-             (change)="Item.months = val($event)" />
+             (change)="Item.months = num($event)" />
     </c-col>
   </c-row>
   <c-row class="mb-3">
@@ -24,12 +24,70 @@
     </label>
     <c-col md="6">
       <input cFormControl id="form_overridePrice" type="number" [value]="Item.overridePrice"
-             (change)="Item.overridePrice = val($event)" />
+             (change)="Item.overridePrice = num($event)" />
     </c-col>
   </c-row>
-  <app-form [is-new]="false" (submit)="Submit()" (delete)="Delete()" [show-mode]="5">
-  </app-form>
+  <app-form (submit)="Submit()" [show-mode]="1"></app-form>
 </form>
-<c-alert *ngFor="let row of Invoices;" color="secondary">
-  {{ row }}
-</c-alert>
+<c-card *ngFor="let invoice of Invoices;" class="mb-3" cBorder="dark">
+  <c-card-header ngPreserveWhitespaces>
+    <strong>{{ invoice.plan?.title ?? "(Without plan)" }}</strong> <small>Balance: </small><strong>{{ invoice.balance }}</strong>
+    <button cButton (click)="Delete(invoice.plan?.validTime)" variant="outline"
+            color="danger" size="sm" class="float-end" *ngIf="invoice.plan?.validTime">
+      Delete
+    </button>
+  </c-card-header>
+  <c-card-body>
+    <c-row class="mb-3">
+      <c-col lg="6">
+        <dl class="row text-truncate mb-0">
+          <dt class="col-sm-3 text-start">{{ titleOf('simultaneousUses') }}</dt>
+          <dd class="col-sm-9 text-end">{{ invoice.plan?.simultaneousUses }}</dd>
+        </dl>
+      </c-col>
+      <c-col lg="6">
+        <dl class="row text-truncate mb-0">
+          <dt class="col-sm-3 text-start">{{ titleOf('validTime') }}</dt>
+          <dd class="col-sm-9 text-end">{{ getDateString(invoice.plan?.validTime ?? null) }}</dd>
+        </dl>
+      </c-col>
+      <c-col lg="6">
+        <dl class="row text-truncate mb-0">
+          <dt class="col-sm-3 text-start">{{ titleOf('price') }}</dt>
+          <dd class="col-sm-9 text-end">{{ invoice.plan?.price }}</dd>
+        </dl>
+      </c-col>
+      <c-col lg="6">
+        <dl class="row text-truncate mb-0">
+          <dt class="col-sm-3 text-start">{{ titleOf('title') }}</dt>
+          <dd class="col-sm-9 text-end">{{ invoice.plan?.title }}</dd>
+        </dl>
+      </c-col>
+    </c-row>
+    <table cTable class="small" [striped]="true" [hover]="true">
+      <thead cTableColor="secondary">
+        <tr>
+          <th scope="col">#</th>
+          <th>{{ titleOf('approved', payment_columns_info) }}</th>
+          <th>{{ titleOf('value', payment_columns_info) }}</th>
+          <th>{{ titleOf('dateTime', payment_columns_info) }}</th>
+          <th>{{ titleOf('trnsactionId', payment_columns_info) }}</th>
+          <th>{{ titleOf('bankAccount', payment_columns_info) }}</th>
+          <th>{{ titleOf('bankName', payment_columns_info) }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of invoice.payments; let index = index">
+          <td scope="row">{{ index + 1 }}</td>
+          <td style="white-space: nowrap;">{{ payment.approved }}</td>
+          <td style="white-space: nowrap;">{{ payment.value }}</td>
+          <td style="white-space: nowrap;">{{ getDateString(payment.dateTime) }}</td>
+          <td style="white-space: nowrap;">{{ payment.trnsactionId }}</td>
+          <td style="white-space: nowrap;">{{ payment.bankAccount }}</td>
+          <td style="white-space: nowrap;">{{ payment.bankName }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </c-card-body>
+  <c-card-footer>Footer</c-card-footer>
+</c-card>
