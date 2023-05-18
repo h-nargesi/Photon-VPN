@@ -312,7 +312,7 @@ public partial class RdContext : DbContext
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("name=ConnectionStrings:default", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
+        => optionsBuilder.UseMySql("server=37.32.9.55;uid=photon;pwd=znf42CYfWhA3st7w;database=rd;Convert Zero Datetime=True", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
