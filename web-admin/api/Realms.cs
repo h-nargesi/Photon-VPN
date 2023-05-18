@@ -18,7 +18,7 @@ public class Realms : Controller
         var result = await db.Realms.AsNoTracking()
                              .Select(rl => new OptionModel
                              {
-                                 Id = rl.Name,
+                                 Id = rl.Id,
                                  Title = rl.Name,
                              })
                              .OrderBy(ur => ur.Title)

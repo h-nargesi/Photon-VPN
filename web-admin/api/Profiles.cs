@@ -60,7 +60,7 @@ public class Profiles : Controller
         var result = await db.Profiles.AsNoTracking()
                              .Select(pr => new OptionModel
                              {
-                                 Id = pr.Name,
+                                 Id = pr.Id,
                                  Title = pr.Name,
                              })
                              .OrderBy(ur => ur.Title)
