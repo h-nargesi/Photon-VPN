@@ -34,10 +34,8 @@ export class PlanListComponent extends BaseComponent {
 
   onDeleteClick(item: PlanModel) {
     this.service.Delete(item.id).subscribe((result: Result) => {
-      if (result.status >= ResultStatus.Invalid)
-        console.error(result);
-
-      this.ngOnInit();
+      if (result.status < ResultStatus.Info)
+        this.ngOnInit();
     });
   }
 

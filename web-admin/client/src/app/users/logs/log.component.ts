@@ -57,8 +57,7 @@ export class UserLogsComponent extends BaseComponent {
     console.log(this.Item);
 
     this.service.Modify(this.Item).subscribe((result: Result) => {
-      if (result.status >= ResultStatus.Invalid) console.error(result);
-      else {
+      if (result.status < ResultStatus.Info) {
         this.Item = UserLogsComponent.InitalizeModel();
         this.Reload();
       }
@@ -71,17 +70,16 @@ export class UserLogsComponent extends BaseComponent {
 
   Delete() {
     this.service.Delete(this.Item.id).subscribe((result: Result) => {
-      if (result.status >= ResultStatus.Invalid)
-        console.error(result);
-
-      this.Cancel();
-      this.Reload();
+      if (result.status < ResultStatus.Invalid) {
+        this.Cancel();
+        this.Reload();
+      }
     });
   }
 
   static InitalizeModel(): UserLog {
     return {
-      witer: 53,
+      witer: 53, // TODO: current user
       color: 0,
       content: '',
       created: new Date(),

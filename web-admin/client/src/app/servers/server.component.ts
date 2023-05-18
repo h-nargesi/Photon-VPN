@@ -26,7 +26,6 @@ export class ServerComponent extends BaseComponent {
     private readonly service: ServersService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    // protected override readonly cookies: CookieService
   ) {
     super();
   }
@@ -36,8 +35,6 @@ export class ServerComponent extends BaseComponent {
   }
 
   ngOnInit() {
-    // this.setCookie('server', 'hamed');
-    // this.getCookie('server');
     this.sub = this.route.params.subscribe(params => {
       if ('id' in params) {
         this.service.Get(+params['id']).subscribe((result: Server) => this.item = result);

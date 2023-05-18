@@ -64,9 +64,8 @@ export class PaymentComponent extends BaseComponent {
     console.log(this.item);
 
     this.service.Modify(this.item).subscribe((result: Result) => {
-      if (result.status < ResultStatus.Info) {
+      if (result.status < ResultStatus.Info)
         this.item.value = 0;
-      }
     });
   }
 
