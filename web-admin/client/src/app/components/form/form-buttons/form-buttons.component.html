@@ -3,7 +3,7 @@
   <ng-content></ng-content>
   <button cButton (click)="cancel.emit()" [routerLink]="list_route" class="me-md-2" color="secondary" variant="outline" *ngIf="Mode(2)">Cancel</button>
   <button cButton [cModalToggle]="ConfirmDelete.id" class="me-md-2" color="danger" variant="outline"
-          *ngIf="!is_new && Mode(3)">
+          *ngIf="!is_new && Mode(4)">
     Delete
   </button>
   <c-modal #ConfirmDelete alignment="center" id="ConfirmDelete">
