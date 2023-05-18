@@ -129,6 +129,7 @@ public class Membership : Controller
         if (user_plan == null) return BadRequest();
 
         user_plan.SyncTimeToUTC();
+        if (user_plan.Months < 1) user_plan.Months = 1;
 
         using var db = new RdContext();
 
@@ -137,7 +138,7 @@ public class Membership : Controller
                                         .MaxAsync(up => (DateTime?)up.ValidTime);
 
         var now = DateTime.UtcNow;
-        if (latest_valid_time == null || now < latest_valid_time) 
+        if (latest_valid_time == null || now > latest_valid_time)
             latest_valid_time = now;
 
         var up = new PermanentUserPlan

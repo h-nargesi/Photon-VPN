@@ -9,6 +9,8 @@ import { Invoice, Membership, UserPlanRequest } from './membership.model';
 })
 export class MembershipService extends BaseWebService {
 
+  protected override readonly entity_name: string = 'membership';
+
   constructor(
     http: HttpClient,
     notify_service: NotifyService,
@@ -30,9 +32,9 @@ export class MembershipService extends BaseWebService {
       );
   }
 
-  public Delete(id: number): Observable<Result> {
+  public Delete(useid: number, datetime: Date): Observable<Result> {
     return this.http
-      .post<Result>(this.module_url + 'delete', id)
+      .post<Result>(this.module_url + 'delete', { permanentUserId: useid, date: datetime })
       .pipe(
         tap(result => this.handleResult(result)),
         catchError<Result, ObservableInput<any>>(this.handleError.bind(this))

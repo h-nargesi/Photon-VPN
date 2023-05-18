@@ -35,9 +35,9 @@ export abstract class BaseWebService {
   }
 
   protected handleResult(result: Result) {
-    console.log(`fetched hero id=${result}`);
+    const entity_name = this.entity_name ?? 'entity';
     if (!result.message)
-      result.message = `The ${this.entity_name.substring(0, this.entity_name.length - 1)} successfully modified.`;
+      result.message = `The ${entity_name.substring(0, entity_name.length - 1)} successfully modified.`;
 
     let color;
     if (result.status >= ResultStatus.Error) color = 'dark';
@@ -49,16 +49,18 @@ export abstract class BaseWebService {
     this.notify_service.notify({
       delay: 5000,
       color: color,
-      title: this.entity_name,
+      title: entity_name,
       description: result.message,
     });
   }
 
   protected handleError(error: HttpErrorResponse) {
+    const entity_name = this.entity_name ?? 'entity';
+
     this.notify_service?.notify({
       delay: 10000,
       color: "warning",
-      title: this.entity_name,
+      title: entity_name,
       description: 'Something bad happened; please try again later.',
     });
 

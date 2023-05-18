@@ -6,6 +6,7 @@ import { MembershipService } from './membership.service';
 import Titles from './membership.json';
 import PaymentTitles from '../../payments/payments.json';
 import { ProfilesService } from '../../plans/profiles.service';
+import { Payment } from '../../payments/payments.model';
 
 @Component({
   selector: 'app-user-invoice',
@@ -55,16 +56,24 @@ export class MembershipComponent extends BaseComponent {
 
   Delete(datetime: Date | undefined) {
     if (!datetime) return;
-    //this.service.Delete({  }).subscribe((result: Result) => {
-    //  if (result.status < ResultStatus.Invalid) {
-    //    this.Reload();
-    //  }
-    //});
+    this.service.Delete(this.UserItem.id, datetime).subscribe((result: Result) => {
+      if (result.status < ResultStatus.Invalid) {
+        this.Reload();
+      }
+    });
   }
 
   static InitalizeModel(): UserPlanRequest {
     return {
       months: 1,
     } as UserPlanRequest;
+  }
+
+  PaymentSum(payments: Payment[]): number {
+    if (!payments) return 0;
+    let value = 0;
+    for (const payment of payments)
+      value += payment.value ?? 0;
+    return value;
   }
 }
