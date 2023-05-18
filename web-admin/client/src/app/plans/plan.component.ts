@@ -15,17 +15,6 @@ export class PlanComponent extends BaseComponent {
   public Item: Plan = { title: '', active: true, created: new Date() } as Plan;
   public columns_info: EntitySchema = Titles.list;
 
-  Colors = [
-    { title: UIColors[UIColors.secondary], id: UIColors.secondary },
-    { title: UIColors[UIColors.primary], id: UIColors.primary },
-    { title: UIColors[UIColors.danger], id: UIColors.danger },
-    { title: UIColors[UIColors.dark], id: UIColors.dark },
-    { title: UIColors[UIColors.info], id: UIColors.info },
-    { title: UIColors[UIColors.light], id: UIColors.light },
-    { title: UIColors[UIColors.success], id: UIColors.success },
-    { title: UIColors[UIColors.warning], id: UIColors.warning },
-  ];
-
   constructor(
     private readonly service: PlansService,
     private readonly route: ActivatedRoute,

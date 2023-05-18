@@ -1,16 +1,32 @@
-import { EntitySchema } from './base.models';
+import { EntitySchema, UIColors } from './base.models';
 
 export abstract class BaseComponent {
 
   protected path!: string;
   protected abstract get columns_info(): EntitySchema | undefined;
 
-  titleOf(name: string) {
-    return this.columns_info && name in this.columns_info ? this.columns_info[name].title : name;
-  }
+  Colors = [
+    { title: UIColors[UIColors.secondary], id: UIColors.secondary },
+    { title: UIColors[UIColors.primary], id: UIColors.primary },
+    { title: UIColors[UIColors.danger], id: UIColors.danger },
+    { title: UIColors[UIColors.dark], id: UIColors.dark },
+    { title: UIColors[UIColors.info], id: UIColors.info },
+    { title: UIColors[UIColors.light], id: UIColors.light },
+    { title: UIColors[UIColors.success], id: UIColors.success },
+    { title: UIColors[UIColors.warning], id: UIColors.warning },
+  ];
+
+  titleOf(name: string, columns_info: EntitySchema | undefined = undefined) {
+    if (!columns_info) columns_info = this.columns_info;
+    return columns_info && name in columns_info ? columns_info[name].title : name;
+  } 
 
   val(event: any): any {
     return event.target.value;
+  }
+
+  num(event: any): number {
+    return +event.target.value;
   }
 
   checkVal(event: any): boolean {

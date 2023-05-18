@@ -21,17 +21,6 @@ export class UserLogsComponent extends BaseComponent {
     super();
   }
 
-  Colors = [
-    { title: UIColors[UIColors.secondary], id: UIColors.secondary },
-    { title: UIColors[UIColors.primary], id: UIColors.primary },
-    { title: UIColors[UIColors.danger], id: UIColors.danger },
-    { title: UIColors[UIColors.dark], id: UIColors.dark },
-    { title: UIColors[UIColors.info], id: UIColors.info },
-    { title: UIColors[UIColors.light], id: UIColors.light },
-    { title: UIColors[UIColors.success], id: UIColors.success },
-    { title: UIColors[UIColors.warning], id: UIColors.warning },
-  ];
-
   Reload(user: User | undefined = undefined): void {
     if (user) this.UserItem = user;
 
