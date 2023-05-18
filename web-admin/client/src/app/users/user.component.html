@@ -8,19 +8,19 @@
         <h4 cCardTitle>{{ Item.username }}</h4>
 
         <dl class="row text-truncate">
-          <dt class="col-sm-3 text-start">realm</dt>
+          <dt class="col-sm-3 text-start">{{ titleOf('realm') }}</dt>
           <dd class="col-sm-9 text-end">{{ Item.realm }}</dd>
 
-          <dt class="col-sm-3 text-start">profile</dt>
+          <dt class="col-sm-3 text-start">{{ titleOf('profile') }}</dt>
           <dd class="col-sm-9 text-end">{{ Item.profile }}</dd>
 
-          <dt class="col-sm-3 text-start">phone</dt>
+          <dt class="col-sm-3 text-start">{{ titleOf('phone') }}</dt>
           <dd class="col-sm-9 text-end">{{ Item.phone }}</dd>
 
-          <dt class="col-sm-3 text-start">from</dt>
+          <dt class="col-sm-3 text-start">{{ titleOf('fromDate') }}</dt>
           <dd class="col-sm-9 text-end">{{ getDateString(Item.fromDate) }}</dd>
 
-          <dt class="col-sm-3 text-start">to</dt>
+          <dt class="col-sm-3 text-start">{{ titleOf('toDate') }}</dt>
           <dd class="col-sm-9 text-end">{{ getRemain(Item.toDate) }}</dd>
         </dl>
         <div class="mx-3 mb-1" style="position: relative; display: inline-block; vertical-align: middle;">
