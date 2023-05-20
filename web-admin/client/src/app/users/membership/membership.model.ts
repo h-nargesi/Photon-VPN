@@ -23,5 +23,6 @@ export interface UserPlanRequest {
   permanentUserId: number;
   profileId: number;
   months: number;
+  startDate: Date | null;
   overridePrice: number | null;
 }

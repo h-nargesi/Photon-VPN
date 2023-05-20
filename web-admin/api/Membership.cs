@@ -78,7 +78,7 @@ public class Membership : Controller
             {
                 balance -= user_plan[plan_index].Price;
 
-                invoices.Insert(0, new
+                invoices.Add(new
                 {
                     Balance = balance,
                     Plan = user_plan[plan_index],
@@ -100,7 +100,7 @@ public class Membership : Controller
                 plan_index++;
             }
 
-            invoices.Insert(0, new
+            invoices.Add(new
             {
                 Balance = balance,
                 Plan = plan,
@@ -111,7 +111,7 @@ public class Membership : Controller
         while (user_plan.Count > plan_index)
         {
             balance -= user_plan[plan_index].Price;
-            invoices.Insert(0, new
+            invoices.Add(new
             {
                 Balance = balance,
                 Plan = user_plan[plan_index],
@@ -133,13 +133,23 @@ public class Membership : Controller
 
         using var db = new RdContext();
 
-        var latest_valid_time = await db.PermanentUserPlans.AsNoTracking()
-                                        .Where(up => up.PermanentUserId == user_plan.PermanentUserId)
-                                        .MaxAsync(up => (DateTime?)up.ValidTime);
+        DateTime start_date;
 
-        var now = DateTime.UtcNow;
-        if (latest_valid_time == null || now > latest_valid_time)
-            latest_valid_time = now;
+        if (user_plan.StartDate.HasValue)
+        {
+            start_date = user_plan.StartDate.Value;
+        }
+        else
+        {
+            var latest_valid_time = await db.PermanentUserPlans.AsNoTracking()
+                                            .Where(up => up.PermanentUserId == user_plan.PermanentUserId)
+                                            .MaxAsync(up => (DateTime?)up.ValidTime);
+
+            var now = DateTime.UtcNow;
+            if (latest_valid_time == null || now > latest_valid_time)
+                start_date = now;
+            else start_date = latest_valid_time.Value;
+        }
 
         var up = new PermanentUserPlan
         {
@@ -147,7 +157,7 @@ public class Membership : Controller
             ProfileId = user_plan.ProfileId,
             OverridePrice = user_plan.OverridePrice,
             Periods = user_plan.Months,
-            ValidTime = latest_valid_time.Value.Date.AddMonths(user_plan.Months).Date,
+            ValidTime = start_date.Date.AddMonths(user_plan.Months).Date,
         };
 
         await db.PermanentUserPlans.AddAsync(up);

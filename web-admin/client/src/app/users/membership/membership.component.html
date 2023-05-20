@@ -19,6 +19,15 @@
     </c-col>
   </c-row>
   <c-row class="mb-3">
+    <label cLabel class="col-md-2 col-form-label" for="form_startDate">
+      {{ titleOf('startDate') }}
+    </label>
+    <c-col md="6">
+      <input cFormControl id="form_startDate" type="date" [value]="Item.startDate"
+             (change)="Item.startDate = val($event)" />
+    </c-col>
+  </c-row>
+  <c-row class="mb-3">
     <label cLabel class="col-md-2 col-form-label" for="form_overridePrice">
       {{ titleOf('overridePrice') }}
     </label>

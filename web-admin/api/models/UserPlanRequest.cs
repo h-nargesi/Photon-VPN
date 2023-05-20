@@ -8,5 +8,7 @@ public class UserPlanRequest
 
     public int Months { get; set; }
 
+    public DateTime? StartDate { get; set; }
+
     public decimal? OverridePrice { get; set; }
 }

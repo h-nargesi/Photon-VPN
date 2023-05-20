@@ -16,6 +16,10 @@
       "title": "Months",
       "show": true
     },
+    "startDate": {
+      "title": "Start Date",
+      "show": true
+    },
     "overridePrice": {
       "title": "Override Price",
       "show": true

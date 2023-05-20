@@ -64,6 +64,6 @@ export abstract class BaseWebService {
       description: 'Something bad happened; please try again later.',
     });
 
-    return throwError(() => error);
+    return throwError(error);
   }
 }
