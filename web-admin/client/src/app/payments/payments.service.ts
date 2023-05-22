@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { EntityService, NotifyService } from '../components';
-import { Payment } from './payments.model';
+import { Payment, PaymentList } from './payments.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PaymentsService extends EntityService<Payment, Payment> {
+export class PaymentsService extends EntityService<PaymentList, Payment> {
 
   constructor(
     http: HttpClient,

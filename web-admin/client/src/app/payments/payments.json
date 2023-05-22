@@ -4,6 +4,10 @@
       "title": "Id",
       "show": false
     },
+    "username": {
+      "title": "User",
+      "show": true
+    },
     "permanentUserId": {
       "title": "Payer",
       "show": true

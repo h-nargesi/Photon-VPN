@@ -15,14 +15,32 @@ public class Payments : Controller
     {
         using var db = new RdContext();
 
-        var query = db.Payments.AsNoTracking();
+        var payments_query = db.Payments.AsNoTracking();
 
         if (user_id.HasValue)
         {
-            query = query.Where(p => p.PermanentUserId == user_id);
+            payments_query = payments_query.Where(p => p.PermanentUserId == user_id);
         }
 
-        //var title_query = 
+        var query = from payment in payments_query
+                    join user in db.PermanentUsers.AsNoTracking()
+                              on payment.PermanentUserId equals user.Id
+                    select new
+                    {
+                        payment.Id,
+                        Username = user.Username +
+                                   (string.IsNullOrEmpty(user.Name) ? "" : " " + user.Name) +
+                                   (string.IsNullOrEmpty(user.Surname) ? "" : " " + user.Surname),
+                        payment.PermanentUserId,
+                        payment.Approved,
+                        payment.Value,
+                        payment.TrnsactionId,
+                        payment.DateTime,
+                        payment.BankName,
+                        payment.BankAccount,
+                        payment.Modified,
+                        payment.Created,
+                    };
 
         var result = await filter.AddIdentityColumn()
                                  .ApplyFilter(query)
