@@ -15,301 +15,301 @@ public partial class RdContext : DbContext
     {
     }
 
-    public virtual DbSet<Account> Accounts { get; set; }
+    public virtual DbSet<Account> Accounts { get; set; } = null!;
 
-    public virtual DbSet<Action> Actions { get; set; }
+    public virtual DbSet<Action> Actions { get; set; } = null!;
 
-    public virtual DbSet<Alert> Alerts { get; set; }
+    public virtual DbSet<Alert> Alerts { get; set; } = null!;
 
-    public virtual DbSet<Ap> Aps { get; set; }
+    public virtual DbSet<Ap> Aps { get; set; } = null!;
 
-    public virtual DbSet<ApAction> ApActions { get; set; }
+    public virtual DbSet<ApAction> ApActions { get; set; } = null!;
 
-    public virtual DbSet<ApConnectionSetting> ApConnectionSettings { get; set; }
+    public virtual DbSet<ApConnectionSetting> ApConnectionSettings { get; set; } = null!;
 
-    public virtual DbSet<ApLoad> ApLoads { get; set; }
+    public virtual DbSet<ApLoad> ApLoads { get; set; } = null!;
 
-    public virtual DbSet<ApProfile> ApProfiles { get; set; }
+    public virtual DbSet<ApProfile> ApProfiles { get; set; } = null!;
 
-    public virtual DbSet<ApProfileEntry> ApProfileEntries { get; set; }
+    public virtual DbSet<ApProfileEntry> ApProfileEntries { get; set; } = null!;
 
-    public virtual DbSet<ApProfileExit> ApProfileExits { get; set; }
+    public virtual DbSet<ApProfileExit> ApProfileExits { get; set; } = null!;
 
-    public virtual DbSet<ApProfileExitApProfileEntry> ApProfileExitApProfileEntries { get; set; }
+    public virtual DbSet<ApProfileExitApProfileEntry> ApProfileExitApProfileEntries { get; set; } = null!;
 
-    public virtual DbSet<ApProfileExitCaptivePortal> ApProfileExitCaptivePortals { get; set; }
+    public virtual DbSet<ApProfileExitCaptivePortal> ApProfileExitCaptivePortals { get; set; } = null!;
 
-    public virtual DbSet<ApProfileExitSetting> ApProfileExitSettings { get; set; }
+    public virtual DbSet<ApProfileExitSetting> ApProfileExitSettings { get; set; } = null!;
 
-    public virtual DbSet<ApProfileSetting> ApProfileSettings { get; set; }
+    public virtual DbSet<ApProfileSetting> ApProfileSettings { get; set; } = null!;
 
-    public virtual DbSet<ApProfileSpecific> ApProfileSpecifics { get; set; }
+    public virtual DbSet<ApProfileSpecific> ApProfileSpecifics { get; set; } = null!;
 
-    public virtual DbSet<ApStation> ApStations { get; set; }
+    public virtual DbSet<ApStation> ApStations { get; set; } = null!;
 
-    public virtual DbSet<ApSystem> ApSystems { get; set; }
+    public virtual DbSet<ApSystem> ApSystems { get; set; } = null!;
 
-    public virtual DbSet<ApUptmHistory> ApUptmHistories { get; set; }
+    public virtual DbSet<ApUptmHistory> ApUptmHistories { get; set; } = null!;
 
-    public virtual DbSet<ApWifiSetting> ApWifiSettings { get; set; }
+    public virtual DbSet<ApWifiSetting> ApWifiSettings { get; set; } = null!;
 
-    public virtual DbSet<AppliedFupComponent> AppliedFupComponents { get; set; }
+    public virtual DbSet<AppliedFupComponent> AppliedFupComponents { get; set; } = null!;
 
-    public virtual DbSet<ArMeshDailySummary> ArMeshDailySummaries { get; set; }
+    public virtual DbSet<ArMeshDailySummary> ArMeshDailySummaries { get; set; } = null!;
 
-    public virtual DbSet<ArNodeIbssConnection> ArNodeIbssConnections { get; set; }
+    public virtual DbSet<ArNodeIbssConnection> ArNodeIbssConnections { get; set; } = null!;
 
-    public virtual DbSet<ArNodeStation> ArNodeStations { get; set; }
+    public virtual DbSet<ArNodeStation> ArNodeStations { get; set; } = null!;
 
-    public virtual DbSet<ArNodeUptmHistory> ArNodeUptmHistories { get; set; }
+    public virtual DbSet<ArNodeUptmHistory> ArNodeUptmHistories { get; set; } = null!;
 
-    public virtual DbSet<AutoDevice> AutoDevices { get; set; }
+    public virtual DbSet<AutoDevice> AutoDevices { get; set; } = null!;
 
-    public virtual DbSet<Check> Checks { get; set; }
+    public virtual DbSet<Check> Checks { get; set; } = null!;
 
-    public virtual DbSet<Cloud> Clouds { get; set; }
+    public virtual DbSet<Cloud> Clouds { get; set; } = null!;
 
-    public virtual DbSet<CloudAdmin> CloudAdmins { get; set; }
+    public virtual DbSet<CloudAdmin> CloudAdmins { get; set; } = null!;
 
-    public virtual DbSet<CloudSetting> CloudSettings { get; set; }
+    public virtual DbSet<CloudSetting> CloudSettings { get; set; } = null!;
 
-    public virtual DbSet<CoaRequest> CoaRequests { get; set; }
+    public virtual DbSet<CoaRequest> CoaRequests { get; set; } = null!;
 
-    public virtual DbSet<Country> Countries { get; set; }
+    public virtual DbSet<Country> Countries { get; set; } = null!;
 
-    public virtual DbSet<DataCollector> DataCollectors { get; set; }
+    public virtual DbSet<DataCollector> DataCollectors { get; set; } = null!;
 
-    public virtual DbSet<DataCollectorOtp> DataCollectorOtps { get; set; }
+    public virtual DbSet<DataCollectorOtp> DataCollectorOtps { get; set; } = null!;
 
-    public virtual DbSet<Device> Devices { get; set; }
+    public virtual DbSet<Device> Devices { get; set; } = null!;
 
-    public virtual DbSet<DynamicClient> DynamicClients { get; set; }
+    public virtual DbSet<DynamicClient> DynamicClients { get; set; } = null!;
 
-    public virtual DbSet<DynamicClientRealm> DynamicClientRealms { get; set; }
+    public virtual DbSet<DynamicClientRealm> DynamicClientRealms { get; set; } = null!;
 
-    public virtual DbSet<DynamicClientSetting> DynamicClientSettings { get; set; }
+    public virtual DbSet<DynamicClientSetting> DynamicClientSettings { get; set; } = null!;
 
-    public virtual DbSet<DynamicClientState> DynamicClientStates { get; set; }
+    public virtual DbSet<DynamicClientState> DynamicClientStates { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetail> DynamicDetails { get; set; }
+    public virtual DbSet<DynamicDetail> DynamicDetails { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetailCtc> DynamicDetailCtcs { get; set; }
+    public virtual DbSet<DynamicDetailCtc> DynamicDetailCtcs { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetailLanguage> DynamicDetailLanguages { get; set; }
+    public virtual DbSet<DynamicDetailLanguage> DynamicDetailLanguages { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetailMobile> DynamicDetailMobiles { get; set; }
+    public virtual DbSet<DynamicDetailMobile> DynamicDetailMobiles { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetailPrelogin> DynamicDetailPrelogins { get; set; }
+    public virtual DbSet<DynamicDetailPrelogin> DynamicDetailPrelogins { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetailSocialLogin> DynamicDetailSocialLogins { get; set; }
+    public virtual DbSet<DynamicDetailSocialLogin> DynamicDetailSocialLogins { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetailTransKey> DynamicDetailTransKeys { get; set; }
+    public virtual DbSet<DynamicDetailTransKey> DynamicDetailTransKeys { get; set; } = null!;
 
-    public virtual DbSet<DynamicDetailTranslation> DynamicDetailTranslations { get; set; }
+    public virtual DbSet<DynamicDetailTranslation> DynamicDetailTranslations { get; set; } = null!;
 
-    public virtual DbSet<DynamicPage> DynamicPages { get; set; }
+    public virtual DbSet<DynamicPage> DynamicPages { get; set; } = null!;
 
-    public virtual DbSet<DynamicPair> DynamicPairs { get; set; }
+    public virtual DbSet<DynamicPair> DynamicPairs { get; set; } = null!;
 
-    public virtual DbSet<DynamicPhoto> DynamicPhotos { get; set; }
+    public virtual DbSet<DynamicPhoto> DynamicPhotos { get; set; } = null!;
 
-    public virtual DbSet<DynamicPhotoTranslation> DynamicPhotoTranslations { get; set; }
+    public virtual DbSet<DynamicPhotoTranslation> DynamicPhotoTranslations { get; set; } = null!;
 
-    public virtual DbSet<EmailHistory> EmailHistories { get; set; }
+    public virtual DbSet<EmailHistory> EmailHistories { get; set; } = null!;
 
-    public virtual DbSet<EmailMessage> EmailMessages { get; set; }
+    public virtual DbSet<EmailMessage> EmailMessages { get; set; } = null!;
 
-    public virtual DbSet<ForwardLookup> ForwardLookups { get; set; }
+    public virtual DbSet<ForwardLookup> ForwardLookups { get; set; } = null!;
 
-    public virtual DbSet<Group> Groups { get; set; }
+    public virtual DbSet<Group> Groups { get; set; } = null!;
 
-    public virtual DbSet<Hardware> Hardwares { get; set; }
+    public virtual DbSet<Hardware> Hardwares { get; set; } = null!;
 
-    public virtual DbSet<HardwareRadio> HardwareRadios { get; set; }
+    public virtual DbSet<HardwareRadio> HardwareRadios { get; set; } = null!;
 
-    public virtual DbSet<Language> Languages { get; set; }
+    public virtual DbSet<Language> Languages { get; set; } = null!;
 
-    public virtual DbSet<MacAlias> MacAliases { get; set; }
+    public virtual DbSet<MacAlias> MacAliases { get; set; } = null!;
 
-    public virtual DbSet<MacUsage> MacUsages { get; set; }
+    public virtual DbSet<MacUsage> MacUsages { get; set; } = null!;
 
-    public virtual DbSet<Mesh> Meshes { get; set; }
+    public virtual DbSet<Mesh> Meshes { get; set; } = null!;
 
-    public virtual DbSet<MeshDailySummary> MeshDailySummaries { get; set; }
+    public virtual DbSet<MeshDailySummary> MeshDailySummaries { get; set; } = null!;
 
-    public virtual DbSet<MeshEntry> MeshEntries { get; set; }
+    public virtual DbSet<MeshEntry> MeshEntries { get; set; } = null!;
 
-    public virtual DbSet<MeshExit> MeshExits { get; set; }
+    public virtual DbSet<MeshExit> MeshExits { get; set; } = null!;
 
-    public virtual DbSet<MeshExitCaptivePortal> MeshExitCaptivePortals { get; set; }
+    public virtual DbSet<MeshExitCaptivePortal> MeshExitCaptivePortals { get; set; } = null!;
 
-    public virtual DbSet<MeshExitMeshEntry> MeshExitMeshEntries { get; set; }
+    public virtual DbSet<MeshExitMeshEntry> MeshExitMeshEntries { get; set; } = null!;
 
-    public virtual DbSet<MeshExitSetting> MeshExitSettings { get; set; }
+    public virtual DbSet<MeshExitSetting> MeshExitSettings { get; set; } = null!;
 
-    public virtual DbSet<MeshSetting> MeshSettings { get; set; }
+    public virtual DbSet<MeshSetting> MeshSettings { get; set; } = null!;
 
-    public virtual DbSet<MeshSpecific> MeshSpecifics { get; set; }
+    public virtual DbSet<MeshSpecific> MeshSpecifics { get; set; } = null!;
 
-    public virtual DbSet<Na> Nas { get; set; }
+    public virtual DbSet<Na> Nas { get; set; } = null!;
 
-    public virtual DbSet<NaRealm> NaRealms { get; set; }
+    public virtual DbSet<NaRealm> NaRealms { get; set; } = null!;
 
-    public virtual DbSet<NaSetting> NaSettings { get; set; }
+    public virtual DbSet<NaSetting> NaSettings { get; set; } = null!;
 
-    public virtual DbSet<NaState> NaStates { get; set; }
+    public virtual DbSet<NaState> NaStates { get; set; } = null!;
 
-    public virtual DbSet<Network> Networks { get; set; }
+    public virtual DbSet<Network> Networks { get; set; } = null!;
 
-    public virtual DbSet<NewAccounting> NewAccountings { get; set; }
+    public virtual DbSet<NewAccounting> NewAccountings { get; set; } = null!;
 
-    public virtual DbSet<Node> Nodes { get; set; }
+    public virtual DbSet<Node> Nodes { get; set; } = null!;
 
-    public virtual DbSet<NodeAction> NodeActions { get; set; }
+    public virtual DbSet<NodeAction> NodeActions { get; set; } = null!;
 
-    public virtual DbSet<NodeConnectionSetting> NodeConnectionSettings { get; set; }
+    public virtual DbSet<NodeConnectionSetting> NodeConnectionSettings { get; set; } = null!;
 
-    public virtual DbSet<NodeIbssConnection> NodeIbssConnections { get; set; }
+    public virtual DbSet<NodeIbssConnection> NodeIbssConnections { get; set; } = null!;
 
-    public virtual DbSet<NodeIbssConnectionsDaily> NodeIbssConnectionsDailies { get; set; }
+    public virtual DbSet<NodeIbssConnectionsDaily> NodeIbssConnectionsDailies { get; set; } = null!;
 
-    public virtual DbSet<NodeLoad> NodeLoads { get; set; }
+    public virtual DbSet<NodeLoad> NodeLoads { get; set; } = null!;
 
-    public virtual DbSet<NodeMeshEntry> NodeMeshEntries { get; set; }
+    public virtual DbSet<NodeMeshEntry> NodeMeshEntries { get; set; } = null!;
 
-    public virtual DbSet<NodeMeshExit> NodeMeshExits { get; set; }
+    public virtual DbSet<NodeMeshExit> NodeMeshExits { get; set; } = null!;
 
-    public virtual DbSet<NodeMpSetting> NodeMpSettings { get; set; }
+    public virtual DbSet<NodeMpSetting> NodeMpSettings { get; set; } = null!;
 
-    public virtual DbSet<NodeNeighbor> NodeNeighbors { get; set; }
+    public virtual DbSet<NodeNeighbor> NodeNeighbors { get; set; } = null!;
 
-    public virtual DbSet<NodeScan> NodeScans { get; set; }
+    public virtual DbSet<NodeScan> NodeScans { get; set; } = null!;
 
-    public virtual DbSet<NodeSetting> NodeSettings { get; set; }
+    public virtual DbSet<NodeSetting> NodeSettings { get; set; } = null!;
 
-    public virtual DbSet<NodeStation> NodeStations { get; set; }
+    public virtual DbSet<NodeStation> NodeStations { get; set; } = null!;
 
-    public virtual DbSet<NodeStationsDaily> NodeStationsDailies { get; set; }
+    public virtual DbSet<NodeStationsDaily> NodeStationsDailies { get; set; } = null!;
 
-    public virtual DbSet<NodeSystem> NodeSystems { get; set; }
+    public virtual DbSet<NodeSystem> NodeSystems { get; set; } = null!;
 
-    public virtual DbSet<NodeUptmHistory> NodeUptmHistories { get; set; }
+    public virtual DbSet<NodeUptmHistory> NodeUptmHistories { get; set; } = null!;
 
-    public virtual DbSet<NodeWifiSetting> NodeWifiSettings { get; set; }
+    public virtual DbSet<NodeWifiSetting> NodeWifiSettings { get; set; } = null!;
 
-    public virtual DbSet<Notification> Notifications { get; set; }
+    public virtual DbSet<Notification> Notifications { get; set; } = null!;
 
-    public virtual DbSet<OpenvpnClient> OpenvpnClients { get; set; }
+    public virtual DbSet<OpenvpnClient> OpenvpnClients { get; set; } = null!;
 
-    public virtual DbSet<OpenvpnServer> OpenvpnServers { get; set; }
+    public virtual DbSet<OpenvpnServer> OpenvpnServers { get; set; } = null!;
 
-    public virtual DbSet<OpenvpnServerClient> OpenvpnServerClients { get; set; }
+    public virtual DbSet<OpenvpnServerClient> OpenvpnServerClients { get; set; } = null!;
 
-    public virtual DbSet<Package> Packages { get; set; }
+    public virtual DbSet<Package> Packages { get; set; } = null!;
 
-    public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<Payment> Payments { get; set; } = null!;
 
-    public virtual DbSet<PermanentUser> PermanentUsers { get; set; }
+    public virtual DbSet<PermanentUser> PermanentUsers { get; set; } = null!;
 
-    public virtual DbSet<PermanentUserLog> PermanentUserLogs { get; set; }
+    public virtual DbSet<PermanentUserLog> PermanentUserLogs { get; set; } = null!;
 
-    public virtual DbSet<PermanentUserNotification> PermanentUserNotifications { get; set; }
+    public virtual DbSet<PermanentUserNotification> PermanentUserNotifications { get; set; } = null!;
 
-    public virtual DbSet<PermanentUserOtp> PermanentUserOtps { get; set; }
+    public virtual DbSet<PermanentUserOtp> PermanentUserOtps { get; set; } = null!;
 
-    public virtual DbSet<PermanentUserPlan> PermanentUserPlans { get; set; }
+    public virtual DbSet<PermanentUserPlan> PermanentUserPlans { get; set; } = null!;
 
-    public virtual DbSet<PermanentUserSetting> PermanentUserSettings { get; set; }
+    public virtual DbSet<PermanentUserSetting> PermanentUserSettings { get; set; } = null!;
 
-    public virtual DbSet<Plan> Plans { get; set; }
+    public virtual DbSet<Plan> Plans { get; set; } = null!;
 
-    public virtual DbSet<PptpClient> PptpClients { get; set; }
+    public virtual DbSet<PptpClient> PptpClients { get; set; } = null!;
 
-    public virtual DbSet<PredefinedCommand> PredefinedCommands { get; set; }
+    public virtual DbSet<PredefinedCommand> PredefinedCommands { get; set; } = null!;
 
-    public virtual DbSet<Profile> Profiles { get; set; }
+    public virtual DbSet<Profile> Profiles { get; set; } = null!;
 
-    public virtual DbSet<ProfileComponent> ProfileComponents { get; set; }
+    public virtual DbSet<ProfileComponent> ProfileComponents { get; set; } = null!;
 
-    public virtual DbSet<ProfileFupComponent> ProfileFupComponents { get; set; }
+    public virtual DbSet<ProfileFupComponent> ProfileFupComponents { get; set; } = null!;
 
-    public virtual DbSet<Radacct> Radaccts { get; set; }
+    public virtual DbSet<Radacct> Radaccts { get; set; } = null!;
 
-    public virtual DbSet<Radcheck> Radchecks { get; set; }
+    public virtual DbSet<Radcheck> Radchecks { get; set; } = null!;
 
-    public virtual DbSet<Radgroupcheck> Radgroupchecks { get; set; }
+    public virtual DbSet<Radgroupcheck> Radgroupchecks { get; set; } = null!;
 
-    public virtual DbSet<Radgroupreply> Radgroupreplies { get; set; }
+    public virtual DbSet<Radgroupreply> Radgroupreplies { get; set; } = null!;
 
-    public virtual DbSet<Radippool> Radippools { get; set; }
+    public virtual DbSet<Radippool> Radippools { get; set; } = null!;
 
-    public virtual DbSet<Radpostauth> Radpostauths { get; set; }
+    public virtual DbSet<Radpostauth> Radpostauths { get; set; } = null!;
 
-    public virtual DbSet<Radreply> Radreplies { get; set; }
+    public virtual DbSet<Radreply> Radreplies { get; set; } = null!;
 
-    public virtual DbSet<Radusergroup> Radusergroups { get; set; }
+    public virtual DbSet<Radusergroup> Radusergroups { get; set; } = null!;
 
-    public virtual DbSet<Realm> Realms { get; set; }
+    public virtual DbSet<Realm> Realms { get; set; } = null!;
 
-    public virtual DbSet<RegistrationRequest> RegistrationRequests { get; set; }
+    public virtual DbSet<RegistrationRequest> RegistrationRequests { get; set; } = null!;
 
-    public virtual DbSet<ReverseLookup> ReverseLookups { get; set; }
+    public virtual DbSet<ReverseLookup> ReverseLookups { get; set; } = null!;
 
-    public virtual DbSet<RollingLastDay> RollingLastDays { get; set; }
+    public virtual DbSet<RollingLastDay> RollingLastDays { get; set; } = null!;
 
-    public virtual DbSet<RollingLastHour> RollingLastHours { get; set; }
+    public virtual DbSet<RollingLastHour> RollingLastHours { get; set; } = null!;
 
-    public virtual DbSet<RollingLastNinetyDay> RollingLastNinetyDays { get; set; }
+    public virtual DbSet<RollingLastNinetyDay> RollingLastNinetyDays { get; set; } = null!;
 
-    public virtual DbSet<RollingLastSevenDay> RollingLastSevenDays { get; set; }
+    public virtual DbSet<RollingLastSevenDay> RollingLastSevenDays { get; set; } = null!;
 
-    public virtual DbSet<RollingLastSixtyDay> RollingLastSixtyDays { get; set; }
+    public virtual DbSet<RollingLastSixtyDay> RollingLastSixtyDays { get; set; } = null!;
 
-    public virtual DbSet<RollingLastThirtyDay> RollingLastThirtyDays { get; set; }
+    public virtual DbSet<RollingLastThirtyDay> RollingLastThirtyDays { get; set; } = null!;
 
-    public virtual DbSet<Schedule> Schedules { get; set; }
+    public virtual DbSet<Schedule> Schedules { get; set; } = null!;
 
-    public virtual DbSet<ScheduleEntry> ScheduleEntries { get; set; }
+    public virtual DbSet<ScheduleEntry> ScheduleEntries { get; set; } = null!;
 
-    public virtual DbSet<Site> Sites { get; set; }
+    public virtual DbSet<Site> Sites { get; set; } = null!;
 
-    public virtual DbSet<SmsHistory> SmsHistories { get; set; }
+    public virtual DbSet<SmsHistory> SmsHistories { get; set; } = null!;
 
-    public virtual DbSet<SocialLoginUser> SocialLoginUsers { get; set; }
+    public virtual DbSet<SocialLoginUser> SocialLoginUsers { get; set; } = null!;
 
-    public virtual DbSet<SocialLoginUserRealm> SocialLoginUserRealms { get; set; }
+    public virtual DbSet<SocialLoginUserRealm> SocialLoginUserRealms { get; set; } = null!;
 
-    public virtual DbSet<Softflow> Softflows { get; set; }
+    public virtual DbSet<Softflow> Softflows { get; set; } = null!;
 
-    public virtual DbSet<TempFlowLog> TempFlowLogs { get; set; }
+    public virtual DbSet<TempFlowLog> TempFlowLogs { get; set; } = null!;
 
-    public virtual DbSet<TempProxyLog> TempProxyLogs { get; set; }
+    public virtual DbSet<TempProxyLog> TempProxyLogs { get; set; } = null!;
 
-    public virtual DbSet<TempReport> TempReports { get; set; }
+    public virtual DbSet<TempReport> TempReports { get; set; } = null!;
 
-    public virtual DbSet<Timezone> Timezones { get; set; }
+    public virtual DbSet<Timezone> Timezones { get; set; } = null!;
 
-    public virtual DbSet<TopUp> TopUps { get; set; }
+    public virtual DbSet<TopUp> TopUps { get; set; } = null!;
 
-    public virtual DbSet<TopUpTransaction> TopUpTransactions { get; set; }
+    public virtual DbSet<TopUpTransaction> TopUpTransactions { get; set; } = null!;
 
-    public virtual DbSet<UnknownDynamicClient> UnknownDynamicClients { get; set; }
+    public virtual DbSet<UnknownDynamicClient> UnknownDynamicClients { get; set; } = null!;
 
-    public virtual DbSet<UnknownNode> UnknownNodes { get; set; }
+    public virtual DbSet<UnknownNode> UnknownNodes { get; set; } = null!;
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<User> Users { get; set; } = null!;
 
-    public virtual DbSet<UserSetting> UserSettings { get; set; }
+    public virtual DbSet<UserSetting> UserSettings { get; set; } = null!;
 
-    public virtual DbSet<UserSsid> UserSsids { get; set; }
+    public virtual DbSet<UserSsid> UserSsids { get; set; } = null!;
 
-    public virtual DbSet<UserStat> UserStats { get; set; }
+    public virtual DbSet<UserStat> UserStats { get; set; } = null!;
 
-    public virtual DbSet<UserStatsDaily> UserStatsDailies { get; set; }
+    public virtual DbSet<UserStatsDaily> UserStatsDailies { get; set; } = null!;
 
-    public virtual DbSet<UsersAccess> UsersAccesses { get; set; }
+    public virtual DbSet<UsersAccess> UsersAccesses { get; set; } = null!;
 
-    public virtual DbSet<Voucher> Vouchers { get; set; }
+    public virtual DbSet<Voucher> Vouchers { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseMySql("server=37.32.9.55;uid=photon;pwd=znf42CYfWhA3st7w;database=rd;Convert Zero Datetime=True", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
