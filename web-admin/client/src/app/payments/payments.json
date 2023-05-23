@@ -5,12 +5,12 @@
       "show": false
     },
     "username": {
-      "title": "User",
+      "title": "Payer",
       "show": true
     },
     "permanentUserId": {
       "title": "Payer",
-      "show": true
+      "show": false
     },
     "approved": {
       "title": "Approved",
@@ -26,7 +26,8 @@
     },
     "dateTime": {
       "title": "Pay Time",
-      "show": false
+      "show": true,
+      "type": "date"
     },
     "bankName": {
       "title": "Bank Name",
@@ -38,7 +39,8 @@
     },
     "created": {
       "title": "Created On",
-      "show": true
+      "show": true,
+      "type": "datetime"
     }
   }
 }
