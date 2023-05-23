@@ -22,7 +22,7 @@
     },
     "trnsactionId": {
       "title": "Transaction",
-      "show": false
+      "show": true
     },
     "dateTime": {
       "title": "Pay Time",

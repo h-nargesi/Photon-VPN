@@ -65,7 +65,7 @@ export class PaymentComponent extends BaseComponent {
 
     this.service.Modify(this.item).subscribe((result: Result) => {
       if (result.status < ResultStatus.Info)
-        this.item.value = 0;
+        this.item.created = new Date();
     });
   }
 
