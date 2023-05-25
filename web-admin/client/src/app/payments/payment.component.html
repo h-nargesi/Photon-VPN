@@ -22,6 +22,10 @@
                       [value]="Item.permanentUserId" (change)="Item.permanentUserId = val($event)">
               </select>
             </c-col>
+            <c-col md="3">
+              <input cFormControl id="form_permanentUserId_search" type="text"
+                     (change)="userSelector.filterItem($event)" />
+            </c-col>
           </c-row>
           <c-row class="mb-3">
             <label cLabel class="col-md-2 col-form-label" for="form_value">

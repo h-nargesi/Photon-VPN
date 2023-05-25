@@ -8,10 +8,13 @@ import { OptionService } from '../../services/option-service';
 })
 export class SelectComponent {
 
+  public Items!: SelectOptions[];
+
   @Input('options') Options!: SelectOptions[];
   @Input('service') Service!: OptionService;
   @Input('lazy-load') lazy_load: boolean = false;
   @Input('default-id') default_id!: number;
+  @Input('search') search: boolean = true;
   @Output("loaded") loaded = new EventEmitter();
 
   ngOnInit() {
@@ -20,7 +23,21 @@ export class SelectComponent {
 
   Load() {
     this.Service?.Options().subscribe(
-      (result: SelectOptions[]) => this.Options = result);
+      (result: SelectOptions[]) => this.Items = this.Options = result);
   }
 
+  filterItem(event: any) {
+    event = event?.target?.value;
+
+    if (!event) {
+      this.Items = this.Options;
+
+    } else if (typeof event === 'string') {
+      event = event.toLowerCase();
+      this.Items = this.Options.filter(
+        a => a.title.toLowerCase().includes(event));
+    }
+
+    console.log(this.Items.length);
+  }
 }
