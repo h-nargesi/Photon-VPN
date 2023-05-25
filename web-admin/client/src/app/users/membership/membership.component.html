@@ -4,7 +4,8 @@
       {{ titleOf('profileId') }}
     </label>
     <c-col md="6">
-      <select app-select cSelect aria-label="Profile" id="form_profile" [value]="Item.profileId"
+      <select app-select cSelect aria-label="Profile" id="form_profile"
+              [value]="Item.profileId" [default-id]="UserItem.profileId"
               (change)="Item.profileId = num($event)" [service]="profile_srv">
       </select>
     </c-col>

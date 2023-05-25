@@ -45,8 +45,8 @@ public class Membership : Controller
 
                               where up.PermanentUserId == user_id
 
-                              let CurrentPrice = up.OverridePrice ?? pl.Price
                               let Periods = up.Periods <= 0 ? 1 : up.Periods
+                              let CurrentPrice = pr.PriceFactor * Periods * pl.Price
 
                               orderby up.ValidTime, up.Created
                               select new UserPlan
@@ -56,7 +56,7 @@ public class Membership : Controller
                                   Title = pl.Title,
                                   SimultaneousUses = pr.SimultaneousUses,
                                   ValidTime = up.ValidTime,
-                                  Price = pr.PriceFactor * Periods * CurrentPrice,
+                                  Price = up.OverridePrice ?? CurrentPrice,
                                   Color = pl.Color,
                                   Created = up.Created,
                                   Modified = up.Modified,
@@ -157,7 +157,7 @@ public class Membership : Controller
             ProfileId = user_plan.ProfileId,
             OverridePrice = user_plan.OverridePrice,
             Periods = user_plan.Months,
-            ValidTime = start_date.Date.AddMonths(user_plan.Months).Date,
+            ValidTime = start_date.AddMonths(user_plan.Months),
         };
 
         await db.PermanentUserPlans.AddAsync(up);
@@ -176,7 +176,7 @@ public class Membership : Controller
         db.PermanentUserPlans.Remove(new PermanentUserPlan
         {
             PermanentUserId = user_time.PermanentUserId,
-            ValidTime = user_time.Date.Date,
+            ValidTime = user_time.Date,
         });
         await db.SaveChangesAsync();
 

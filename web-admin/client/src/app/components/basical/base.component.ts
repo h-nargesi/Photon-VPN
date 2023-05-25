@@ -76,9 +76,10 @@ export abstract class BaseComponent {
 
     let result = [];
     let diff = date.getTime() - new Date().getTime();
+    const negative = diff < 0;
     let slash;
 
-    if (diff < 0) {
+    if (negative) {
       diff = -diff;
     }
 
@@ -88,7 +89,7 @@ export abstract class BaseComponent {
       result.push(slash + ' days');
     }
 
-    if (slash > 0 && !details) return result.join(', ');
+    if (slash > 0 && !details) return this.JoinRemain(negative, result);
 
     slash = Math.floor(diff / 3600000);
     if (slash > 0) {
@@ -96,7 +97,7 @@ export abstract class BaseComponent {
       result.push(slash + ' hours');
     }
 
-    if (slash > 0 && !details) return result.join(', ');
+    if (slash > 0 && !details) return this.JoinRemain(negative, result);
 
     slash = Math.floor(diff / 60000);
     if (slash > 0) {
@@ -104,6 +105,13 @@ export abstract class BaseComponent {
       result.push(slash + ' minutes');
     }
 
-    return result.join(', ');
+    return this.JoinRemain(negative, result);
+  }
+
+  private static JoinRemain(negative: boolean, parts: string[]): string {
+    let final = parts.join(', ');
+    if (negative) final = `(${final})`;
+
+    return final;
   }
 }

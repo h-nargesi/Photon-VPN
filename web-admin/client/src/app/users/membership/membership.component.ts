@@ -34,6 +34,9 @@ export class MembershipComponent extends BaseComponent {
       throw 'user-id is not set';
     }
 
+    if (this.UserItem.profileId)
+      this.Item.profileId = this.UserItem.profileId;
+
     this.service.Balance(this.UserItem.id).subscribe((result: Invoice[]) => this.Invoices = result);
   }
 
@@ -49,6 +52,8 @@ export class MembershipComponent extends BaseComponent {
     this.service.Add(this.Item).subscribe((result: Result) => {
       if (result.status < ResultStatus.Info) {
         this.Item = MembershipComponent.InitalizeModel();
+        if (this.UserItem.profileId)
+          this.Item.profileId = this.UserItem.profileId;
         this.Reload();
       }
     });
