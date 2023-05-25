@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { SelectOptions } from '../../basical/base.models';
 import { OptionService } from '../../services/option-service';
 
@@ -17,6 +17,10 @@ export class SelectComponent {
   @Input('search') search: boolean = true;
   @Output("loaded") loaded = new EventEmitter();
 
+  constructor(private ref: ElementRef) {
+
+  }
+
   ngOnInit() {
     if (!this.lazy_load || this.default_id) this.Load();
   }
@@ -31,13 +35,13 @@ export class SelectComponent {
 
     if (!event) {
       this.Items = this.Options;
+      this.ref.nativeElement.dispatchEvent(new Event('change'));
 
     } else if (typeof event === 'string') {
       event = event.toLowerCase();
-      this.Items = this.Options.filter(
+      this.Items = this.Options?.filter(
         a => a.title.toLowerCase().includes(event));
+      this.ref.nativeElement.dispatchEvent(new Event('change'));
     }
-
-    console.log(this.Items.length);
   }
 }
