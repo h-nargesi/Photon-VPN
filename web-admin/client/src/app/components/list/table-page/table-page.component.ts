@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { BaseComponent } from '../../basical/base.component';
 import { EntitySchema } from '../../basical/base.models';
 import { LGMDService } from '../../services/lgmd-service';
+import { LinkService } from '../../services/link-service';
 import { ListQuery, Result, ResultStatus } from '../../services/list-query.model';
 import { TableViewComponent } from '../table-view/table-view.component';
 
@@ -28,7 +28,7 @@ export class TablePageComponent extends BaseComponent {
 
   @ViewChild('tableView') private table_view!: TableViewComponent;
 
-  constructor(private readonly router: Router) {
+  constructor(private readonly router: LinkService) {
     super();
   }
 
@@ -41,7 +41,7 @@ export class TablePageComponent extends BaseComponent {
   }
 
   onAddClick() {
-    this.router.navigate([this.title?.toLowerCase(), 'edit']);
+    this.router.jump([this.title?.toLowerCase(), 'edit']);
   }
 
   onUndoClick() {
@@ -74,10 +74,10 @@ export class TablePageComponent extends BaseComponent {
     if (!this.table_view?.SelectedItems.size) return;
     const items = Array.from(this.table_view?.SelectedItems.values());
     const id = items[items.length - 1].id;
-    this.router.navigate([this.title?.toLowerCase(), 'edit', id]);
+    this.router.jump([this.title?.toLowerCase(), 'edit', id]);
   }
 
   onDbClick(item: any) {
-    this.router.navigate([this.title?.toLowerCase(), 'edit', item.id]);
+    this.router.jump([this.title?.toLowerCase(), 'edit', item.id]);
   }
 }

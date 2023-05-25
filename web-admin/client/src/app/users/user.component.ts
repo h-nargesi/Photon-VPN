@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, EntitySchema, Result, ResultStatus } from '../components';
+import { ActivatedRoute } from '@angular/router';
+import { BaseComponent, EntitySchema, LinkService, Result, ResultStatus } from '../components';
 import { RealmsService } from '../global-services/realms.service';
 import { ProfilesService } from '../plans/profiles.service';
 import Titles from './info/users.json';
@@ -29,7 +29,7 @@ export class UserComponent extends BaseComponent {
   constructor(
     private readonly service: UsersService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
+    private readonly router: LinkService,
     public readonly profile_srv: ProfilesService,
     public readonly realms_srv: RealmsService) {
     super();

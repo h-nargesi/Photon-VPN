@@ -1,10 +1,9 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { BaseComponent, EntitySchema, LinkService, Result, ResultStatus, WidgetSchema, WidgetViewComponent } from '../components';
+import Titles from './plans.json';
 import { PlanModel } from './plans.models';
 import { PlansService } from './plans.service';
-import { EntitySchema, WidgetViewComponent, Result, ResultStatus, WidgetSchema, BaseComponent } from '../components';
-import Titles from './plans.json';
 
 @Component({
   selector: 'app-plan-list',
@@ -20,7 +19,7 @@ export class PlanListComponent extends BaseComponent {
 
   constructor(
     private readonly service: PlansService,
-    private readonly router: Router) {
+    private readonly router: LinkService) {
     super();
   }
 
@@ -29,7 +28,7 @@ export class PlanListComponent extends BaseComponent {
   }
 
   onAddClick() {
-    this.router.navigate(['plans', 'edit']);
+    this.router.jump(['plans', 'edit']);
   }
 
   onDeleteClick(item: PlanModel) {
@@ -40,6 +39,6 @@ export class PlanListComponent extends BaseComponent {
   }
 
   onEditClick(item: PlanModel) {
-    this.router.navigate(['plans', 'edit', item.id]);
+    this.router.jump(['plans', 'edit', item.id]);
   }
 }

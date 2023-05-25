@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, EntitySchema, Result, ResultStatus, UIColors } from '../components';
+import { ActivatedRoute } from '@angular/router';
+import { BaseComponent, EntitySchema, LinkService, Result, ResultStatus } from '../components';
 import Titles from './plans.json';
 import { Plan } from './plans.models';
 import { PlansService } from './plans.service';
@@ -18,7 +18,7 @@ export class PlanComponent extends BaseComponent {
   constructor(
     private readonly service: PlansService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router) {
+    private readonly router: LinkService) {
     super();
   }
 

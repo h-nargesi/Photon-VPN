@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent, EntitySchema, Result, ResultStatus, SelectComponent } from '../components';
+import { ActivatedRoute } from '@angular/router';
+import { BaseComponent, EntitySchema, LinkService, Result, ResultStatus, SelectComponent } from '../components';
 import { UsersService } from '../users/users.service';
 import Titles from './payments.json';
 import { Payment } from './payments.model';
@@ -26,7 +26,7 @@ export class PaymentComponent extends BaseComponent {
   constructor(
     private readonly service: PaymentsService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
+    private readonly router: LinkService,
     public readonly users_srv: UsersService) {
     super();
   }
