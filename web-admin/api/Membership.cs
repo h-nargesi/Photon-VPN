@@ -18,7 +18,7 @@ public class Membership : Controller
 
         var user_payments_query = from py in db.Payments.AsNoTracking()
                                   where py.PermanentUserId == user_id
-                                  orderby py.DateTime descending, py.Created descending
+                                  orderby py.DateTime, py.Created
                                   select py;
 
         var user_payments = await user_payments_query.ToListAsync();
@@ -48,7 +48,7 @@ public class Membership : Controller
                               let CurrentPrice = up.OverridePrice ?? pl.Price
                               let Periods = up.Periods <= 0 ? 1 : up.Periods
 
-                              orderby up.ValidTime descending, up.Created descending
+                              orderby up.ValidTime, up.Created
                               select new UserPlan
                               {
                                   PlanId = pr.PlanId,
@@ -78,7 +78,7 @@ public class Membership : Controller
             {
                 balance -= user_plan[plan_index].Price;
 
-                invoices.Add(new
+                invoices.Insert(0, new
                 {
                     Balance = balance,
                     Plan = user_plan[plan_index],
@@ -100,7 +100,7 @@ public class Membership : Controller
                 plan_index++;
             }
 
-            invoices.Add(new
+            invoices.Insert(0, new
             {
                 Balance = balance,
                 Plan = plan,
@@ -111,7 +111,7 @@ public class Membership : Controller
         while (user_plan.Count > plan_index)
         {
             balance -= user_plan[plan_index].Price;
-            invoices.Add(new
+            invoices.Insert(0, new
             {
                 Balance = balance,
                 Plan = user_plan[plan_index],
