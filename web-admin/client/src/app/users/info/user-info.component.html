@@ -31,8 +31,10 @@
       {{ titleOf('realm') }}
     </label>
     <c-col md="6">
-      <select app-select cSelect aria-label="Realm" id="form_realm" [value]="Item.realm"
-              (change)="Item.realm = val($event)" [service]="realms_srv">
+      <select app-select cSelect aria-label="Realm" id="form_realm"
+              [service]="realms_srv" 
+              [value]="Item.realmId" [default-id]="Item.realmId"
+              (change)="Item.realmId = num($event); Item.realm = selector($event)">
       </select>
     </c-col>
   </c-row>
@@ -41,8 +43,10 @@
       {{ titleOf('profile') }}
     </label>
     <c-col md="6">
-      <select app-select cSelect aria-label="Profile" id="form_profile" [value]="Item.profile"
-              (change)="Item.profile = val($event)" [service]="profile_srv">
+      <select app-select cSelect aria-label="Profile" id="form_profile"
+              [service]="profile_srv" 
+              [value]="Item.profileId" [default-id]="Item.profileId"
+              (change)="Item.profileId = num($event); Item.profile = selector($event)">
       </select>
     </c-col>
   </c-row>

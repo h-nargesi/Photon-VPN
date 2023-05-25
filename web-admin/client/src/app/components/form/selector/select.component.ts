@@ -13,7 +13,7 @@ export class SelectComponent {
   @Input('options') Options!: SelectOptions[];
   @Input('service') Service!: OptionService;
   @Input('lazy-load') lazy_load: boolean = false;
-  @Input('default-id') default_id!: number;
+  @Input('default-id') default_id!: number | null;
   @Input('search') search: boolean = true;
   @Output("loaded") loaded = new EventEmitter();
 

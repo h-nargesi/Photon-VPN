@@ -28,5 +28,4 @@ export class UserInfoComponent extends BaseComponent {
         this.Item.id = Number(result.data);
     });
   }
-
 }

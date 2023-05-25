@@ -1,3 +1,4 @@
+import { ThisReceiver } from '@angular/compiler';
 import { EntitySchema, UIColors } from './base.models';
 
 export abstract class BaseComponent {
@@ -23,6 +24,11 @@ export abstract class BaseComponent {
 
   val(event: any): any {
     return event.target.value;
+  }
+
+  selector(event: any) {
+    var target = event.target;
+    return target[target.selectedIndex].title;
   }
 
   num(event: any): number {
