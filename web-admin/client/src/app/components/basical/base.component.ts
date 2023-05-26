@@ -89,7 +89,7 @@ export abstract class BaseComponent {
       result.push(slash + ' days');
     }
 
-    if (slash > 0 && !details) return this.JoinRemain(negative, result);
+    if (slash > 0 && !details) return BaseComponent.JoinRemain(negative, result);
 
     slash = Math.floor(diff / 3600000);
     if (slash > 0) {
@@ -97,7 +97,7 @@ export abstract class BaseComponent {
       result.push(slash + ' hours');
     }
 
-    if (slash > 0 && !details) return this.JoinRemain(negative, result);
+    if (slash > 0 && !details) return BaseComponent.JoinRemain(negative, result);
 
     slash = Math.floor(diff / 60000);
     if (slash > 0) {
@@ -105,7 +105,7 @@ export abstract class BaseComponent {
       result.push(slash + ' minutes');
     }
 
-    return this.JoinRemain(negative, result);
+    return BaseComponent.JoinRemain(negative, result);
   }
 
   private static JoinRemain(negative: boolean, parts: string[]): string {

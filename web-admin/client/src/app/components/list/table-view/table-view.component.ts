@@ -52,7 +52,16 @@ export class TableViewComponent extends ListViewComponent {
   SetFilterColumn(column: string, value: string) {
     if (!this.Query) return;
     if (!this.Query.filters) this.Query.filters = {};
-    this.Query.filters[column] = { value: value } as Filter;
+
+    if (value.length == 0)
+      delete this.Query.filters[column];
+
+    else if (value == 'null')
+      this.Query.filters[column] = { value: null } as Filter;
+
+    else
+      this.Query.filters[column] = { value: value } as Filter;
+
     this.OnFilterCanged();
   }
 

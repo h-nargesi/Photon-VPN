@@ -15,6 +15,29 @@ public class Payments : Controller
     {
         using var db = new RdContext();
 
+        var query = ListQuery(db, user_id);
+
+        var result = await filter.AddIdentityColumn()
+                                 .ApplyFilter(query)
+                                 .ToDynamicArrayAsync();
+
+        return Ok(result.SyncTimeList());
+    }
+
+    [HttpPost]
+    public IActionResult Count([FromQuery] int? user_id, [FromBody] ListQuery filter)
+    {
+        using var db = new RdContext();
+
+        var query = ListQuery(db, user_id);
+
+        var filtered = filter.ApplyFilterCount(query);
+
+        return Ok(filtered.Count());
+    }
+
+    private IQueryable ListQuery(RdContext db, int? user_id)
+    {
         var payments_query = db.Payments.AsNoTracking();
 
         if (user_id.HasValue)
@@ -42,28 +65,7 @@ public class Payments : Controller
                         payment.Created,
                     };
 
-        var result = await filter.AddIdentityColumn()
-                                 .ApplyFilter(query)
-                                 .ToDynamicArrayAsync();
-
-        return Ok(result.SyncTimeList());
-    }
-
-    [HttpPost]
-    public IActionResult Count([FromQuery] int? user_id, [FromBody] ListQuery filter)
-    {
-        using var db = new RdContext();
-
-        var query = db.Payments.AsNoTracking();
-
-        if (user_id.HasValue)
-        {
-            query = query.Where(p => p.PermanentUserId == user_id);
-        }
-
-        var filtered = filter.ApplyFilterCount(query);
-
-        return Ok(filtered.Count());
+        return query;
     }
 
     [HttpGet]

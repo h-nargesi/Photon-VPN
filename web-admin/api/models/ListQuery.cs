@@ -43,7 +43,7 @@ public class ListQuery
         query = ApplyOrdering(query);
         query = ApplyRecordLimits(query);
         query = ApplySelection(query);
-        
+
         // Serilog.Log.Information("List Query: " + query.ToQueryString());
 
         return query;
@@ -54,7 +54,7 @@ public class ListQuery
         if (query == null) throw new ArgumentNullException(nameof(query));
 
         query = ApplyWhere(query);
-        
+
         // Serilog.Log.Information("Count Query: " + query.ToQueryString());
 
         return query;
@@ -70,20 +70,9 @@ public class ListQuery
         foreach (var filter in Filters)
         {
             if (filter.Value == null) continue;
-            else if (filter.Value.Value == null)
-            {
-                columns.Add(filter.Key + " IS NULL");
-            }
-            else if (string.IsNullOrEmpty(filter.Value.Type))
-            {
-                columns.Add($"{FirstCharToUpper(filter.Key)}.Contains(@{parameters.Count})");
-                parameters.Add(filter.Value.Value);
-            }
-            else
-            {
-                columns.Add(FirstCharToUpper(filter.Key) + " == @" + parameters.Count);
-                parameters.Add(filter.Value.Convert());
-            }
+
+            var column = FirstCharToUpper(filter.Key);
+            filter.Value.Set(column, columns, parameters);
         }
 
         return query.Where(string.Join(" AND ", columns), parameters.ToArray());
@@ -130,7 +119,7 @@ public class ListQuery
         }
     }
 
-    private static string? FirstCharToUpper(string? input)
+    private static string FirstCharToUpper(string input)
     {
         if (string.IsNullOrWhiteSpace(input)) return input;
         else return string.Concat(input[0].ToString().ToUpper(), input.AsSpan(1));
