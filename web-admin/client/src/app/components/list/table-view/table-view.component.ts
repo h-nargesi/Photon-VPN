@@ -62,6 +62,8 @@ export class TableViewComponent extends ListViewComponent {
     else
       this.Query.filters[column] = { value: value } as Filter;
 
+    this.Query.start = 0;
+
     this.OnFilterCanged();
   }
 
@@ -84,6 +86,7 @@ export class TableViewComponent extends ListViewComponent {
   SetSearch(key: string) {
     if (!this.Query) return;
     this.Query.search = key;
+    this.Query.start = 0;
     this.OnFilterCanged();
   }
 

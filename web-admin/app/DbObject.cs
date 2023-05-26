@@ -15,8 +15,8 @@ public class DbObject
         if (string.IsNullOrEmpty(Value))
         {
             if (type == MySqlDbType.String)
-                columns.Add($"({column} IS NULL OR {column} == string.Empty)");
-            else columns.Add($"{column} IS NULL");
+                columns.Add($"({column} == null OR {column} == string.Empty)");
+            else columns.Add($"{column} == null");
         }
         else
         {
