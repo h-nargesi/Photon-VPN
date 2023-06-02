@@ -20,7 +20,7 @@ export abstract class BaseComponent {
   titleOf(name: string, columns_info: EntitySchema | undefined = undefined) {
     if (!columns_info) columns_info = this.columns_info;
     return columns_info && name in columns_info ? columns_info[name].title : name;
-  } 
+  }
 
   val(event: any): any {
     return event.target.value;
@@ -37,6 +37,10 @@ export abstract class BaseComponent {
 
   checkVal(event: any): boolean {
     return event.target.checked;
+  }
+
+  isObject(value: any): boolean {
+    return value?.constructor == Object;
   }
 
   getCookie(name: string): any {
@@ -56,23 +60,20 @@ export abstract class BaseComponent {
   getTimeString = BaseComponent.getTimeString;
   getRemain = BaseComponent.getRemain;
 
-  static getDateTimeString(date: Date | null): string {
-    if (!date) return '';
-    else return BaseComponent.getDateString(date) + ' ' + BaseComponent.getTimeString(date);
+  static getDateTimeString(date: Date | null, locales: string = 'en-US'): string | undefined {
+    return date?.toLocaleString(locales);
   }
 
-  static getDateString(date: Date | null): string | undefined {
-    return date?.toLocaleString().substring(0, 10);
+  static getDateString(date: Date | null, locales: string = 'en-US'): string | undefined {
+    return date?.toLocaleDateString(locales);
   }
 
   static getTimeString(time: Date | null): string | undefined {
-    return time?.toLocaleString().substring(11, 19);
+    return time?.toLocaleTimeString();
   }
 
   static getRemain(date: Date | null, details: boolean = false): string {
     if (date == null) return '';
-
-    date = new Date(Date.parse(date.toString()));
 
     let result = [];
     let diff = date.getTime() - new Date().getTime();

@@ -31,7 +31,7 @@ export class TimeLineViewComponent extends ListViewComponent {
     if (created && modified && created.getTime() >= modified.getTime())
       result = `created:${result} / modified:${BaseComponent.getDateTimeString(modified)}`;
 
-    return result;
+    return result ?? '';
   }
 
   GetColor(data: Data): string {

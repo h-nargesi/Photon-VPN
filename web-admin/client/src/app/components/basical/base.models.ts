@@ -24,6 +24,7 @@ export enum UIColors {
 
 export enum ShowType {
   datetime = "datetime",
+  jalali = "jalali",
   date = "date",
   time = "time",
   duration = "duration",

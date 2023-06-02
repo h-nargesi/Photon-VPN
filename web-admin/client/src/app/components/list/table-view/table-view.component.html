@@ -30,7 +30,10 @@
           cTableColor="{{ IsSelected(index) ? 'primary' : '' }}">
 
         <td scope="row">{{ GetStartOffset() + index + 1 }}</td>
-        <td *ngFor="let col of DataColumns;" style="white-space: nowrap;">{{ row[col] }}</td>
+        <td *ngFor="let col of DataColumns;" style="white-space: nowrap;">
+          <span *ngIf="!isObject(row[col])">{{ row[col] }}</span>
+          <span *ngIf="isObject(row[col])" [cTooltip]="row[col].Tooltip">{{ row[col].Display }}</span>
+        </td>
       </tr>
     </tbody>
   </table>

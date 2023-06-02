@@ -27,7 +27,7 @@
     "dateTime": {
       "title": "Pay Time",
       "show": true,
-      "type": "date"
+      "type": "jalali"
     },
     "bankName": {
       "title": "Bank Name",

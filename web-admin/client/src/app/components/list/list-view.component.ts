@@ -1,6 +1,6 @@
 import { EventEmitter } from "@angular/core";
 import { BaseComponent } from "../basical/base.component";
-import { ShowType } from "../basical/base.models";
+import { EntitySchema, ShowType } from "../basical/base.models";
 
 export abstract class ListViewComponent extends BaseComponent {
 
@@ -92,16 +92,55 @@ export abstract class ListViewComponent extends BaseComponent {
           continue;
         switch (this.columns_info[column].type) {
           case ShowType.datetime:
-            for (var d of data) d[column] = BaseComponent.getDateTimeString(d[column]);
+            for (var d of data) {
+              var date = new Date(Date.parse(d[column]));
+              d[column] = {
+                'Display': BaseComponent.getDateTimeString(date),
+                'Tooltip': [
+                  BaseComponent.getDateTimeString(date, 'fa-IR'),
+                  BaseComponent.getRemain(date)
+                ].join('\n'),
+              }
+            }
             break;
           case ShowType.date:
-            for (var d of data) d[column] = BaseComponent.getDateString(d[column]);
+            for (var d of data) {
+              var date = new Date(Date.parse(d[column]));
+              d[column] = {
+                'Display': BaseComponent.getDateString(date),
+                'Tooltip': [
+                  BaseComponent.getDateString(date, 'fa-IR'),
+                  BaseComponent.getRemain(date)
+                ].join('\n'),
+              };
+            }
+            break;
+          case ShowType.jalali:
+            for (var d of data) {
+              var date = new Date(Date.parse(d[column]));
+              d[column] = {
+                'Display': BaseComponent.getDateString(date, 'fa-IR'),
+                'Tooltip': [
+                  BaseComponent.getDateString(date),
+                  BaseComponent.getRemain(date)
+                ].join('\n'),
+              };
+            }
             break;
           case ShowType.time:
             for (var d of data) d[column] = BaseComponent.getTimeString(d[column]);
             break;
           case ShowType.duration:
-            for (var d of data) d[column] = BaseComponent.getRemain(d[column]);
+            for (var d of data) {
+              var date = new Date(Date.parse(d[column]));
+              d[column] = {
+                'Display': BaseComponent.getRemain(date),
+                'Tooltip': [
+                  BaseComponent.getDateString(date),
+                  BaseComponent.getDateString(date, 'fa-IR'),
+                ].join('\n'),
+              };
+            }
             break;
 
         }

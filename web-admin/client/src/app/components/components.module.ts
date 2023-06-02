@@ -12,7 +12,8 @@ import {
   ModalModule,
   ProgressModule,
   SharedModule,
-  TableModule, ToastModule, WidgetModule
+  TableModule, ToastModule, WidgetModule,
+  TooltipModule,
 } from '@coreui/angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
 import { IconModule } from '@coreui/icons-angular';
@@ -56,6 +57,7 @@ import { WidgetViewComponent } from './list/widget-view/widget-view.component';
     ModalModule,
     ToastModule,
     RouterModule,
+    TooltipModule,
   ],
   exports: [
     ListButtonsComponent,
