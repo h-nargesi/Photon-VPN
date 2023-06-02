@@ -18,6 +18,7 @@ export class TablePageComponent extends BaseComponent {
   @Input("columns-info") columns_info!: EntitySchema;
   @Input("data-projection") data_projection!: ((data: any[]) => any[]);
   @Input("service") service!: LGMDService;
+  @Input("default-filter") default_filter!: ListQuery;
   @Input('show-reload') show_reload: boolean = true;
   @Input('show-add') show_add: boolean = true;
   @Input('show-edit') show_edit: boolean = true;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EntitySchema } from '../components';
+import { EntitySchema, ListQuery } from '../components';
 import Titles from './payments.json';
 import { PaymentsService } from './payments.service';
 
@@ -10,6 +10,9 @@ import { PaymentsService } from './payments.service';
 export class PaymentListComponent {
   title: string = 'Payments';
   columns_info: EntitySchema = Titles.list;
+  default_filter: ListQuery = {
+    ordering: { 'dateTime': false }
+  };
 
   constructor(public readonly service: PaymentsService) { }
 }

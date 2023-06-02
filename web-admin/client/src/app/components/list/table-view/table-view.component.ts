@@ -15,6 +15,7 @@ export class TableViewComponent extends ListViewComponent {
   @Input("columns-info") columns_info!: EntitySchema;
   @Input("data-projection") data_projection!: ((data: any[]) => any[]);
   @Input("service") service!: LGMDService;
+  @Input("default-filter") default_filter!: ListQuery;
 
   @Output("selected") selectedEvent = new EventEmitter<Map<number, any>>();
   @Output("double-click") double_click = new EventEmitter<any>();
@@ -36,8 +37,7 @@ export class TableViewComponent extends ListViewComponent {
   }
 
   GetStartOffset(): number {
-    if (!this.Query) return 0;
-    else return this.Query.start;
+    return this.Query?.start ?? 0;
   }
 
   Relaod() {
@@ -97,10 +97,22 @@ export class TableViewComponent extends ListViewComponent {
   ClearFilters() {
     if (!this.Query) return;
 
-    this.Query.start = 0;
-    this.Query.search = null;
-    this.Query.filters = null;
-    this.Query.ordering = null;
+    this.Query.start = this.default_filter?.start ?? 0;
+    this.Query.search = this.default_filter?.search ?? null;
+
+    if (this.default_filter?.filters) {
+      this.Query.filters = {};
+      for (const f in this.default_filter.filters)
+        this.Query.filters[f] = this.default_filter.filters[f];
+    }
+    else this.Query.filters = null;
+
+    if (this.default_filter?.ordering) {
+      this.Query.ordering = {};
+      for (const o in this.default_filter.ordering)
+        this.Query.ordering[o] = this.default_filter.ordering[o];
+    }
+    else this.Query.ordering = null;
 
     this.OnFilterCanged();
   }
@@ -145,7 +157,7 @@ export class TableViewComponent extends ListViewComponent {
     this.Query = this.getCookie('query');
 
     if (!this.Query) {
-      this.Query = { start: 0, limit: 5 } as ListQuery;
+      this.Query = { start: 0, limit: 5 };
       this.setCookie('query', this.Query);
     }
 
@@ -178,6 +190,8 @@ export class TableViewComponent extends ListViewComponent {
   private CalculatePagination() {
     this.Pages = [];
     if (!this.Query) return;
+    if (!this.Query.start) this.Query.start = 0;
+    if (!this.Query.limit) this.Query.limit = 5;
 
     const current_page = Math.floor(this.Query.start / this.Query.limit);
 

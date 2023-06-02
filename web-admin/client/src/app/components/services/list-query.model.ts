@@ -1,10 +1,10 @@
 export interface ListQuery {
-  start: number,
-  limit: number,
-  search: string | null,
-  filters: { [column: string]: Filter } | null,
-  ordering: { [column: string]: boolean } | null,
-  columns: string[] | null,
+  start?: number,
+  limit?: number,
+  search?: string | null,
+  filters?: { [column: string]: Filter } | null,
+  ordering?: { [column: string]: boolean } | null,
+  columns?: string[] | null,
 }
 
 export interface Filter {

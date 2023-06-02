@@ -24,6 +24,7 @@
           [service]="service"
           [columns-info]="columns_info"
           [data-projection]="data_projection"
+          [default-filter]="default_filter"
           (double-click)="onDbClick($event)"
           (reloading)="reloading.emit($event)">
         </app-table-view>
