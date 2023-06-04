@@ -93,7 +93,7 @@ export abstract class ListViewComponent extends BaseComponent {
         switch (this.columns_info[column].type) {
           case ShowType.datetime:
             for (var d of data) {
-              var date = new Date(Date.parse(d[column]));
+              var date = BaseComponent.toDate(d[column]);
               d[column] = {
                 'Display': BaseComponent.getDateTimeString(date),
                 'Tooltip': [
@@ -105,7 +105,7 @@ export abstract class ListViewComponent extends BaseComponent {
             break;
           case ShowType.date:
             for (var d of data) {
-              var date = new Date(Date.parse(d[column]));
+              var date = BaseComponent.toDate(d[column]);
               d[column] = {
                 'Display': BaseComponent.getDateString(date),
                 'Tooltip': [
@@ -117,7 +117,7 @@ export abstract class ListViewComponent extends BaseComponent {
             break;
           case ShowType.jalali:
             for (var d of data) {
-              var date = new Date(Date.parse(d[column]));
+              var date = BaseComponent.toDate(d[column]);
               d[column] = {
                 'Display': BaseComponent.getDateString(date, 'fa-IR'),
                 'Tooltip': [
@@ -132,7 +132,7 @@ export abstract class ListViewComponent extends BaseComponent {
             break;
           case ShowType.duration:
             for (var d of data) {
-              var date = new Date(Date.parse(d[column]));
+              var date = BaseComponent.toDate(d[column]);
               d[column] = {
                 'Display': BaseComponent.getRemain(date),
                 'Tooltip': [

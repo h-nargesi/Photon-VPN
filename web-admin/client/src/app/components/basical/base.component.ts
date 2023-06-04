@@ -60,19 +60,26 @@ export abstract class BaseComponent {
   getTimeString = BaseComponent.getTimeString;
   getRemain = BaseComponent.getRemain;
 
+  static toDate(value: any): Date | null {
+    if (!value) return null;
+    else if (value.constructor == Date) return value;
+    else return new Date(Date.parse(value.toString()));
+  }
+
   static getDateTimeString(date: Date | null, locales: string = 'en-US'): string | undefined {
-    return date?.toLocaleString(locales);
+    return BaseComponent.toDate(date)?.toLocaleString(locales);
   }
 
   static getDateString(date: Date | null, locales: string = 'en-US'): string | undefined {
-    return date?.toLocaleDateString(locales);
+    return BaseComponent.toDate(date)?.toLocaleDateString(locales);
   }
 
   static getTimeString(time: Date | null): string | undefined {
-    return time?.toLocaleTimeString();
+    return BaseComponent.toDate(time)?.toLocaleTimeString();
   }
 
   static getRemain(date: Date | null, details: boolean = false): string {
+    date = BaseComponent.toDate(date);
     if (date == null) return '';
 
     let result = [];
